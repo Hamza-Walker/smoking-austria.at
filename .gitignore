@@ -1,0 +1,34 @@
+build
+dist
+/media
+.DS_Store
+.env
+.next
+.vercel
+# Node.js
+node_modules/
+
+# Next.js
+.next/
+
+# TypeScript
+*.tsbuildinfo
+
+# Editor files
+.vscode/
+.idea/
+
+# Dependency lock files
+yarn.lock
+package-lock.json
+
+# Build files
+out/
+dist/
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
