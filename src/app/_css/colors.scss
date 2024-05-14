@@ -94,5 +94,41 @@
 
   --color-gray-500: rgba(164, 161, 170, 1);
   --color-green-500: rgba(60, 209, 57, 1);
+  // New Brand Colors with Two Opacity Options Each
+  --color-light-50: rgba(245, 243, 244, 1); // #f5f3f4
+  --color-light-50-opacity-20: rgba(245, 243, 244, 0.2);
+  --color-light-50-opacity-40: rgba(245, 243, 244, 0.4);
+
+  --color-light-60: rgba(211, 211, 211, 1); // #d3d3d3
+  --color-light-60-opacity-20: rgba(211, 211, 211, 0.2);
+  --color-light-60-opacity-40: rgba(211, 211, 211, 0.4);
+
+  --color-light-500: rgba(177, 167, 166, 1); // #b1a7a6
+  --color-light-500-opacity-20: rgba(177, 167, 166, 0.2);
+  --color-light-500-opacity-40: rgba(177, 167, 166, 0.4);
+
+  --color-danger-500: rgba(229, 56, 59, 1); // #e5383b
+  --color-danger-500-opacity-20: rgba(229, 56, 59, 0.2);
+  --color-danger-500-opacity-40: rgba(229, 56, 59, 0.4);
+
+  --color-danger-500-5: rgba(186, 24, 27, 0.05); // #ba181b
+  --color-danger-500-5-opacity-20: rgba(186, 24, 27, 0.2);
+  --color-danger-500-5-opacity-40: rgba(186, 24, 27, 0.4);
+
+  --color-danger-500-5: rgba(65, 22, 26, 0.05); // #a4161a
+  --color-danger-500-5-opacity-20: rgba(65, 22, 26, 0.2);
+  --color-danger-500-5-opacity-40: rgba(65, 22, 26, 0.4);
+
+  --color-danger-500-5: rgba(102, 7, 8, 0.05); // #660708
+  --color-danger-500-5-opacity-20: rgba(102, 7, 8, 0.2);
+  --color-danger-500-5-opacity-40: rgba(102, 7, 8, 0.4);
+
+  --color-danger-500-5: rgba(25, 26, 25, 0.05); // #161a1d
+  --color-danger-500-5-opacity-20: rgba(25, 26, 25, 0.2);
+  --color-danger-500-5-opacity-40: rgba(25, 26, 25, 0.4);
+
+  --color-danger-500-5: rgba(11, 8, 10, 0.05); // #0b090a
+  --color-danger-500-5-opacity-20: rgba(11, 8, 10, 0.2);
+  --color-danger-500-5-opacity-40: rgba(11, 8, 10, 0.4);
 }
 
