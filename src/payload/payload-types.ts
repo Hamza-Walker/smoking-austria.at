@@ -60,6 +60,7 @@ export interface Page {
             } | null;
             url?: string | null;
             label: string;
+            icon?: number | Media | null;
             appearance?: ('default' | 'primary' | 'secondary') | null;
           };
           id?: string | null;
@@ -84,6 +85,7 @@ export interface Page {
                 } | null;
                 url?: string | null;
                 label: string;
+                icon?: number | Media | null;
                 appearance?: ('primary' | 'secondary') | null;
               };
               id?: string | null;
@@ -111,6 +113,7 @@ export interface Page {
                 } | null;
                 url?: string | null;
                 label: string;
+                icon?: number | Media | null;
                 appearance?: ('default' | 'primary' | 'secondary') | null;
               };
               id?: string | null;
@@ -229,6 +232,7 @@ export interface Product {
                 } | null;
                 url?: string | null;
                 label: string;
+                icon?: number | Media | null;
                 appearance?: ('primary' | 'secondary') | null;
               };
               id?: string | null;
@@ -256,6 +260,7 @@ export interface Product {
                 } | null;
                 url?: string | null;
                 label: string;
+                icon?: number | Media | null;
                 appearance?: ('default' | 'primary' | 'secondary') | null;
               };
               id?: string | null;
@@ -320,6 +325,7 @@ export interface Product {
                     } | null;
                     url?: string | null;
                     label: string;
+                    icon?: number | Media | null;
                     appearance?: ('primary' | 'secondary') | null;
                   };
                   id?: string | null;
@@ -347,6 +353,7 @@ export interface Product {
                     } | null;
                     url?: string | null;
                     label: string;
+                    icon?: number | Media | null;
                     appearance?: ('default' | 'primary' | 'secondary') | null;
                   };
                   id?: string | null;
@@ -533,6 +540,7 @@ export interface Header {
           } | null;
           url?: string | null;
           label: string;
+          icon?: number | Media | null;
         };
         id?: string | null;
       }[]
@@ -558,6 +566,7 @@ export interface Footer {
           } | null;
           url?: string | null;
           label: string;
+          icon?: number | Media | null;
         };
         id?: string | null;
       }[]
