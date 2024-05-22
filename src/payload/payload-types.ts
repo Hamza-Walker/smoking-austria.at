@@ -45,7 +45,7 @@ export interface Page {
   title: string;
   publishedOn?: string | null;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'customeHero';
     richText: {
       [k: string]: unknown;
     }[];
@@ -187,6 +187,8 @@ export interface Media {
   filesize?: number | null;
   width?: number | null;
   height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

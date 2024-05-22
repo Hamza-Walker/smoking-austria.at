@@ -107,28 +107,29 @@
   --color-light-500-opacity-20: rgba(177, 167, 166, 0.2);
   --color-light-500-opacity-40: rgba(177, 167, 166, 0.4);
 
-  --color-danger-500: rgba(229, 56, 59, 1); // #e5383b
-  --color-danger-500-opacity-20: rgba(229, 56, 59, 0.2);
-  --color-danger-500-opacity-40: rgba(229, 56, 59, 0.4);
+  --color-danger-base: rgba(229, 56, 59, 1); /* #e5383b */
+  --color-danger-base-semi-transparent: rgba(229, 56, 59, 0.2);
+  --color-danger-base-transparent: rgba(229, 56, 59, 0.4);
 
-  --color-danger-500-5: rgba(186, 24, 27, 0.05); // #ba181b
-  --color-danger-500-5-opacity-20: rgba(186, 24, 27, 0.2);
-  --color-danger-500-5-opacity-40: rgba(186, 24, 27, 0.4);
+  --color-danger-light: rgba(186, 24, 27, 0.05); /* #ba181b */
+  --color-danger-light-semi-transparent: rgba(186, 24, 27, 0.2);
+  --color-danger-light-transparent: rgba(186, 24, 27, 0.4);
 
-  --color-danger-500-5: rgba(65, 22, 26, 0.05); // #a4161a
-  --color-danger-500-5-opacity-20: rgba(65, 22, 26, 0.2);
-  --color-danger-500-5-opacity-40: rgba(65, 22, 26, 0.4);
+  --color-danger-medium-dark: rgba(65, 22, 26, 0.05); /* #a4161a */
+  --color-danger-medium-dark-semi-transparent: rgba(65, 22, 26, 0.2);
+  --color-danger-medium-dark-transparent: rgba(65, 22, 26, 0.4);
 
-  --color-danger-500-5: rgba(102, 7, 8, 0.05); // #660708
-  --color-danger-500-5-opacity-20: rgba(102, 7, 8, 0.2);
-  --color-danger-500-5-opacity-40: rgba(102, 7, 8, 0.4);
+  --color-danger-dark: rgba(102, 7, 8, 0.05); /* #660708 */
+  --color-danger-dark-semi-transparent: rgba(102, 7, 8, 0.2);
+  --color-danger-dark-transparent: rgba(102, 7, 8, 0.4);
 
-  --color-danger-500-5: rgba(25, 26, 25, 0.05); // #161a1d
-  --color-danger-500-5-opacity-20: rgba(25, 26, 25, 0.2);
-  --color-danger-500-5-opacity-40: rgba(25, 26, 25, 0.4);
+  --color-danger-extra-dark: rgba(25, 26, 25, 0.05); /* #161a1d */
+  --color-danger-extra-dark-semi-transparent: rgba(25, 26, 25, 0.2);
+  --color-danger-extra-dark-transparent: rgba(25, 26, 25, 0.4);
 
-  --color-danger-500-5: rgba(11, 8, 10, 0.05); // #0b090a
-  --color-danger-500-5-opacity-20: rgba(11, 8, 10, 0.2);
-  --color-danger-500-5-opacity-40: rgba(11, 8, 10, 0.4);
+  --color-danger-ultra-dark: rgba(11, 8, 10, 0.05); /* #0b090a */
+  --color-danger-ultra-dark-semi-transparent: rgba(11, 8, 10, 0.2);
+  --color-danger-ultra-dark-transparent: rgba(11, 8, 10, 0.4);
+
 }
 
