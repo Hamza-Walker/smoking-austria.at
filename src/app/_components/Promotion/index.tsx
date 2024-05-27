@@ -46,7 +46,7 @@ const Promotion = () => {
         <p>
           Discover the best deals on your favorite smoking essentials. This month's exclusive offers
           include premium papers and filters at unbeatable prices. Stock up and enjoy the smoothest
-          experience. 🛍️✨
+          experience. ✨
         </p>
 
         <ul className={classes.stats}>
