@@ -5,6 +5,7 @@ import { fetchDoc } from '../../_api/fetchDoc'
 import { fetchDocs } from '../../_api/fetchDocs'
 import { Blocks } from '../../_components/Blocks'
 import { Gutter } from '../../_components/Gutter'
+import { HR } from '../../_components/HR'
 import Filters from './Filters'
 import classes from './index.module.scss'
 
@@ -19,7 +20,6 @@ const Products = async () => {
       slug: 'products',
       draft: isDraftMode,
     })
-
     categroies = await fetchDocs<Category>('categories')
     console.log(page)
   } catch (error) {
@@ -32,6 +32,7 @@ const Products = async () => {
         <Filters />
         <Blocks blocks={page.layout} disableTopPadding={true} />
       </Gutter>
+      <HR />
     </div>
   )
 }
