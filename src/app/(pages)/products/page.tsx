@@ -14,14 +14,30 @@ const Products = async () => {
   let page: Page | null = null
   let categroies: Category[] | null = null
 
+  const printPopulatedDocsDetails = docs => {
+    docs.forEach(doc => {
+      console.log('Current Document:', doc)
+
+      // Check if populatedDocs exists and is an array
+      if (Array.isArray(doc.populatedDocs)) {
+        console.log('Populated Docs:')
+        doc.populatedDocs.forEach(popDoc => {
+          console.log(popDoc)
+        })
+      } else {
+        console.log('No populatedDocs found.')
+      }
+    })
+  }
+
   try {
     page = await fetchDoc<Page>({
       collection: 'pages',
       slug: 'products',
       draft: isDraftMode,
     })
+    printPopulatedDocsDetails(page.layout)
     categroies = await fetchDocs<Category>('categories')
-    console.log(page)
   } catch (error) {
     console.log(error)
   }
@@ -29,7 +45,7 @@ const Products = async () => {
   return (
     <div className={classes.container}>
       <Gutter className={classes.products}>
-        <Filters />
+        <Filters categories={categroies} />
         <Blocks blocks={page.layout} disableTopPadding={true} />
       </Gutter>
       <HR />
