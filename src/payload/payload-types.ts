@@ -6,17 +6,11 @@
  * and re-run `payload generate:types` to regenerate this file.
  */
 
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CartItems".
- */
-export type CartItems =
-  | {
-      product?: (number | null) | Product;
-      quantity?: number | null;
-      id?: string | null;
-    }[]
-  | null;
+export type CartItems = {
+  product?: string | Product;
+  quantity?: number;
+  id?: string;
+}[];
 
 export interface Config {
   collections: {
@@ -36,463 +30,425 @@ export interface Config {
     footer: Footer;
   };
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pages".
- */
 export interface Page {
-  id: number;
+  id: string;
   title: string;
-  publishedOn?: string | null;
+  publishedOn?: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'customeHero';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'customHero';
     richText: {
       [k: string]: unknown;
     }[];
-    links?:
-      | {
-          link: {
-            type?: ('reference' | 'custom') | null;
-            newTab?: boolean | null;
-            reference?: {
-              relationTo: 'pages';
-              value: number | Page;
-            } | null;
-            url?: string | null;
-            label: string;
-            icon?: number | Media | null;
-            appearance?: ('default' | 'primary' | 'secondary') | null;
-          };
-          id?: string | null;
-        }[]
-      | null;
-    media?: number | Media | null;
+    links?: {
+      link: {
+        type?: 'reference' | 'custom';
+        newTab?: boolean;
+        reference: {
+          relationTo: 'pages';
+          value: string | Page;
+        };
+        url: string;
+        label: string;
+        icon?: string | Media;
+        appearance?: 'default' | 'primary' | 'secondary';
+      };
+      id?: string;
+    }[];
+    media: string | Media;
   };
   layout: (
     | {
-        invertBackground?: boolean | null;
+        invertBackground?: boolean;
         richText: {
           [k: string]: unknown;
         }[];
-        links?:
-          | {
-              link: {
-                type?: ('reference' | 'custom') | null;
-                newTab?: boolean | null;
-                reference?: {
-                  relationTo: 'pages';
-                  value: number | Page;
-                } | null;
-                url?: string | null;
-                label: string;
-                icon?: number | Media | null;
-                appearance?: ('primary' | 'secondary') | null;
-              };
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-        blockName?: string | null;
+        links?: {
+          link: {
+            type?: 'reference' | 'custom';
+            newTab?: boolean;
+            reference: {
+              relationTo: 'pages';
+              value: string | Page;
+            };
+            url: string;
+            label: string;
+            icon?: string | Media;
+            appearance?: 'primary' | 'secondary';
+          };
+          id?: string;
+        }[];
+        id?: string;
+        blockName?: string;
         blockType: 'cta';
       }
     | {
-        invertBackground?: boolean | null;
-        columns?:
-          | {
-              size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
-              richText: {
-                [k: string]: unknown;
-              }[];
-              enableLink?: boolean | null;
-              link?: {
-                type?: ('reference' | 'custom') | null;
-                newTab?: boolean | null;
-                reference?: {
-                  relationTo: 'pages';
-                  value: number | Page;
-                } | null;
-                url?: string | null;
-                label: string;
-                icon?: number | Media | null;
-                appearance?: ('default' | 'primary' | 'secondary') | null;
-              };
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-        blockName?: string | null;
+        invertBackground?: boolean;
+        columns?: {
+          size?: 'oneThird' | 'half' | 'twoThirds' | 'full';
+          richText: {
+            [k: string]: unknown;
+          }[];
+          enableLink?: boolean;
+          link?: {
+            type?: 'reference' | 'custom';
+            newTab?: boolean;
+            reference: {
+              relationTo: 'pages';
+              value: string | Page;
+            };
+            url: string;
+            label: string;
+            icon?: string | Media;
+            appearance?: 'default' | 'primary' | 'secondary';
+          };
+          id?: string;
+        }[];
+        id?: string;
+        blockName?: string;
         blockType: 'content';
       }
     | {
-        invertBackground?: boolean | null;
-        position?: ('default' | 'fullscreen') | null;
-        media: number | Media;
-        id?: string | null;
-        blockName?: string | null;
+        invertBackground?: boolean;
+        position?: 'default' | 'fullscreen';
+        media: string | Media;
+        id?: string;
+        blockName?: string;
         blockType: 'mediaBlock';
       }
     | {
         introContent: {
           [k: string]: unknown;
         }[];
-        populateBy?: ('collection' | 'selection') | null;
-        relationTo?: 'products' | null;
-        categories?: (number | Category)[] | null;
-        limit?: number | null;
+        populateBy?: 'collection' | 'selection';
+        relationTo?: 'products';
+        categories?: string[] | Category[];
+        limit?: number;
         selectedDocs?:
           | {
               relationTo: 'products';
-              value: number | Product;
+              value: string;
             }[]
-          | null;
+          | {
+              relationTo: 'products';
+              value: Product;
+            }[];
         populatedDocs?:
           | {
               relationTo: 'products';
-              value: number | Product;
+              value: string;
             }[]
-          | null;
-        populatedDocsTotal?: number | null;
-        id?: string | null;
-        blockName?: string | null;
+          | {
+              relationTo: 'products';
+              value: Product;
+            }[];
+        populatedDocsTotal?: number;
+        id?: string;
+        blockName?: string;
         blockType: 'archive';
       }
   )[];
-  slug?: string | null;
+  slug?: string;
   meta?: {
-    title?: string | null;
-    description?: string | null;
-    image?: number | Media | null;
+    title?: string;
+    description?: string;
+    image?: string | Media;
   };
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
+  _status?: 'draft' | 'published';
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
 export interface Media {
-  id: number;
+  id: string;
   alt: string;
-  caption?:
-    | {
-        [k: string]: unknown;
-      }[]
-    | null;
+  caption?: {
+    [k: string]: unknown;
+  }[];
   updatedAt: string;
   createdAt: string;
-  url?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
+  url?: string;
+  filename?: string;
+  mimeType?: string;
+  filesize?: number;
+  width?: number;
+  height?: number;
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
- */
 export interface Category {
   id: string;
   title: string;
-  media?: number | Media | null;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  media?: string | Media;
+  parent?: string | Category;
+  breadcrumbs?: {
+    doc?: string | Category;
+    url?: string;
+    label?: string;
+    id?: string;
+  }[];
   updatedAt: string;
   createdAt: string;
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products".
- */
 export interface Product {
-  id: number;
+  id: string;
   title: string;
-  publishedOn?: string | null;
-  layout: (
+  publishedOn?: string;
+  layout?: (
     | {
-        invertBackground?: boolean | null;
+        invertBackground?: boolean;
         richText: {
           [k: string]: unknown;
         }[];
-        links?:
-          | {
-              link: {
-                type?: ('reference' | 'custom') | null;
-                newTab?: boolean | null;
-                reference?: {
-                  relationTo: 'pages';
-                  value: number | Page;
-                } | null;
-                url?: string | null;
-                label: string;
-                icon?: number | Media | null;
-                appearance?: ('primary' | 'secondary') | null;
-              };
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-        blockName?: string | null;
+        links?: {
+          link: {
+            type?: 'reference' | 'custom';
+            newTab?: boolean;
+            reference: {
+              relationTo: 'pages';
+              value: string | Page;
+            };
+            url: string;
+            label: string;
+            icon?: string | Media;
+            appearance?: 'primary' | 'secondary';
+          };
+          id?: string;
+        }[];
+        id?: string;
+        blockName?: string;
         blockType: 'cta';
       }
     | {
-        invertBackground?: boolean | null;
-        columns?:
-          | {
-              size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
-              richText: {
-                [k: string]: unknown;
-              }[];
-              enableLink?: boolean | null;
-              link?: {
-                type?: ('reference' | 'custom') | null;
-                newTab?: boolean | null;
-                reference?: {
-                  relationTo: 'pages';
-                  value: number | Page;
-                } | null;
-                url?: string | null;
-                label: string;
-                icon?: number | Media | null;
-                appearance?: ('default' | 'primary' | 'secondary') | null;
-              };
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-        blockName?: string | null;
+        invertBackground?: boolean;
+        columns?: {
+          size?: 'oneThird' | 'half' | 'twoThirds' | 'full';
+          richText: {
+            [k: string]: unknown;
+          }[];
+          enableLink?: boolean;
+          link?: {
+            type?: 'reference' | 'custom';
+            newTab?: boolean;
+            reference: {
+              relationTo: 'pages';
+              value: string | Page;
+            };
+            url: string;
+            label: string;
+            icon?: string | Media;
+            appearance?: 'default' | 'primary' | 'secondary';
+          };
+          id?: string;
+        }[];
+        id?: string;
+        blockName?: string;
         blockType: 'content';
       }
     | {
-        invertBackground?: boolean | null;
-        position?: ('default' | 'fullscreen') | null;
-        media: number | Media;
-        id?: string | null;
-        blockName?: string | null;
+        invertBackground?: boolean;
+        position?: 'default' | 'fullscreen';
+        media: string | Media;
+        id?: string;
+        blockName?: string;
         blockType: 'mediaBlock';
       }
     | {
         introContent: {
           [k: string]: unknown;
         }[];
-        populateBy?: ('collection' | 'selection') | null;
-        relationTo?: 'products' | null;
-        categories?: (number | Category)[] | null;
-        limit?: number | null;
+        populateBy?: 'collection' | 'selection';
+        relationTo?: 'products';
+        categories?: string[] | Category[];
+        limit?: number;
         selectedDocs?:
           | {
               relationTo: 'products';
-              value: number | Product;
+              value: string;
             }[]
-          | null;
+          | {
+              relationTo: 'products';
+              value: Product;
+            }[];
         populatedDocs?:
           | {
               relationTo: 'products';
-              value: number | Product;
+              value: string;
             }[]
-          | null;
-        populatedDocsTotal?: number | null;
-        id?: string | null;
-        blockName?: string | null;
+          | {
+              relationTo: 'products';
+              value: Product;
+            }[];
+        populatedDocsTotal?: number;
+        id?: string;
+        blockName?: string;
         blockType: 'archive';
       }
   )[];
-  stripeProductID?: string | null;
-  priceJSON?: string | null;
-  enablePaywall?: boolean | null;
-  paywall?:
-    | (
-        | {
-            invertBackground?: boolean | null;
-            richText: {
-              [k: string]: unknown;
+  stripeProductID?: string;
+  priceJSON?: string;
+  enablePaywall?: boolean;
+  paywall?: (
+    | {
+        invertBackground?: boolean;
+        richText: {
+          [k: string]: unknown;
+        }[];
+        links?: {
+          link: {
+            type?: 'reference' | 'custom';
+            newTab?: boolean;
+            reference: {
+              relationTo: 'pages';
+              value: string | Page;
+            };
+            url: string;
+            label: string;
+            icon?: string | Media;
+            appearance?: 'primary' | 'secondary';
+          };
+          id?: string;
+        }[];
+        id?: string;
+        blockName?: string;
+        blockType: 'cta';
+      }
+    | {
+        invertBackground?: boolean;
+        columns?: {
+          size?: 'oneThird' | 'half' | 'twoThirds' | 'full';
+          richText: {
+            [k: string]: unknown;
+          }[];
+          enableLink?: boolean;
+          link?: {
+            type?: 'reference' | 'custom';
+            newTab?: boolean;
+            reference: {
+              relationTo: 'pages';
+              value: string | Page;
+            };
+            url: string;
+            label: string;
+            icon?: string | Media;
+            appearance?: 'default' | 'primary' | 'secondary';
+          };
+          id?: string;
+        }[];
+        id?: string;
+        blockName?: string;
+        blockType: 'content';
+      }
+    | {
+        invertBackground?: boolean;
+        position?: 'default' | 'fullscreen';
+        media: string | Media;
+        id?: string;
+        blockName?: string;
+        blockType: 'mediaBlock';
+      }
+    | {
+        introContent: {
+          [k: string]: unknown;
+        }[];
+        populateBy?: 'collection' | 'selection';
+        relationTo?: 'products';
+        categories?: string[] | Category[];
+        limit?: number;
+        selectedDocs?:
+          | {
+              relationTo: 'products';
+              value: string;
+            }[]
+          | {
+              relationTo: 'products';
+              value: Product;
             }[];
-            links?:
-              | {
-                  link: {
-                    type?: ('reference' | 'custom') | null;
-                    newTab?: boolean | null;
-                    reference?: {
-                      relationTo: 'pages';
-                      value: number | Page;
-                    } | null;
-                    url?: string | null;
-                    label: string;
-                    icon?: number | Media | null;
-                    appearance?: ('primary' | 'secondary') | null;
-                  };
-                  id?: string | null;
-                }[]
-              | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'cta';
-          }
-        | {
-            invertBackground?: boolean | null;
-            columns?:
-              | {
-                  size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
-                  richText: {
-                    [k: string]: unknown;
-                  }[];
-                  enableLink?: boolean | null;
-                  link?: {
-                    type?: ('reference' | 'custom') | null;
-                    newTab?: boolean | null;
-                    reference?: {
-                      relationTo: 'pages';
-                      value: number | Page;
-                    } | null;
-                    url?: string | null;
-                    label: string;
-                    icon?: number | Media | null;
-                    appearance?: ('default' | 'primary' | 'secondary') | null;
-                  };
-                  id?: string | null;
-                }[]
-              | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'content';
-          }
-        | {
-            invertBackground?: boolean | null;
-            position?: ('default' | 'fullscreen') | null;
-            media: number | Media;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'mediaBlock';
-          }
-        | {
-            introContent: {
-              [k: string]: unknown;
+        populatedDocs?:
+          | {
+              relationTo: 'products';
+              value: string;
+            }[]
+          | {
+              relationTo: 'products';
+              value: Product;
             }[];
-            populateBy?: ('collection' | 'selection') | null;
-            relationTo?: 'products' | null;
-            categories?: (number | Category)[] | null;
-            limit?: number | null;
-            selectedDocs?:
-              | {
-                  relationTo: 'products';
-                  value: number | Product;
-                }[]
-              | null;
-            populatedDocs?:
-              | {
-                  relationTo: 'products';
-                  value: number | Product;
-                }[]
-              | null;
-            populatedDocsTotal?: number | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'archive';
-          }
-      )[]
-    | null;
-  categories?: (number | Category)[] | null;
-  relatedProducts?: (number | Product)[] | null;
-  slug?: string | null;
-  skipSync?: boolean | null;
+        populatedDocsTotal?: number;
+        id?: string;
+        blockName?: string;
+        blockType: 'archive';
+      }
+  )[];
+  categories?: string[] | Category[];
+  relatedProducts?: string[] | Product[];
+  slug?: string;
+  skipSync?: boolean;
   meta?: {
-    title?: string | null;
-    description?: string | null;
-    image?: number | Media | null;
+    title?: string;
+    description?: string;
+    image?: string | Media;
   };
   updatedAt: string;
   createdAt: string;
-  _status?: ('draft' | 'published') | null;
+  _status?: 'draft' | 'published';
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "orders".
- */
 export interface Order {
-  id: number;
-  orderedBy?: (number | null) | User;
-  stripePaymentIntentID?: string | null;
+  id: string;
+  orderedBy?: string | User;
+  stripePaymentIntentID?: string;
   total: number;
-  items?:
-    | {
-        product: number | Product;
-        price?: number | null;
-        quantity?: number | null;
-        id?: string | null;
-      }[]
-    | null;
+  items?: {
+    product: string | Product;
+    price?: number;
+    quantity?: number;
+    id?: string;
+  }[];
   updatedAt: string;
   createdAt: string;
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
 export interface User {
-  id: number;
-  name?: string | null;
-  roles?: ('admin' | 'customer')[] | null;
-  purchases?: (number | Product)[] | null;
-  stripeCustomerID?: string | null;
+  id: string;
+  name?: string;
+  roles?: ('admin' | 'customer')[];
+  purchases?: string[] | Product[];
+  stripeCustomerID?: string;
   cart?: {
     items?: CartItems;
   };
-  skipSync?: boolean | null;
+  skipSync?: boolean;
   updatedAt: string;
   createdAt: string;
   email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  password: string | null;
+  resetPasswordToken?: string;
+  resetPasswordExpiration?: string;
+  salt?: string;
+  hash?: string;
+  loginAttempts?: number;
+  lockUntil?: string;
+  password: string;
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "redirects".
- */
 export interface Redirect {
-  id: number;
+  id: string;
   from: string;
-  to?: {
-    type?: ('reference' | 'custom') | null;
-    reference?:
-      | ({
+  to: {
+    type?: 'reference' | 'custom';
+    reference:
+      | {
           relationTo: 'pages';
-          value: number | Page;
-        } | null)
-      | ({
+          value: string | Page;
+        }
+      | {
           relationTo: 'products';
-          value: number | Product;
-        } | null);
-    url?: string | null;
+          value: string | Product;
+        };
+    url: string;
   };
   updatedAt: string;
   createdAt: string;
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-preferences".
- */
 export interface PayloadPreference {
-  id: number;
+  id: string;
   user: {
     relationTo: 'users';
-    value: number | User;
+    value: string | User;
   };
-  key?: string | null;
+  key?: string;
   value?:
     | {
         [k: string]: unknown;
@@ -505,77 +461,57 @@ export interface PayloadPreference {
   updatedAt: string;
   createdAt: string;
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "payload-migrations".
- */
 export interface PayloadMigration {
-  id: number;
-  name?: string | null;
-  batch?: number | null;
+  id: string;
+  name?: string;
+  batch?: number;
   updatedAt: string;
   createdAt: string;
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "settings".
- */
 export interface Settings {
-  id: number;
-  productsPage?: (number | null) | Page;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+  id: string;
+  productsPage?: string | Page;
+  updatedAt?: string;
+  createdAt?: string;
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header".
- */
 export interface Header {
-  id: number;
-  navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?: {
-            relationTo: 'pages';
-            value: number | Page;
-          } | null;
-          url?: string | null;
-          label: string;
-          icon?: number | Media | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+  id: string;
+  navItems?: {
+    link: {
+      type?: 'reference' | 'custom';
+      newTab?: boolean;
+      reference: {
+        relationTo: 'pages';
+        value: string | Page;
+      };
+      url: string;
+      label: string;
+      icon?: string | Media;
+    };
+    id?: string;
+  }[];
+  updatedAt?: string;
+  createdAt?: string;
 }
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "footer".
- */
 export interface Footer {
-  id: number;
+  id: string;
   copyright: string;
-  navItems?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?: {
-            relationTo: 'pages';
-            value: number | Page;
-          } | null;
-          url?: string | null;
-          label: string;
-          icon?: number | Media | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+  navItems?: {
+    link: {
+      type?: 'reference' | 'custom';
+      newTab?: boolean;
+      reference: {
+        relationTo: 'pages';
+        value: string | Page;
+      };
+      url: string;
+      label: string;
+      icon?: string | Media;
+    };
+    id?: string;
+  }[];
+  updatedAt?: string;
+  createdAt?: string;
 }
 
 
