@@ -45,15 +45,15 @@ export const Blocks: React.FC<{
 
             const isPrevSame = Boolean(blockIsInverted) === Boolean(prevBlockInverted)
 
-            let paddingTop: VerticalPaddingOptions = 'large'
-            let paddingBottom: VerticalPaddingOptions = 'large'
+            let paddingTop: VerticalPaddingOptions = 'none'
+            let paddingBottom: VerticalPaddingOptions = 'none'
 
             if (prevBlock && isPrevSame) {
               paddingTop = 'none'
             }
-
+            // change this to add remove padding
             if (index === blocks.length - 1) {
-              paddingBottom = 'large'
+              paddingBottom = 'none'
             }
 
             if (disableTopPadding && index === 0) {

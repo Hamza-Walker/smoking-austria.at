@@ -5,13 +5,22 @@ import { AddToCartButton } from '../../_components/AddToCartButton'
 import { Gutter } from '../../_components/Gutter'
 import { Media } from '../../_components/Media'
 import { Price } from '../../_components/Price'
-
+import { Blocks } from '../../_components/Blocks'
 import classes from './index.module.scss'
 
 export const ProductHero: React.FC<{
   product: Product
 }> = ({ product }) => {
-  const { title, categories, meta: { image: metaImage, description } = {} } = product
+  const {
+    title,
+    categories,
+    meta: { image: metaImage, description },
+    layout = {},
+  } = product
+  console.log(product)
+
+  // Filter the layout array to find media blocks
+  const mediaBlocks = layout.filter(block => block.blockType === 'mediaBlock')
 
   return (
     <Gutter className={classes.productHero}>
@@ -50,7 +59,7 @@ export const ProductHero: React.FC<{
           <h6>Description</h6>
           <p>{description}</p>
         </div>
-
+        <Blocks blocks={mediaBlocks} />
         <AddToCartButton product={product} className={classes.addToCartButton} />
       </div>
     </Gutter>

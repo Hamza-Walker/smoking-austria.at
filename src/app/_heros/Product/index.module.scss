@@ -14,7 +14,6 @@
 .mediaWrapper {
   position: relative;
   min-height: 400px;
-  background-color: var(--color-dark-50);
 
   @include small-break {
     min-height: 250px;
@@ -27,7 +26,11 @@
   aspect-ratio: 1/1;
   max-width: 100%;
 }
-
+.mediaBlockContainer {
+ height: 100%; /* Adjust as needed */
+  width: 100%; /* Adjust as needed */
+  object-fit: contain; /* or 'cover' depending on your needs */
+}
 .details {
   display: flex;
   flex-direction: column;
