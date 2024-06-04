@@ -17,7 +17,7 @@ export const ProductHero: React.FC<{
     meta: { image: metaImage, description },
     layout = {},
   } = product
-  console.log(product)
+  //console.log(product)
 
   // Filter the layout array to find media blocks
   const mediaBlocks = layout.filter(block => block.blockType === 'mediaBlock')

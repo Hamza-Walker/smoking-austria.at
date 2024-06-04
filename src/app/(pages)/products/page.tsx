@@ -36,7 +36,7 @@ const Products = async () => {
       slug: 'products',
       draft: isDraftMode,
     })
-    printPopulatedDocsDetails(page.layout)
+    //    printPopulatedDocsDetails(page.layout)
     categroies = await fetchDocs<Category>('categories')
   } catch (error) {
     console.log(error)
