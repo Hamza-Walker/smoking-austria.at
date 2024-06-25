@@ -30,7 +30,7 @@ export const Orders: CollectionConfig = {
       type: 'relationship',
       relationTo: 'users',
       hooks: {
-        beforeChange: [populateOrderedBy],
+        // beforeChange: [populateOrderedBy],
       },
     },
     {
