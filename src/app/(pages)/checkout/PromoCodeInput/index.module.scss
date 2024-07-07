@@ -1,6 +1,13 @@
 
-
-.promo-code-container {
+.promoCodeInput {
   margin-top: 2rem
  }
 
+.input {
+    width: 33%; // Full width of the container
+    padding: 12px 20px; // Increased padding for better touch targets
+    border-radius: 5px; // Rounded corners
+    border: 2px solid #ccc; // Thicker border for visibility
+    font-size: 18px; // Larger font size
+    outline: none; // Remove focus outline for consistency
+  }

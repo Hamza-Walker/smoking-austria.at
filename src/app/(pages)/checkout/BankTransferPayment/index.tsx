@@ -12,13 +12,13 @@ const BankTransferPayment: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className={classes.container}>
       <h3 className={classes.payment}>Bank Transfer Details</h3>
       <p>Please transfer the total amount to the following bank account:</p>
       <p>Bank: BAWAG</p>
       <p>IBAN: AT39 60000 0104 1019 7559</p>
-      <p>Account Number: 123456789</p>
-      <p>Sort Code: 00-00-00</p>
+      <p>Refference Number: {'add reference number'}</p>
+      <p>Amount: {'add amount'}</p>
       <PromoCodeInput />
       <TermsAndConditions
         termsUrl="/terms-and-conditions" // Change this URL to the actual terms page URL

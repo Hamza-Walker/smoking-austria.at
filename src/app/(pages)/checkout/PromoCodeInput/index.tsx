@@ -7,7 +7,7 @@ const PromoCodeInput: React.FC = () => {
     <div className={classes.promoCodeInput}>
       <h3>Redeem promotional coupon</h3>
       <p>Enter your promotional code below:</p>
-      <input type="text" placeholder="Promotional Code" />
+      <input className={classes.input} type="text" placeholder="Promotional Code" />
     </div>
   )
 }
