@@ -3,7 +3,6 @@
 import React, { Fragment, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-
 import { Settings } from '../../../../payload/payload-types'
 import { useAuth } from '../../../_providers/Auth'
 import { useCart } from '../../../_providers/Cart'
@@ -12,6 +11,7 @@ import { CheckoutItem } from '../CheckoutItem'
 import classes from './index.module.scss'
 import StripePayment from '../StripePayment'
 import BankTransferPayment from '../BankTransferPayment'
+import { Button } from '../../../_components/Button'
 
 export const CheckoutPage: React.FC<{
   settings: Settings
@@ -96,26 +96,21 @@ export const CheckoutPage: React.FC<{
 
       <div className={classes.paymentMethod}>
         <h3>Select Payment Method</h3>
-        <label>
-          <input
-            type="radio"
-            value="stripe"
-            checked={paymentMethod === 'stripe'}
-            onChange={() => setPaymentMethod('stripe')}
-          />
-          Credit Card
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="bankTransfer"
-            checked={paymentMethod === 'bankTransfer'}
-            onChange={() => setPaymentMethod('bankTransfer')}
-          />
-          Bank Transfer
-        </label>
+        <div className={classes.buttonContainer}>
+          <Button
+            appearance={paymentMethod === 'stripe' ? 'primary' : 'default'}
+            onClick={() => setPaymentMethod('stripe')}
+          >
+            Credit Card
+          </Button>
+          <Button
+            appearance={paymentMethod === 'bankTransfer' ? 'primary' : 'default'}
+            onClick={() => setPaymentMethod('bankTransfer')}
+          >
+            Bank Transfer
+          </Button>
+        </div>
       </div>
-
       {paymentMethod === 'stripe' && <StripePayment />}
       {paymentMethod === 'bankTransfer' && <BankTransferPayment />}
     </Fragment>

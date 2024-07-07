@@ -50,3 +50,30 @@
 .error {
   margin-top: calc(var(--block-padding) - var(--base));
 }
+
+.paymentMethod {
+  h3 {
+    margin-bottom: 1rem;
+  }
+
+  .buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem; /* Space between the buttons */
+
+    button {
+      flex: 1; /* Ensure buttons fill the width equally */
+    }
+  }
+}
+.button {
+  &.appearance--default {
+    background-color: #f0f0f0;
+    color: #000;
+  }
+
+  &.appearance--primary {
+    background-color: #0070f3;
+    color: #fff;
+  }
+}
