@@ -1,14 +1,48 @@
 @import "../../../_css/common";
 
-.container {
- margin-top: 2rem;
-}
 
 .buttonContainer {
- display: flex;
- justify-content: left;
- gap: 1rem;
- margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+justify-content: left;
+}
+.buttonCart {
+ width: 12%;
+}
+/* index.module.scss */
+
+.buttonSubmit {
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  color: white;
+  position: relative;
+  z-index: 0;
+  width: 20%;
 }
 
+.buttonSubmit::before {
+  content: '';
+  border-radius: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at var(--x) var(--y), orange, red);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  z-index: -1;
+}
+
+.buttonSubmit:hover::before {
+  opacity: 1;
+}
+
+.buttonSubmit:active::before {
+  background: radial-gradient(circle at var(--x) var(--y), red, orange);
+}
+
+.buttonSubmit:active {
+  transform: scale(0.95);
+}
 

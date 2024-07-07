@@ -1,8 +1,5 @@
-'use client'
-
-import React, { ElementType } from 'react'
+import React, { ElementType, MouseEventHandler, useState } from 'react'
 import Link from 'next/link'
-
 import classes from './index.module.scss'
 
 export type Props = {
@@ -10,6 +7,8 @@ export type Props = {
   appearance?: 'default' | 'primary' | 'secondary' | 'none'
   el?: 'button' | 'link' | 'a'
   onClick?: MouseEventHandler<HTMLButtonElement | HTMLAnchorElement | HTMLLinkElement>
+  onMouseMove?: MouseEventHandler<HTMLButtonElement>
+  onMouseDown?: MouseEventHandler<HTMLButtonElement>
   href?: string
   newTab?: boolean
   className?: string
@@ -27,6 +26,8 @@ export const Button: React.FC<Props> = ({
   appearance,
   className: classNameFromProps,
   onClick,
+  onMouseMove,
+  onMouseDown,
   type = 'button',
   disabled,
   invert,
@@ -71,9 +72,12 @@ export const Button: React.FC<Props> = ({
       type={type}
       {...newTabProps}
       onClick={onClick}
+      onMouseMove={onMouseMove}
+      onMouseDown={onMouseDown}
       disabled={disabled}
     >
       {content}
     </Element>
   )
 }
+

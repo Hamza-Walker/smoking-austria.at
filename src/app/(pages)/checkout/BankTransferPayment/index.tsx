@@ -14,13 +14,20 @@ const BankTransferPayment: React.FC = () => {
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault()
     console.log('Bank transfer payment submitted')
-    // TODO: add logic to send an email
-    // TODO: add logic to redirect to a successful processing of the order
-    // TODO: add logic to clear the cart
-    // TODO: add logic to redirect to the order confirmation page
   }, [])
 
-  console.log('BankTransferPayment component is rendered')
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    e.currentTarget.style.setProperty('--x', `${x}px`)
+    e.currentTarget.style.setProperty('--y', `${y}px`)
+  }
+
+  const handleMouseDown = () => {
+    console.log('Button clicked')
+  }
 
   return (
     <div className={classes.container}>
@@ -32,18 +39,25 @@ const BankTransferPayment: React.FC = () => {
       <p>Amount: {'add amount'}</p>
       <PromoCodeInput />
       <TermsAndConditions
-        termsUrl="/terms-and-conditions" // to alter the contents go to (Pages)/terms-and-conditions/index.tsx
+        termsUrl="/terms-and-conditions" // Change this URL to the actual terms page URL
         onAccept={handleTermsAccept}
       />
       <div className={classes.buttonContainer}>
         <Button
           label="Confirm Order"
           type="submit"
-          appearance="secondary"
           disabled={!termsAccepted}
+          className={classes.buttonSubmit}
           onClick={handleSubmit}
+          onMouseMove={handleMouseMove}
+          onMouseDown={handleMouseDown}
         ></Button>
-        <Button label="Back to cart" href="/cart" appearance="secondary" />
+        <Button
+          className={classes.buttonCart}
+          label="Back"
+          appearance="primary"
+          href="/cart"
+        ></Button>
       </div>
     </div>
   )
