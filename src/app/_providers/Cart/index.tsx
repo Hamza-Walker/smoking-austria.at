@@ -26,6 +26,7 @@ export type CartContext = {
     raw: number
   }
   hasInitializedCart: boolean
+  applyCoupon: (discount: number) => void
 }
 
 const Context = createContext({} as CartContext)
@@ -232,7 +233,15 @@ export const CartProvider = props => {
       type: 'CLEAR_CART',
     })
   }, [])
-
+  const applyCoupon = (discount: number) => {
+    setTotal(prevTotal => ({
+      formatted: ((prevTotal.raw - discount) / 100).toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD',
+      }),
+      raw: prevTotal.raw - discount,
+    }))
+  }
   // calculate the new cart total whenever the cart changes
   useEffect(() => {
     if (!hasInitialized) return
@@ -243,7 +252,7 @@ export const CartProvider = props => {
           acc +
           (typeof item.product === 'object'
             ? JSON.parse(item?.product?.priceJSON || '{}')?.data?.[0]?.unit_amount *
-              (typeof item?.quantity === 'number' ? item?.quantity : 0)
+            (typeof item?.quantity === 'number' ? item?.quantity : 0)
             : 0)
         )
       }, 0) || 0
@@ -268,6 +277,7 @@ export const CartProvider = props => {
         isProductInCart,
         cartTotal: total,
         hasInitializedCart,
+        applyCoupon,
       }}
     >
       {children && children}

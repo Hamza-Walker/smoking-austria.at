@@ -1,5 +1,4 @@
 'use client'
-
 import React, { Fragment, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -23,8 +22,11 @@ export const CheckoutPage: React.FC<{
   const { user } = useAuth()
   const router = useRouter()
   const [paymentMethod, setPaymentMethod] = React.useState<'stripe' | 'bankTransfer'>('stripe')
-  const { cart, cartIsEmpty, cartTotal } = useCart()
+  const { cart, cartIsEmpty, cartTotal, applyCoupon } = useCart()
 
+  const handleApplyCoupon = (discount: number) => {
+    applyCoupon(discount)
+  }
   useEffect(() => {
     if (user !== null && cartIsEmpty) {
       router.push('/cart')
@@ -112,7 +114,14 @@ export const CheckoutPage: React.FC<{
         </div>
       </div>
       {paymentMethod === 'stripe' && <StripePayment />}
-      {paymentMethod === 'bankTransfer' && <BankTransferPayment />}
+      {paymentMethod === 'bankTransfer' && (
+        <BankTransferPayment
+          userId={user.id}
+          cartItems={cart.items}
+          cartTotal={cartTotal}
+          onApplyCoupon={handleApplyCoupon}
+        />
+      )}
     </Fragment>
   )
 }
