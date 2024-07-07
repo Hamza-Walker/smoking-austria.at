@@ -1,8 +1,16 @@
-import React from 'react'
 import PromoCodeInput from '../PromoCodeInput/index'
+import React, { useState } from 'react'
 
 import classes from './index.module.scss'
+import TermsAndConditions from '../TermsAndConditions'
+
 const BankTransferPayment: React.FC = () => {
+  const [termsAccepted, setTermsAccepted] = useState(false)
+
+  const handleTermsAccept = (accepted: boolean) => {
+    setTermsAccepted(accepted)
+  }
+
   return (
     <div>
       <h3 className={classes.payment}>Bank Transfer Details</h3>
@@ -12,6 +20,10 @@ const BankTransferPayment: React.FC = () => {
       <p>Account Number: 123456789</p>
       <p>Sort Code: 00-00-00</p>
       <PromoCodeInput />
+      <TermsAndConditions
+        termsUrl="/terms-and-conditions" // Change this URL to the actual terms page URL
+        onAccept={handleTermsAccept}
+      />
     </div>
   )
 }
