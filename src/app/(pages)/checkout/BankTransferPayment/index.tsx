@@ -36,9 +36,14 @@ const BankTransferPayment: React.FC = () => {
         onAccept={handleTermsAccept}
       />
       <div className={classes.buttonContainer}>
-        <Button type="submit" appearance="primary" disabled={!termsAccepted} onClick={handleSubmit}>
-          SUBMIT
-        </Button>
+        <Button
+          label="Confirm Order"
+          type="submit"
+          appearance="secondary"
+          disabled={!termsAccepted}
+          onClick={handleSubmit}
+        ></Button>
+        <Button label="Back to cart" href="/cart" appearance="secondary" />
       </div>
     </div>
   )

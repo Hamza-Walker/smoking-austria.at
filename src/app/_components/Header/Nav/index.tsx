@@ -31,7 +31,6 @@ export const HeaderNav: React.FC<{ header: HeaderType }> = ({ header }) => {
           onClick={() => (window.location.href = '/login')}
         />
       )}
-      {user && <CartLink />}
       {/* TODO:  Add Logout button _ remove cause its appearing twice on the header*/}
     </nav>
   )
