@@ -9,7 +9,7 @@ export type Props = {
   label?: string
   appearance?: 'default' | 'primary' | 'secondary' | 'none'
   el?: 'button' | 'link' | 'a'
-  onClick?: () => void
+  onClick?: MouseEventHandler<HTMLButtonElement | HTMLAnchorElement | HTMLLinkElement>
   href?: string
   newTab?: boolean
   className?: string
