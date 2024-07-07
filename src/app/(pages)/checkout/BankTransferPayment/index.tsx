@@ -26,6 +26,14 @@ const BankTransferPayment: React.FC<{
     setDiscount(discountAmount)
     onApplyCoupon(discountAmount)
   }
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    e.currentTarget.style.setProperty('--x', `${x}px`)
+    e.currentTarget.style.setProperty('--y', `${y}px`)
+  }
 
   const handleMouseDown = () => {
     console.log('Button clicked')
@@ -57,6 +65,7 @@ const BankTransferPayment: React.FC<{
           disabled={!termsAccepted}
           className={classes.buttonSubmit}
           onClick={handleSubmit}
+          onMouseMove={handleMouseMove}
           onMouseDown={handleMouseDown}
         ></Button>
       </div>
