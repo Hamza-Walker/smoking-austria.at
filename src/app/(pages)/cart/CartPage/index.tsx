@@ -14,7 +14,7 @@ import { useAuth } from '../../../_providers/Auth'
 import { useCart } from '../../../_providers/Cart'
 
 import classes from './index.module.scss'
-import CartItem from '../CartITem'
+import CartItem from '../CartITem/index'
 
 export const CartPage: React.FC<{
   settings: Settings
