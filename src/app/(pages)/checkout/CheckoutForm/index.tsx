@@ -20,6 +20,15 @@ export const CheckoutForm: React.FC<{}> = () => {
   const router = useRouter()
   const { cart, cartTotal } = useCart()
 
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    e.currentTarget.style.setProperty('--x', `${x}px`)
+    e.currentTarget.style.setProperty('--y', `${y}px`)
+  }
+
   const handleSubmit = useCallback(
     async e => {
       e.preventDefault()
@@ -99,13 +108,20 @@ export const CheckoutForm: React.FC<{}> = () => {
     <form onSubmit={handleSubmit} className={classes.form}>
       {error && <Message error={error} />}
       <PaymentElement />
-      <div className={classes.actions}>
-        <Button label="Back to cart" href="/cart" appearance="secondary" />
+      <div className={classes.buttonContainer}>
         <Button
-          label={isLoading ? 'Loading...' : 'Checkout'}
+          className={classes.buttonCart}
+          label="Back to cart"
+          href="/cart"
+          appearance="primary"
+        />
+        <Button
+          label={isLoading ? 'Loading...' : 'Buy Now'}
           type="submit"
           appearance="primary"
           disabled={!stripe || isLoading}
+          className={classes.buttonSubmit}
+          onMouseMove={handleMouseMove}
         />
       </div>
     </form>
