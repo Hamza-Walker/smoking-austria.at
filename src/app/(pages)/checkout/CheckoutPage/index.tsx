@@ -100,16 +100,18 @@ export const CheckoutPage: React.FC<{
         <h3>Select Payment Method</h3>
         <div className={classes.buttonContainer}>
           <Button
-            appearance={paymentMethod === 'stripe' ? 'primary' : 'default'}
-            onClick={() => setPaymentMethod('stripe')}
-          >
-            Credit Card
-          </Button>
-          <Button
+            className={classes.button}
             appearance={paymentMethod === 'bankTransfer' ? 'primary' : 'default'}
             onClick={() => setPaymentMethod('bankTransfer')}
           >
             Bank Transfer
+          </Button>
+          <Button
+            className={classes.button}
+            appearance={paymentMethod === 'stripe' ? 'primary' : 'default'}
+            onClick={() => setPaymentMethod('stripe')}
+          >
+            Credit Card
           </Button>
         </div>
       </div>
