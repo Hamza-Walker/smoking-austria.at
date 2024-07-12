@@ -7,7 +7,8 @@ export const InitTheme: React.FC = () => {
     // eslint-disable-next-line @next/next/no-before-interactive-script-outside-document
     <Script
       id="theme-script"
-      strategy="beforeInteractive"
+      //      strategy="beforeInteractive" apperantly a friend said this line causes a
+      //      run time error in poduction so it disabled.
       dangerouslySetInnerHTML={{
         __html: `
   (function () {
