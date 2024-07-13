@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import classes from './index.module.scss'
 
 const Promotion = () => {
@@ -11,10 +11,13 @@ const Promotion = () => {
   })
 
   // Calculate the target date as the last day of the current month
-  const targetDate = new Date()
-  targetDate.setMonth(targetDate.getMonth() + 1)
-  targetDate.setDate(0) // Last day of the current month
-  targetDate.setHours(23, 59, 59, 999) // End of the day
+  const targetDate = useMemo(() => {
+    const date = new Date()
+    date.setMonth(date.getMonth() + 1)
+    date.setDate(0) // Last day of the current month
+    date.setHours(23, 59, 59, 999) // End of the day
+    return date
+  }, [])
 
   useEffect(() => {
     const timerInterval = setInterval(() => {

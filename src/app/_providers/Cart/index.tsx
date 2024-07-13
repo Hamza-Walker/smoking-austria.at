@@ -251,8 +251,8 @@ export const CartProvider = props => {
         return (
           acc +
           (typeof item.product === 'object'
-            ? JSON.parse(item?.product?.priceJSON || '{}')?.data?.[0]?.unit_amount *
-            (typeof item?.quantity === 'number' ? item?.quantity : 0)
+            ? JSON.parse(item?.product?.priceJSON || '{}').data?.[0].unit_amount *
+              (typeof item.quantity === 'number' ? item.quantity : 0)
             : 0)
         )
       }, 0) || 0
