@@ -19,6 +19,8 @@ services:
     image: mongo:latest
     ports:
       - '27017:27017'
+    environment:
+      PAYLOAD_SECRET_KEY: 0xCp+KlNVvjOzJljlnrPxgyA9gWdzobpDEbG1D/eQ1o=
     command:
       - --storageEngine=wiredTiger
     volumes:
