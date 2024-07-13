@@ -1,34 +1,21 @@
-version: '3'
+version: '3.8'
 
 services:
-  payload:
-    image: node:18-alpine
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - '3000:3000'
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    working_dir: /home/node/app/
-    command: sh -c "npm install && npm run dev"
-    depends_on:
-      - mongo
-    env_file:
-      - .env
-
-  mongo:
-    image: mongo:latest
-    ports:
-      - '27017:27017'
+      - "3000:3000"
     environment:
-      PAYLOAD_SECRET_KEY: 0xCp+KlNVvjOzJljlnrPxgyA9gWdzobpDEbG1D/eQ1o=
-    command:
-      - --storageEngine=wiredTiger
+      NODE_ENV: production
+      PAYLOAD_CONFIG_PATH: dist/payload/payload.config.js
+      PAYLOAD_SECRET: 0xCp+KlNVvjOzJljlnrPxgyA9gWdzobpDEbG1D/eQ1o=
     volumes:
-      - data:/data/db
-    logging:
-      driver: none
-
-volumes:
-  data:
-  node_modules:
-
+      - .:/app
+    command: npm run serve
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
