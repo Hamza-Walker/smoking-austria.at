@@ -1,20 +1,13 @@
-# Use an official Node.js runtime as a parent image
 FROM node:18.8-alpine as base
 
-# Set the working directory
-WORKDIR /home/node/app
+FROM base as builder
 
-# Copy package.json and package-lock.json
+WORKDIR /home/node/app
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code
 COPY . .
-
-# Build the application
-RUN npm run build
+RUN yarn install
+RUN yarn build
 
 FROM base as runtime
 
@@ -23,16 +16,13 @@ ENV PAYLOAD_CONFIG_PATH=dist/payload.config.js
 ENV PAYLOAD_SECRET=0xCp+KlNVvjOzJljlnrPxgyA9gWdzobpDEbG1D/eQ1o=
 
 WORKDIR /home/node/app
+COPY package*.json  ./
+COPY yarn.lock ./
 
-# Install only production dependencies
-COPY package*.json ./
-RUN npm install --production
-
-# Copy built files from the builder stage
+RUN yarn install --production
 COPY --from=builder /home/node/app/dist ./dist
 COPY --from=builder /home/node/app/build ./build
 
 EXPOSE 3000
 
 CMD ["node", "dist/server.js"]
-
