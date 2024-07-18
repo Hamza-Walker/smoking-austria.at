@@ -1,6 +1,6 @@
 # Use Node.js 18 for the build container
 ARG NODE_VERSION=18
-
+ARG PAYLOAD_SECRET=0xCp+KlNVvjOzJljlnrPxgyA9gWdzobpDEbG1D/eQ1o
 # Setup the build container
 FROM node:${NODE_VERSION}-alpine AS build
 
