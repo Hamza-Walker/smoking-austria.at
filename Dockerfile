@@ -1,6 +1,7 @@
-# Use Node.js 18 for the build container
+# Use Node.js 18 for both build and runtime stages
 ARG NODE_VERSION=18
-ARG PAYLOAD_SECRET=0xCp+KlNVvjOzJljlnrPxgyA9gWdzobpDEbG1D/eQ1o
+ARG PAYLOAD_SECRET
+
 # Setup the build container
 FROM node:${NODE_VERSION}-alpine AS build
 
@@ -16,9 +17,19 @@ COPY . .
 # Build the application
 RUN yarn build
 
-# Final stage for serving static files (if applicable)
-FROM nginx:alpine
-COPY --from=build /home/node/build /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Setup the runtime container
+FROM node:${NODE_VERSION}-alpine
 
+WORKDIR /home/node
+
+# Copy the built application
+COPY --from=build /home/node /home/node
+
+# Expose the service's port
+EXPOSE 3000
+
+# Ensure the secret key environment variable is available
+ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
+
+# Run the service
+CMD ["yarn", "run", "serve"]
