@@ -1,35 +1,27 @@
-# Use Node.js 18 for both build and runtime stages
-ARG NODE_VERSION=18
-ARG PAYLOAD_SECRET
+FROM node:18.8-alpine as base
 
-# Setup the build container
-FROM node:${NODE_VERSION}-alpine AS build
+FROM base as builder
 
-WORKDIR /home/node
+WORKDIR /home/node/app
+COPY package*.json ./
 
-# Install dependencies
-COPY package*.json .
-RUN yarn install
-
-# Copy the source files
 COPY . .
-
-# Build the application
+RUN yarn install
 RUN yarn build
 
-# Setup the runtime container
-FROM node:${NODE_VERSION}-alpine
+FROM base as runtime
 
-WORKDIR /home/node
+ENV NODE_ENV=production
+ENV PAYLOAD_CONFIG_PATH=dist/payload.config.js
 
-# Copy the built application
-COPY --from=build /home/node /home/node
+WORKDIR /home/node/app
+COPY package*.json  ./
+COPY yarn.lock ./
 
-# Expose the service's port
+RUN yarn install --production
+COPY --from=builder /home/node/app/dist ./dist
+COPY --from=builder /home/node/app/build ./build
+
 EXPOSE 3000
 
-# Ensure the secret key environment variable is available
-ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
-
-# Run the service
-CMD ["yarn", "run", "serve"]
+CMD ["node", "dist/server.js"]

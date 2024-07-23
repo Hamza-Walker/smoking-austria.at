@@ -5,6 +5,9 @@ import CategoryCard from './CategroyCard'
 import classes from './index.module.scss'
 
 const Categories = ({ categories }: { categories: Category[] }) => {
+  if (!categories || categories.length === 0) {
+    return <div>No categories available.</div>
+  }
   return (
     <section className={classes.constainer}>
       <div className={classes.titleWrapper}>

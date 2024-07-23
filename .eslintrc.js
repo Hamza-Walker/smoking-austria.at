@@ -4,8 +4,9 @@ module.exports = {
   ignorePatterns: ['**/payload-types.ts'],
   plugins: ['prettier'],
   rules: {
-    'prettier/prettier': 'error',
+    'prettier/prettier': ['error', { endOfLine: 'auto' }],
     'no-console': 'off',
+    'import/order': 'off',
     'simple-import-sort/imports': 'off',
   },
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import classes from './index.module.scss'
 
 const PromoCodeInput: React.FC<{

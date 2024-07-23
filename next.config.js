@@ -6,6 +6,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  staticPageGenerationTimeout: 120,
   reactStrictMode: true,
   swcMinify: true,
   images: {

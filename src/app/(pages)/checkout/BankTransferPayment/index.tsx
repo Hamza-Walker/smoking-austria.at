@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
+
+import { Button } from '../../../_components/Button'
 import PromoCodeInput from '../PromoCodeInput'
 import TermsAndConditions from '../TermsAndConditions'
-import { Button } from '../../../_components/Button'
+
 import classes from './index.module.scss'
 
 const BankTransferPayment: React.FC<{

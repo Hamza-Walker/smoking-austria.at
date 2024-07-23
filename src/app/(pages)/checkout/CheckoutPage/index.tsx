@@ -2,15 +2,16 @@
 import React, { Fragment, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+
 import { Settings } from '../../../../payload/payload-types'
+import { Button } from '../../../_components/Button'
 import { useAuth } from '../../../_providers/Auth'
 import { useCart } from '../../../_providers/Cart'
+import BankTransferPayment from '../BankTransferPayment'
 import { CheckoutItem } from '../CheckoutItem'
+import StripePayment from '../StripePayment'
 
 import classes from './index.module.scss'
-import StripePayment from '../StripePayment'
-import BankTransferPayment from '../BankTransferPayment'
-import { Button } from '../../../_components/Button'
 
 export const CheckoutPage: React.FC<{
   settings: Settings
