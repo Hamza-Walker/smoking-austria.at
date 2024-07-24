@@ -14,23 +14,7 @@ import classes from './index.module.scss'
 const Products = async () => {
   const { isEnabled: isDraftMode } = draftMode()
   let page: Page | null = null
-  let categroies: Category[] | null = null
-
-  const printPopulatedDocsDetails = docs => {
-    docs.forEach(doc => {
-      console.log('Current Document:', doc)
-
-      // Check if populatedDocs exists and is an array
-      if (Array.isArray(doc.populatedDocs)) {
-        console.log('Populated Docs:')
-        doc.populatedDocs.forEach(popDoc => {
-          console.log(popDoc)
-        })
-      } else {
-        console.log('No populatedDocs found.')
-      }
-    })
-  }
+  let categories: Category[] | null = null
 
   try {
     page = await fetchDoc<Page>({
@@ -38,16 +22,35 @@ const Products = async () => {
       slug: 'products',
       draft: isDraftMode,
     })
-    //    printPopulatedDocsDetails(page.layout)
-    categroies = await fetchDocs<Category>('categories')
+    console.log('Page fetched successfully:', page)
+
+    categories = await fetchDocs<Category>('categories')
+    console.log('Categories fetched successfully:', categories)
   } catch (error) {
-    console.log(error)
+    console.error('Error fetching data:', error)
+    return (
+      <div className={classes.container}>
+        <Gutter className={classes.products}>
+          <p>Error loading products. Please try again later.</p>
+        </Gutter>
+      </div>
+    )
+  }
+
+  if (!page || !categories) {
+    return (
+      <div className={classes.container}>
+        <Gutter className={classes.products}>
+          <p>No data available.</p>
+        </Gutter>
+      </div>
+    )
   }
 
   return (
     <div className={classes.container}>
       <Gutter className={classes.products}>
-        <Filters categories={categroies} />
+        <Filters categories={categories} />
         <Blocks blocks={page.layout} disableTopPadding={true} />
       </Gutter>
       <HR />
