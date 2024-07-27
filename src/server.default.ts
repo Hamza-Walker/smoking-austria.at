@@ -10,6 +10,7 @@ dotenv.config({
 })
 
 import express from 'express'
+import nodemailer from 'nodemailer'
 import payload from 'payload'
 
 import { seed } from './payload/seed'
@@ -22,6 +23,21 @@ app.get('/', (_, res) => {
   res.redirect('/admin')
 })
 
+
+const transport = nodemailer.createTransport({
+  host: 'smtp0001.neo.space', // Update with actual SMTP host
+  port: 465, // Update with actual port
+  auth: {
+    user: 'hamza@walker-vienna.com', // Update with your email
+    pass: process.env.EMAIL_PASSWORD, // Ensure to use environment variables for sensitive data
+  },
+})
+console.log(transport)
+const emailConfig = {
+  fromName: 'Hamza Walker',
+  fromAddress: 'hamza@walker-vienna.com',
+  transport,
+}
 const start = async (): Promise<void> => {
   await payload.init({
     secret: process.env.PAYLOAD_SECRET || '',
@@ -29,6 +45,7 @@ const start = async (): Promise<void> => {
     onInit: () => {
       payload.logger.info(`Payload Admin URL: ${payload.getAdminURL()}`)
     },
+    email: emailConfig,
   })
 
   if (process.env.PAYLOAD_SEED === 'true') {
