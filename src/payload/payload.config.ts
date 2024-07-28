@@ -7,9 +7,10 @@ import seo from '@payloadcms/plugin-seo'
 import type { GenerateTitle } from '@payloadcms/plugin-seo/types'
 import stripePlugin from '@payloadcms/plugin-stripe'
 import { slateEditor } from '@payloadcms/richtext-slate'
-import dotenv from 'dotenv'
+import dotenv from './dotenv' // Correct import for dotenv
 import path from 'path'
 import { buildConfig } from 'payload/config'
+import { merge } from 'webpack-merge'
 
 import Categories from './collections/Categories'
 import { Media } from './collections/Media'
@@ -29,11 +30,11 @@ import { Settings } from './globals/Settings'
 import { priceUpdated } from './stripe/webhooks/priceUpdated'
 import { productUpdated } from './stripe/webhooks/productUpdated'
 
+const customWebpackConfig = require('../../webpack.config')
+
 const generateTitle: GenerateTitle = () => {
   return 'My Store'
 }
-
-const mockModulePath = path.resolve(__dirname, './emptyModuleMock.js')
 
 dotenv.config({
   path: path.resolve(__dirname, '../../.env'),
@@ -44,35 +45,10 @@ export default buildConfig({
     user: Users.slug,
     bundler: webpackBundler(),
     components: {
-      // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeLogin` statement on line 15.
       beforeLogin: [BeforeLogin],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
       beforeDashboard: [BeforeDashboard],
     },
-    webpack: config => {
-      return {
-        ...config,
-        resolve: {
-          ...config.resolve,
-          alias: {
-            ...config.resolve?.alias,
-            dotenv: path.resolve(__dirname, './dotenv.js'),
-            [path.resolve(__dirname, 'collections/Products/hooks/beforeChange')]: mockModulePath,
-            [path.resolve(__dirname, 'collections/Users/hooks/createStripeCustomer')]:
-              mockModulePath,
-            [path.resolve(__dirname, 'collections/Users/endpoints/customer')]: mockModulePath,
-            [path.resolve(__dirname, 'endpoints/create-payment-intent')]: mockModulePath,
-            [path.resolve(__dirname, 'endpoints/customers')]: mockModulePath,
-            [path.resolve(__dirname, 'endpoints/products')]: mockModulePath,
-            [path.resolve(__dirname, 'endpoints/seed')]: mockModulePath,
-            stripe: mockModulePath,
-            express: mockModulePath,
-          },
-        },
-      }
-    },
+    webpack: config => merge(config, customWebpackConfig),
   },
   editor: slateEditor({}),
   db: postgresAdapter({
@@ -111,8 +87,6 @@ export default buildConfig({
       method: 'get',
       handler: productsProxy,
     },
-    // The seed endpoint is used to populate the database with some example data
-    // You should delete this endpoint before deploying your site to production
     {
       path: '/seed',
       method: 'get',

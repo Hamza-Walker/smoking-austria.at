@@ -1,10 +1,19 @@
 module.exports = {
-  root: true,
-  extends: ['plugin:@next/next/recommended', '@payloadcms'],
-  ignorePatterns: ['**/payload-types.ts'],
-  plugins: ['prettier'],
+  parser: '@typescript-eslint/parser',
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+  plugins: ['@typescript-eslint'],
   rules: {
-    'prettier/prettier': 'error',
-    'no-console': 'off',
+    // Your custom rules
+  },
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: 'module',
+    tsconfigRootDir: __dirname,
+    project: ['./tsconfig.json'],
+  },
+  settings: {
+    'import/resolver': {
+      typescript: {},
+    },
   },
 }

@@ -1,11 +1,17 @@
 import path from 'path'
+import fs from 'fs'
+import Handlebars from 'handlebars'
+import inlineCSS from 'inline-css'
 import type { AfterChangeHook } from 'payload/dist/collections/config/types'
 import type { Order } from '../../../payload-types'
-import generateEmailHTML from './utilities/generateEmailHTML'
+import { formatCurrency } from './utilities/formatCurrency'
 import { generatePDF } from './utilities/generatePDF'
-import fs from 'fs'
 
 export const sendOrderConfirmation: AfterChangeHook<Order> = async ({ doc, req, operation }) => {
+  if (typeof window !== 'undefined') {
+    return
+  }
+
   const { payload } = req
 
   console.log('sendOrderConfirmation hook triggered')
@@ -16,7 +22,6 @@ export const sendOrderConfirmation: AfterChangeHook<Order> = async ({ doc, req, 
     console.log('Ordered by:', orderedBy)
 
     try {
-      // Find the user by ID
       const user = await payload.findByID({
         collection: 'users',
         id: orderedBy,
@@ -25,34 +30,52 @@ export const sendOrderConfirmation: AfterChangeHook<Order> = async ({ doc, req, 
       console.log('User found:', user)
 
       if (user) {
+        const date = new Date().toLocaleDateString('de-AT').replace(/\./g, '-')
+        const uniqueID = Math.floor(1000 + Math.random() * 9000)
+        const invoiceNumber = `INV-${user.id}-${date}-${uniqueID}`
+        const paymentMethod = doc.stripePaymentIntentID ? 'Card' : 'Check'
+
         const emailData = {
-          invoiceNumber: '1/2024',
+          invoiceNumber,
+          date,
           sender: {
             name: 'Toifl Hans Christian e.U.',
             address: 'Meinhartsdorfergasse 10/2, 1150 Wien, Österreich',
           },
           recipient: {
             name: user.name,
-            address: user.address,
+            address: user.email,
           },
-          date: new Date().toLocaleDateString('de-AT'),
+          paymentMethod,
           items: doc.items.map(item => ({
             quantity: item.quantity,
-            description: item.product.name,
-            unitPriceBrutto: item.price,
-            totalNetto: item.price * item.quantity * 0.8, // example calculation
-            totalBrutto: item.price * item.quantity,
-            mwst: item.price * item.quantity * 0.2, // example calculation
+            description: item.product.title || 'No title',
+            unitPriceBrutto: formatCurrency(item.price),
+            totalNetto: formatCurrency(item.price * item.quantity * 0.8),
+            totalBrutto: formatCurrency(item.price * item.quantity),
+            mwst: formatCurrency(item.price * item.quantity * 0.2),
           })),
-          total: doc.total,
+          total: formatCurrency(doc.total),
         }
 
-        // Generate HTML for the receipt
-        const htmlContent = await generateEmailHTML(emailData)
+        // Read and compile the email template
+        const emailTemplatePath = path.join(__dirname,'utilities', 'emailTemplate.html')
+        const emailTemplateSource = fs.readFileSync(emailTemplatePath, 'utf-8')
+        const compiledEmailTemplate = Handlebars.compile(emailTemplateSource)
+        const emailHTML = await inlineCSS(compiledEmailTemplate(emailData), {
+          url: ' ',
+          removeStyleTags: false,
+        })
+
+        // Read and compile the receipt template
+        const receiptTemplatePath = path.join(__dirname, 'utilities', 'recieptTemplate.html')
+        const receiptTemplateSource = fs.readFileSync(receiptTemplatePath, 'utf-8')
+        const compiledReceiptTemplate = Handlebars.compile(receiptTemplateSource)
+        const receiptHTML = compiledReceiptTemplate(emailData)
 
         // Generate PDF
         const outputPath = path.join(__dirname, `../receipts/receipt_${doc.id}.pdf`)
-        const pdfPath = await generatePDF(htmlContent, outputPath)
+        const pdfPath = await generatePDF(receiptHTML, outputPath)
 
         // Read the generated PDF file as a Buffer
         const pdfBuffer = fs.readFileSync(pdfPath)
@@ -62,7 +85,7 @@ export const sendOrderConfirmation: AfterChangeHook<Order> = async ({ doc, req, 
           from: 'hamza@walker-vienna.com',
           to: user.email,
           subject: 'Order Confirmation',
-          html: htmlContent,
+          html: emailHTML,
           attachments: [
             {
               filename: 'receipt.pdf',

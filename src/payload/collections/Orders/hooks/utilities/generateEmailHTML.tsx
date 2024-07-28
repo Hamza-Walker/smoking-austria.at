@@ -3,12 +3,10 @@ import Handlebars from 'handlebars'
 import inlineCSS from 'inline-css'
 import path from 'path'
 
-const template = fs.readFileSync(path.join(__dirname, './template.html'), 'utf8')
-
-// Compile the template
+const template = fs.readFileSync(path.join(__dirname, './emailTemplate.html'), 'utf8')
 const getHTML = Handlebars.compile(template)
 
-const generateEmailHTML = async (data: any): Promise<string> => {
+const generateEmailHTML = async (data): Promise<string> => {
   const preInlinedCSS = getHTML(data)
   const html = await inlineCSS(preInlinedCSS, {
     url: ' ',
