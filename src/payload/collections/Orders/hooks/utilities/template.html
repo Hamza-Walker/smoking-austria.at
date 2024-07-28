@@ -1,0 +1,47 @@
+<!-- template.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Order Receipt</title>
+  <style>
+    /* Your CSS styles */
+  </style>
+</head>
+<body>
+  <div>
+    <h1>Rechnung Nr.: {{invoiceNumber}}</h1>
+    <p>Von: {{sender.name}}</p>
+    <p>{{sender.address}}</p>
+    <p>To: {{recipient.name}}</p>
+    <p>{{recipient.address}}</p>
+    <p>Wien, {{date}}</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Menge</th>
+          <th>Bezeichnung</th>
+          <th>Einzelpreis Brutto</th>
+          <th>Gesamt Netto</th>
+          <th>Gesamt Brutto</th>
+          <th>Mwst Betrag</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each items}}
+        <tr>
+          <td>{{this.quantity}}</td>
+          <td>{{this.description}}</td>
+          <td>{{this.unitPriceBrutto}}</td>
+          <td>{{this.totalNetto}}</td>
+          <td>{{this.totalBrutto}}</td>
+          <td>{{this.mwst}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <p>Total: {{total}}</p>
+  </div>
+</body>
+</html>
+

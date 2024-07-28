@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 import next from 'next'
 import nextBuild from 'next/dist/build'
 import path from 'path'
-
+import nodemailer from 'nodemailer'
 dotenv.config({
   path: path.resolve(__dirname, '../.env'),
 })
@@ -15,6 +15,27 @@ import { seed } from './payload/seed'
 const app = express()
 const PORT = process.env.PORT || 3000
 
+const transport = nodemailer.createTransport({
+  host: 'smtp0001.neo.space', // Update with actual SMTP host
+  port: 465, // Update with actual port
+  auth: {
+    user: 'hamza@walker-vienna.com', // Update with your email
+    pass: process.env.EMAIL_PASSWORD, // Ensure to use environment variables for sensitive data
+  },
+})
+transport.verify((error, success) => {
+  if (error) {
+    console.error('Error verifying SMTP connection:', error);
+  } else {
+    console.log('SMTP connection verified successfully.');
+  }
+});
+const emailConfig = {
+  fromName: 'Hamza Walker',
+  fromAddress: 'hamza@walker-vienna.com',
+  transport,
+}
+
 const start = async (): Promise<void> => {
   await payload.init({
     secret: process.env.PAYLOAD_SECRET || '',
@@ -22,6 +43,7 @@ const start = async (): Promise<void> => {
     onInit: () => {
       payload.logger.info(`Payload Admin URL: ${payload.getAdminURL()}`)
     },
+    email: emailConfig,
   })
 
   if (process.env.PAYLOAD_SEED === 'true') {
