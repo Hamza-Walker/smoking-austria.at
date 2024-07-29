@@ -55,7 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await payload.sendEmail({
       to: email,
       from: {
-        name: 'Hamza Walker',
+        name: 'Smoking-Austria',
         address: process.env.EMAIL_SALES,
       },
       subject: 'Password Reset Successful',
