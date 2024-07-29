@@ -13,7 +13,7 @@ import Users from './collections/Users'
 import { buildConfig } from 'payload/config'
 import { createPaymentIntent } from './endpoints/create-payment-intent'
 import { customersProxy } from './endpoints/customers'
-import dotenv from './dotenv' // Correct import for dotenv
+import dotenv from 'dotenv' // Correct import for dotenv
 import { merge } from 'webpack-merge'
 import nestedDocs from '@payloadcms/plugin-nested-docs'
 import path from 'path'
