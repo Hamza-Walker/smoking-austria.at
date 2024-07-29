@@ -59,8 +59,15 @@ export const sendOrderConfirmation: AfterChangeHook<Order> = async ({ doc, req, 
           total: formatCurrency(doc.total),
         }
 
-        // Read and compile the email template
+        // Paths
         const emailTemplatePath = path.join(__dirname, 'utilities', 'emailTemplate.html')
+        const receiptTemplatePath = path.join(__dirname, 'utilities', 'recieptTemplate.html')
+        const outputPath = path.join(__dirname, `../receipts/receipt_${doc.id}.pdf`)
+
+        // Ensure receipts directory exists
+        ensureDirectoryExistence(outputPath)
+
+        // Read and compile the email template
         const emailTemplateSource = fs.readFileSync(emailTemplatePath, 'utf-8')
         const compiledEmailTemplate = Handlebars.compile(emailTemplateSource)
         const emailHTML = await inlineCSS(compiledEmailTemplate(emailData), {
@@ -69,13 +76,11 @@ export const sendOrderConfirmation: AfterChangeHook<Order> = async ({ doc, req, 
         })
 
         // Read and compile the receipt template
-        const receiptTemplatePath = path.join(__dirname, 'utilities', 'recieptTemplate.html')
         const receiptTemplateSource = fs.readFileSync(receiptTemplatePath, 'utf-8')
         const compiledReceiptTemplate = Handlebars.compile(receiptTemplateSource)
         const receiptHTML = compiledReceiptTemplate(emailData)
 
         // Generate PDF
-        const outputPath = path.join(__dirname, `../receipts/receipt_${doc.id}.pdf`)
         const pdfPath = await generatePDF(receiptHTML, outputPath)
 
         // Read the generated PDF file as a Buffer
@@ -103,10 +108,20 @@ export const sendOrderConfirmation: AfterChangeHook<Order> = async ({ doc, req, 
       } else {
         console.error('User not found:', orderedBy)
       }
-    } catch (err: Error | unknown) {
+    } catch (err: unknown) {
       console.error('Error finding user or sending email:', err)
     }
   } else {
     console.log('Operation is not create or req.user is not defined')
   }
+}
+
+// Function to ensure directory existence
+const ensureDirectoryExistence = (filePath: string): boolean => {
+  const dirname = path.dirname(filePath)
+  if (fs.existsSync(dirname)) {
+    return true
+  }
+  ensureDirectoryExistence(dirname)
+  fs.mkdirSync(dirname)
 }

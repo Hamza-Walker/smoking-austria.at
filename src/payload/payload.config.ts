@@ -1,8 +1,14 @@
+import path from 'path'
+import { buildConfig } from 'payload/config'
+import { webpackBundler } from '@payloadcms/bundler-webpack'
+import { merge } from 'webpack-merge'
+import type { Configuration as WebpackConfig } from 'webpack'
+import dotenv from 'dotenv'
+
 import BeforeDashboard from './components/BeforeDashboard'
 import BeforeLogin from './components/BeforeLogin'
 import Categories from './collections/Categories'
 import { Footer } from './globals/Footer'
-import type { GenerateTitle } from '@payloadcms/plugin-seo/types'
 import { Header } from './globals/Header'
 import { Media } from './collections/Media'
 import { Orders } from './collections/Orders'
@@ -10,35 +16,28 @@ import { Pages } from './collections/Pages'
 import Products from './collections/Products'
 import { Settings } from './globals/Settings'
 import Users from './collections/Users'
-import type { Configuration as WebpackConfig } from 'webpack'
-import { buildConfig } from 'payload/config'
+
 import { createPaymentIntent } from './endpoints/create-payment-intent'
 import { customersProxy } from './endpoints/customers'
-import dotenv from 'dotenv' // Correct import for dotenv
-import { merge } from 'webpack-merge'
-import nestedDocs from '@payloadcms/plugin-nested-docs'
-import path from 'path'
-import { payloadCloud } from '@payloadcms/plugin-cloud'
-import { postgresAdapter } from '@payloadcms/db-postgres'
 import { priceUpdated } from './stripe/webhooks/priceUpdated'
 import { productUpdated } from './stripe/webhooks/productUpdated'
 import { productsProxy } from './endpoints/products'
-import redirects from '@payloadcms/plugin-redirects'
 import { seed } from './endpoints/seed'
+
+import nestedDocs from '@payloadcms/plugin-nested-docs'
+import redirects from '@payloadcms/plugin-redirects'
 import seo from '@payloadcms/plugin-seo'
 import { slateEditor } from '@payloadcms/richtext-slate'
 import stripePlugin from '@payloadcms/plugin-stripe'
-import { webpackBundler } from '@payloadcms/bundler-webpack'
+import { payloadCloud } from '@payloadcms/plugin-cloud'
+import { postgresAdapter } from '@payloadcms/db-postgres'
+import { GenerateTitle } from '@payloadcms/plugin-seo/dist/types'
 
-const generateTitle: GenerateTitle = () => {
-  return 'My Store'
-}
+const generateTitle: GenerateTitle = () => 'My Store'
 
 dotenv.config({
   path: path.resolve(__dirname, '../../.env'),
 })
-
-const mockModulePath = path.resolve(__dirname, './emptyModuleMock.js')
 
 const customWebpackConfig: WebpackConfig = {
   resolve: {
@@ -46,20 +45,44 @@ const customWebpackConfig: WebpackConfig = {
       assert: require.resolve('assert/'),
       url: require.resolve('url/'),
       os: require.resolve('os-browserify/browser'),
+      stream: require.resolve('stream-browserify'),
+      constants: require.resolve('constants-browserify'),
+      zlib: require.resolve('browserify-zlib'),
+      net: false,
+      tls: false,
+      readline: false,
       fs: false,
       child_process: false,
     },
     alias: {
       dotenv: path.resolve(__dirname, './dotenv.js'),
-      [path.resolve(__dirname, 'collections/Products/hooks/beforeChange')]: mockModulePath,
-      [path.resolve(__dirname, 'collections/Users/hooks/createStripeCustomer')]: mockModulePath,
-      [path.resolve(__dirname, 'collections/Users/endpoints/customer')]: mockModulePath,
-      [path.resolve(__dirname, 'endpoints/create-payment-intent')]: mockModulePath,
-      [path.resolve(__dirname, 'endpoints/customers')]: mockModulePath,
-      [path.resolve(__dirname, 'endpoints/products')]: mockModulePath,
-      [path.resolve(__dirname, 'endpoints/seed')]: mockModulePath,
-      stripe: mockModulePath,
-      express: mockModulePath,
+      [path.resolve(__dirname, 'collections/Products/hooks/beforeChange')]: path.resolve(
+        __dirname,
+        './emptyModuleMock.js',
+      ),
+      [path.resolve(__dirname, 'collections/Users/hooks/createStripeCustomer')]: path.resolve(
+        __dirname,
+        './emptyModuleMock.js',
+      ),
+      [path.resolve(__dirname, 'collections/Users/endpoints/customer')]: path.resolve(
+        __dirname,
+        './emptyModuleMock.js',
+      ),
+      [path.resolve(__dirname, 'endpoints/create-payment-intent')]: path.resolve(
+        __dirname,
+        './emptyModuleMock.js',
+      ),
+      [path.resolve(__dirname, 'endpoints/customers')]: path.resolve(
+        __dirname,
+        './emptyModuleMock.js',
+      ),
+      [path.resolve(__dirname, 'endpoints/products')]: path.resolve(
+        __dirname,
+        './emptyModuleMock.js',
+      ),
+      [path.resolve(__dirname, 'endpoints/seed')]: path.resolve(__dirname, './emptyModuleMock.js'),
+      stripe: path.resolve(__dirname, './emptyModuleMock.js'),
+      express: path.resolve(__dirname, './emptyModuleMock.js'),
     },
   },
   cache: {

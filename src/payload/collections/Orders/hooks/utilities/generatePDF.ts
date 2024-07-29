@@ -1,13 +1,22 @@
-import pdf from 'html-pdf'
+import fs from 'fs'
+import pdf from 'html-pdf-node'
 
-export const generatePDF = (html: string, outputPath: string): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    pdf.create(html).toFile(outputPath, (err, res) => {
-      if (err) {
-        return reject(err)
-      }
-      // Ensure the resolved value is the file path as a string
-      resolve(res.filename)
-    })
+export const generatePDF = async (html: string, outputPath: string): Promise<string> => {
+  const file = { content: html }
+  const options = { format: 'A4' }
+
+  return new Promise<string>((resolve, reject) => {
+    pdf
+      .generatePdf(file, options)
+      .then((pdfBuffer: Buffer) => {
+        fs.writeFile(outputPath, pdfBuffer, err => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(outputPath)
+          }
+        })
+      })
+      .catch(reject)
   })
 }
