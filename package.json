@@ -35,7 +35,7 @@
     "@stripe/stripe-js": "^1.46.0",
     "assert": "^2.1.0",
     "cross-env": "^7.0.3",
-    "dotenv": "^8.6.0",
+    "dotenv": "^8.2.0",
     "escape-html": "^1.0.3",
     "express": "^4.19.2",
     "handlebars": "^4.7.8",
