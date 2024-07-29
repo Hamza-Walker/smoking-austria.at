@@ -49,7 +49,8 @@ export const sendOrderConfirmation: AfterChangeHook<Order> = async ({ doc, req, 
           paymentMethod,
           items: doc.items.map(item => ({
             quantity: item.quantity,
-            description: item.product.title || 'No title',
+            description:
+              typeof item.product === 'string' ? 'No title' : item.product.title || 'No title',
             unitPriceBrutto: formatCurrency(item.price),
             totalNetto: formatCurrency(item.price * item.quantity * 0.8),
             totalBrutto: formatCurrency(item.price * item.quantity),
@@ -102,7 +103,7 @@ export const sendOrderConfirmation: AfterChangeHook<Order> = async ({ doc, req, 
       } else {
         console.error('User not found:', orderedBy)
       }
-    } catch (err) {
+    } catch (err: Error | unknown) {
       console.error('Error finding user or sending email:', err)
     }
   } else {

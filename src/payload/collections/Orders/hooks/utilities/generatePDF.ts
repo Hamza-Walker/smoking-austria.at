@@ -1,5 +1,4 @@
 import pdf from 'html-pdf'
-import path from 'path'
 
 export const generatePDF = (html: string, outputPath: string): Promise<string> => {
   return new Promise((resolve, reject) => {
