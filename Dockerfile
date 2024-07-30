@@ -2,18 +2,16 @@
 FROM node:18.8-alpine as base
 
 # Install necessary dependencies for Puppeteer and Chromium
-RUN apk add --no-cache \
-    libnss3 \
+RUN apk update && apk upgrade && apk add --no-cache \
     chromium \
     nss \
     freetype \
     harfbuzz \
     ca-certificates \
     ttf-freefont \
-    wget \
     udev \
     bash \
-    chromium
+    && rm -rf /var/cache/apk/*
 
 # Set environment variables for Puppeteer
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
