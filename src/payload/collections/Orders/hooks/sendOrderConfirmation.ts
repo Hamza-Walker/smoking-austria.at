@@ -1,11 +1,11 @@
-import path from 'path'
-import fs from 'fs'
-import Handlebars from 'handlebars'
-import inlineCSS from 'inline-css'
 import type { AfterChangeHook } from 'payload/dist/collections/config/types'
+import Handlebars from 'handlebars'
 import type { Order } from '../../../payload-types'
 import { formatCurrency } from './utilities/formatCurrency'
+import fs from 'fs'
 import { generatePDF } from './utilities/generatePDF'
+import inlineCSS from 'inline-css'
+import path from 'path'
 
 export const sendOrderConfirmation: AfterChangeHook<Order> = async ({ doc, req, operation }) => {
   if (typeof window !== 'undefined') {
@@ -40,7 +40,7 @@ export const sendOrderConfirmation: AfterChangeHook<Order> = async ({ doc, req, 
           date,
           sender: {
             name: 'Toifl Hans Christian e.U.',
-            address: 'Meinhartsdorfergasse 10/2, 1150 Wien, Österreich',
+            address: 'Meinhartsdorfergasse 10/2,\n1150 Wien,\nÖsterreich',
           },
           recipient: {
             name: user.name,
