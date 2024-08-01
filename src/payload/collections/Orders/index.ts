@@ -1,13 +1,12 @@
 import type { CollectionConfig } from 'payload/types'
-
+import { LinkToPaymentIntent } from './ui/LinkToPaymentIntent'
 import { admins } from '../../access/admins'
 import { adminsOrLoggedIn } from '../../access/adminsOrLoggedIn'
 import { adminsOrOrderedBy } from './access/adminsOrOrderedBy'
 import { clearUserCart } from './hooks/clearUserCart'
-import { sendOrderConfirmation } from './hooks/sendOrderConfirmation'
 // import { populateOrderedBy } from './hooks/populateOrderedBy'
+import { sendOrderConfirmationWithReciept } from './hooks/sendOrderConfirmationWithReciept'
 import { updateUserPurchases } from './hooks/updateUserPurchases'
-import { LinkToPaymentIntent } from './ui/LinkToPaymentIntent'
 
 export const Orders: CollectionConfig = {
   slug: 'orders',
@@ -17,7 +16,7 @@ export const Orders: CollectionConfig = {
     preview: doc => `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/orders/${doc.id}`,
   },
   hooks: {
-    afterChange: [updateUserPurchases, clearUserCart, sendOrderConfirmation],
+    afterChange: [updateUserPurchases, clearUserCart, sendOrderConfirmationWithReciept],
   },
   access: {
     read: adminsOrOrderedBy,

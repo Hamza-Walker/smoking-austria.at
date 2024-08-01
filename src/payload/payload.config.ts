@@ -11,6 +11,7 @@ import Products from './collections/Products'
 import { Settings } from './globals/Settings'
 import Users from './collections/Users'
 import { buildConfig } from 'payload/config'
+import { cloudStorage } from '@payloadcms/plugin-cloud-storage'
 import { createPaymentIntent } from './endpoints/create-payment-intent'
 import { customersProxy } from './endpoints/customers'
 import dotenv from 'dotenv'
@@ -22,12 +23,11 @@ import { priceUpdated } from './stripe/webhooks/priceUpdated'
 import { productUpdated } from './stripe/webhooks/productUpdated'
 import { productsProxy } from './endpoints/products'
 import redirects from '@payloadcms/plugin-redirects'
+import { s3Adapter } from '@payloadcms/plugin-cloud-storage/s3'
 import seo from '@payloadcms/plugin-seo'
 import { slateEditor } from '@payloadcms/richtext-slate'
 import stripePlugin from '@payloadcms/plugin-stripe'
 import { webpackBundler } from '@payloadcms/bundler-webpack'
-import { s3Adapter } from '@payloadcms/plugin-cloud-storage/s3'
-import { cloudStorage } from '@payloadcms/plugin-cloud-storage'
 const generateTitle: GenerateTitle = () => {
   return 'My Store'
 }
@@ -46,11 +46,14 @@ const storageAdapter = s3Adapter({
   },
   bucket: process.env.S3_BUCKET_NAME,
 })
-
+const emptyObjectPath = path.resolve(__dirname, './mocks/emptyObject.js')
+const fullFilePath = path.resolve(
+  __dirname,
+  'collections/Orders/hooks/sendOrderConfirmationWithReciept.ts',
+)
 dotenv.config({
   path: path.resolve(__dirname, '../../.env'),
 })
-
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -81,6 +84,7 @@ export default buildConfig({
             [path.resolve(__dirname, 'endpoints/seed')]: mockModulePath,
             stripe: mockModulePath,
             express: mockModulePath,
+            [fullFilePath]: emptyObjectPath,
           },
         },
       }

@@ -1,5 +1,4 @@
 import type { GlobalConfig } from 'payload/types'
-
 import link from '../fields/link'
 
 export const Footer: GlobalConfig = {
@@ -12,7 +11,7 @@ export const Footer: GlobalConfig = {
       name: 'copyright',
       label: 'Copyright',
       type: 'text',
-      // required: true,
+      required: false,
     },
     {
       name: 'navItems',

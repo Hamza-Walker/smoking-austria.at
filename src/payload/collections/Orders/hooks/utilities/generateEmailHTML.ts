@@ -3,8 +3,7 @@ import fs from 'fs'
 import inlineCSS from 'inline-css'
 import path from 'path'
 
-const templatePath = path.join(__dirname, './emailTemplate.html')
-const template = fs.readFileSync(templatePath, 'utf8')
+const template = fs.readFileSync(path.join(__dirname, './emailTemplate.html'), 'utf8')
 const getHTML = Handlebars.compile(template)
 
 const generateEmailHTML = async (data): Promise<string> => {
