@@ -34,11 +34,14 @@ const generateTitle: GenerateTitle = () => {
 }
 
 const mockModulePath = path.resolve(__dirname, './emptyModuleMock.js')
-
+const emptyObjectPath = path.resolve(__dirname, './mocks/emptyObject.js')
+const fullFilePath = path.resolve(
+  __dirname,
+  'collections/Orders/hooks/sendOrderConfirmationWithReciept.ts',
+)
 dotenv.config({
   path: path.resolve(__dirname, '../../.env'),
 })
-
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -69,6 +72,7 @@ export default buildConfig({
             [path.resolve(__dirname, 'endpoints/seed')]: mockModulePath,
             stripe: mockModulePath,
             express: mockModulePath,
+            [fullFilePath]: emptyObjectPath,
           },
         },
       }
