@@ -1,5 +1,6 @@
-import fs from 'fs'
 import { PDFDocument, rgb } from 'pdf-lib'
+
+import fs from 'fs'
 
 const generatePDF = async (html: string, outputPath: string): Promise<void> => {
   try {
@@ -19,7 +20,7 @@ const generatePDF = async (html: string, outputPath: string): Promise<void> => {
 
     const pdfBytes = await pdfDoc.save()
     fs.writeFileSync(outputPath, pdfBytes)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error generating PDF:', error)
     throw error
   }
