@@ -46,7 +46,6 @@
     "inline-css": "^4.0.2",
     "next": "13.5.2",
     "nodemailer": "^6.9.14",
-    "os-browserify": "^0.3.0",
     "payload": "^2.0.0",
     "payload-admin-bar": "^1.0.6",
     "pdf-lib": "^1.17.1",

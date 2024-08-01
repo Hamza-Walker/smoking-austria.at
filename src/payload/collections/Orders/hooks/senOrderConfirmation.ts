@@ -5,7 +5,7 @@ import generateEmailHTML from './utilities/generateEmailHTML'
 import generatePDF from './utilities/generatePDF'
 import path from 'path'
 
-const sendOrderConfirmation: AfterChangeHook = async ({
+const sendOrderConfirmationWithReceipt: AfterChangeHook = async ({
   doc,
   req,
 }: {
@@ -77,9 +77,9 @@ const sendOrderConfirmation: AfterChangeHook = async ({
     if (!response.ok) {
       console.error('Error response from order confirmation:', await response.text())
     }
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error sending order confirmation:', error)
   }
 }
 
-export default sendOrderConfirmation
+export default sendOrderConfirmationWithReceipt
