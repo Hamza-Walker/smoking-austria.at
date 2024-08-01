@@ -7,7 +7,11 @@ import { generatePDF } from './utilities/generatePDF'
 import inlineCSS from 'inline-css'
 import path from 'path'
 
-export const sendOrderConfirmationWithReciept: AfterChangeHook<Order> = async ({ doc, req, operation }) => {
+export const sendOrderConfirmationWithReciept: AfterChangeHook<Order> = async ({
+  doc,
+  req,
+  operation,
+}) => {
   if (typeof window !== 'undefined') {
     return
   }
