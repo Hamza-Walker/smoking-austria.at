@@ -9,6 +9,7 @@ import { priceFromJSON } from '../../../_components/Price'
 import { useCart } from '../../../_providers/Cart'
 
 import classes from './index.module.scss'
+import AddressForm from './AddressForm'
 
 const BankTransferPayment: React.FC<{
   userId: string
@@ -107,9 +108,14 @@ const BankTransferPayment: React.FC<{
   const handleMouseDown = () => {
     console.log('Button clicked')
   }
-
+  const onSubmit = () => {
+    console.log('Form submitted')
+  }
   return (
     <div className={classes.container}>
+      <div className={classes.addressForm}>
+        <AddressForm onSubmit={onSubmit} />
+      </div>
       <h3 className={classes.payment}>Bank Transfer Details</h3>
       <p>Please transfer the total amount to the following bank account:</p>
       <p>Bank: BAWAG</p>
