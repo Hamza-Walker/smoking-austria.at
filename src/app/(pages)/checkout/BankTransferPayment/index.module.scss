@@ -50,14 +50,11 @@
 
 .container {
   display: flex;
-  justify-content: flex-start; /* Distributes space between the two columns */
   align-items: flex-start; /* Aligns items at the top */
-  gap: 1rem;
 }
 
 .bankDetails {
-  flex: 1;
-  margin-right: 1rem; /* Space between bank details and address form */
+   flex: 1;
 }
 
 .addressFormContainer {

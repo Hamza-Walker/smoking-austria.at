@@ -73,7 +73,7 @@ const AddressForm = forwardRef(({ userId, initialAddress, onSubmit }: AddressFor
 
   return (
     <div className={classes.formContainer}>
-      <h3 className={classes.title}>Please Confirm Your Shipping Address</h3>
+      <h3 className={classes.title}>Shipping Address</h3>
       <div className={classes.formGroup}>
         <label htmlFor="street">Street</label>
         <input
