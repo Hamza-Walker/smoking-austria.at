@@ -47,7 +47,7 @@ const BankTransferPayment: React.FC<{
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              total: cartTotal.raw,
+              total: cartTotal.raw - discount,
               items: (cart?.items || [])?.map(({ product, quantity }) => ({
                 product: typeof product === 'string' ? product : product.id,
                 quantity,
@@ -83,13 +83,24 @@ const BankTransferPayment: React.FC<{
         setIsLoading(false)
       }
     },
-    [router, cart, cartTotal],
+    [router, cart, cartTotal, discount],
   )
 
-  const handleApplyCoupon = (discountAmount: number) => {
+  const handleApplyCoupon = (promoCode: string) => {
+    let discountAmount = 0
+
+    if (promoCode === 'DISCOUNT20') {
+      discountAmount = cartTotal.raw * 0.2 // Assuming a 20% discount
+    } else {
+      setError('Invalid promo code.')
+    }
+
+    discountAmount = isNaN(discountAmount) || discountAmount < 0 ? 0 : discountAmount
+
     setDiscount(discountAmount)
     onApplyCoupon(discountAmount)
   }
+
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - rect.left
@@ -111,7 +122,16 @@ const BankTransferPayment: React.FC<{
         <p>Bank: BAWAG</p>
         <p>IBAN: AT39 60000 0104 1019 7559</p>
         <p>Reference Number: {userId}</p>
-        <p>Amount: {cartTotal.formatted}</p>
+        <p>
+          Amount:{' '}
+          {new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format((cartTotal.raw - discount) / 100)}
+        </p>
+
         <PromoCodeInput onApplyPromoCode={handleApplyCoupon} />
         <TermsAndConditions termsUrl="/terms-and-conditions" onAccept={handleTermsAccept} />
         <div className={classes.buttonContainer}>
@@ -135,7 +155,7 @@ const BankTransferPayment: React.FC<{
       </div>
       <div className={classes.addressFormContainer}>
         <div className={classes.addressForm}>
-          <AddressForm ref={addressFormRef} userId={userId} onSubmit={() => { }} />
+          <AddressForm ref={addressFormRef} userId={userId} onSubmit={() => {}} />
         </div>
       </div>
     </div>

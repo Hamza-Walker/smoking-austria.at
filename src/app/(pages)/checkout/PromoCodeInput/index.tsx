@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import classes from './index.module.scss'
 
 const PromoCodeInput: React.FC<{
-  onApplyPromoCode: (promoCode: string) => void // Update prop type
+  onApplyPromoCode: (promoCode: string) => void
 }> = ({ onApplyPromoCode }) => {
   const [promoCode, setPromoCode] = useState('')
   const [invalidPromo, setInvalidPromo] = useState(false)
@@ -14,9 +14,8 @@ const PromoCodeInput: React.FC<{
   }
 
   const handleApplyPromoCode = () => {
-    if (promoCode === 'DISCOUNT20') {
+    if (promoCode.trim()) {
       onApplyPromoCode(promoCode)
-      setPromoCode('') // Clear input after applying promo code
     } else {
       setInvalidPromo(true) // Set state to show invalid promo message
     }
