@@ -1,14 +1,31 @@
-
-.promoCodeInput {
+.promoCodeInputContainer {
   margin-top: 2.5rem;
-margin-bottom: 2.5rem;
-}
+  margin-bottom: 2.5rem;
+  align-items: center;
 
-.input {
-    width: 33%; // Full width of the container
+  label, button {
+    width: 100%; /* Ensure full width */
+    margin-bottom: 1rem; /* Add some space between elements */
+  }
+  label {
+    display: block;
+    margin-bottom: 0rem; /* Reduce spacing between label and input */
+    font-weight: bold;
+    color: #555;
+  }
+
+  input {
     padding: 12px 20px; // Increased padding for better touch targets
     border-radius: 5px; // Rounded corners
-    border: 2px solid #ccc; // Thicker border for visibility
     font-size: 18px; // Larger font size
     outline: none; // Remove focus outline for consistency
+    border: 1px solid #ddd;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 65%;
   }
+    button {
+    width: auto; /* Allow the button to size based on content */
+    padding: 10px 20px;
+  }
+}
+

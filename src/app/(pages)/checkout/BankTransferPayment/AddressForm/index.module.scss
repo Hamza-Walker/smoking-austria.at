@@ -1,4 +1,5 @@
 .formContainer {
+  flex: 1;
   padding: 1rem;
   background-color: #f9f9f9;
   border-radius: 10px;
@@ -19,7 +20,7 @@
     }
 
     input {
-      width: 100%; /* Ensure input fields take full available width */
+      width: 90%; /* Ensure input fields take full available width */
       max-width: 100%; /* Limit width of input fields */
       padding: 0.2rem; /* Adjust padding for more compact input fields */
       border-radius: 5px;

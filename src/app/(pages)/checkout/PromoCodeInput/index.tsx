@@ -23,11 +23,11 @@ const PromoCodeInput: React.FC<{
   }
 
   return (
-    <div className={classes.promoCodeInput}>
+    <div className={classes.promoCodeInputContainer}>
       <h3>Redeem promotional coupon</h3>
-      <p>Enter your promotional code below:</p>
+      <label>Enter your promotional code below:</label>
       <input
-        className={`${classes.input} ${invalidPromo ? classes.invalid : ''}`}
+        className={classes.promoCodeInput}
         type="text"
         placeholder="Promotional Code"
         value={promoCode}
