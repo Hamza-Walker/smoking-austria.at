@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { Order } from '../../../../payload/payload-types'
@@ -23,6 +23,7 @@ const BankTransferPayment: React.FC<{
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { cart } = useCart()
+  const addressFormRef = useRef<{ submitAddress: () => Promise<void> }>(null)
 
   const handleTermsAccept = (accepted: boolean) => {
     setTermsAccepted(accepted)
@@ -34,13 +35,10 @@ const BankTransferPayment: React.FC<{
       setIsLoading(true)
 
       try {
-        // Simulate payment intent confirmation
-        const paymentIntent = { id: 'mock_payment_intent_id' }
+        if (addressFormRef.current) {
+          await addressFormRef.current.submitAddress()
+        }
 
-        // Before redirecting to the order confirmation page, we need to create the order in Payload
-        // Cannot clear the cart yet because if you clear the cart while in the checkout
-        // you will be redirected to the `/cart` page before this redirect happens
-        // Instead, we clear the cart in an `afterChange` hook on the `orders` collection in Payload
         try {
           const orderReq = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/orders`, {
             method: 'POST',
@@ -50,7 +48,6 @@ const BankTransferPayment: React.FC<{
             },
             body: JSON.stringify({
               total: cartTotal.raw,
-              stripePaymentIntentID: paymentIntent.id,
               items: (cart?.items || [])?.map(({ product, quantity }) => ({
                 product: typeof product === 'string' ? product : product.id,
                 quantity,
@@ -77,9 +74,7 @@ const BankTransferPayment: React.FC<{
 
           router.push(`/order-confirmation?order_id=${doc.id}`)
         } catch (err) {
-          // don't throw an error if the order was not created successfully
-          // this is because payment _did_ in fact go through, and we don't want the user to pay twice
-          console.error(err.message) // eslint-disable-line no-console
+          console.error(err.message)
           router.push(`/order-confirmation?error=${encodeURIComponent(err.message)}`)
         }
       } catch (err) {
@@ -95,7 +90,6 @@ const BankTransferPayment: React.FC<{
     setDiscount(discountAmount)
     onApplyCoupon(discountAmount)
   }
-
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - rect.left
@@ -108,40 +102,42 @@ const BankTransferPayment: React.FC<{
   const handleMouseDown = () => {
     console.log('Button clicked')
   }
-  const onSubmit = () => {
-    console.log('Form submitted')
-  }
+
   return (
     <div className={classes.container}>
-      <div className={classes.addressForm}>
-        <AddressForm onSubmit={onSubmit} />
+      <div className={classes.bankDetails}>
+        <h3 className={classes.payment}>Bank Transfer Details</h3>
+        <p>Please transfer the total amount to the following bank account:</p>
+        <p>Bank: BAWAG</p>
+        <p>IBAN: AT39 60000 0104 1019 7559</p>
+        <p>Reference Number: {userId}</p>
+        <p>Amount: {cartTotal.formatted}</p>
+        <PromoCodeInput onApplyPromoCode={handleApplyCoupon} />
+        <TermsAndConditions termsUrl="/terms-and-conditions" onAccept={handleTermsAccept} />
+        <div className={classes.buttonContainer}>
+          <Button
+            className={classes.buttonCart}
+            label="Back"
+            appearance="primary"
+            href="/cart"
+          ></Button>
+          <Button
+            label={isLoading ? 'Loading...' : 'Confirm Order'}
+            type="submit"
+            disabled={!termsAccepted || isLoading}
+            className={classes.buttonSubmit}
+            onClick={handleSubmit}
+            onMouseMove={handleMouseMove}
+            onMouseDown={handleMouseDown}
+          ></Button>
+        </div>
+        {error && <div className={classes.error}>{error}</div>}
       </div>
-      <h3 className={classes.payment}>Bank Transfer Details</h3>
-      <p>Please transfer the total amount to the following bank account:</p>
-      <p>Bank: BAWAG</p>
-      <p>IBAN: AT39 60000 0104 1019 7559</p>
-      <p>Reference Number: {userId}</p>
-      <p>Amount: {cartTotal.formatted}</p>
-      <PromoCodeInput onApplyPromoCode={handleApplyCoupon} />
-      <TermsAndConditions termsUrl="/terms-and-conditions" onAccept={handleTermsAccept} />
-      <div className={classes.buttonContainer}>
-        <Button
-          className={classes.buttonCart}
-          label="Back"
-          appearance="primary"
-          href="/cart"
-        ></Button>
-        <Button
-          label={isLoading ? 'Loading...' : 'Confirm Order'}
-          type="submit"
-          disabled={!termsAccepted || isLoading}
-          className={classes.buttonSubmit}
-          onClick={handleSubmit}
-          onMouseMove={handleMouseMove}
-          onMouseDown={handleMouseDown}
-        ></Button>
+      <div className={classes.addressFormContainer}>
+        <div className={classes.addressForm}>
+          <AddressForm ref={addressFormRef} userId={userId} onSubmit={() => { }} />
+        </div>
       </div>
-      {error && <div className={classes.error}>{error}</div>}
     </div>
   )
 }

@@ -1436,7 +1436,7 @@ type Product {
   id: Int
   title: String
   publishedOn: DateTime
-  layout: [Product_Layout!]!
+  layout: [Product_Layout!]
   stripeProductID: String
   priceJSON: String
   enablePaywall: Boolean
@@ -4549,7 +4549,7 @@ type ProductVersion {
 type ProductVersion_Version {
   title: String
   publishedOn: DateTime
-  layout: [ProductVersion_Version_Layout!]!
+  layout: [ProductVersion_Version_Layout!]
   stripeProductID: String
   priceJSON: String
   enablePaywall: Boolean
@@ -5062,6 +5062,7 @@ type User {
   purchases(draft: Boolean): [Product!]
   stripeCustomerID: String
   cart: User_Cart
+  address: User_Address
   skipSync: Boolean
   updatedAt: DateTime
   createdAt: DateTime
@@ -5088,6 +5089,14 @@ type CartItems {
   product(draft: Boolean): Product
   quantity: Float
   id: String
+}
+
+type User_Address {
+  street: String
+  city: String
+  state: String
+  zipCode: String
+  country: String
 }
 
 """
@@ -6523,6 +6532,11 @@ input User_where {
   cart__items__product: User_cart__items__product_operator
   cart__items__quantity: User_cart__items__quantity_operator
   cart__items__id: User_cart__items__id_operator
+  address__street: User_address__street_operator
+  address__city: User_address__city_operator
+  address__state: User_address__state_operator
+  address__zipCode: User_address__zipCode_operator
+  address__country: User_address__country_operator
   skipSync: User_skipSync_operator
   updatedAt: User_updatedAt_operator
   createdAt: User_createdAt_operator
@@ -6607,6 +6621,61 @@ input User_cart__items__id_operator {
   exists: Boolean
 }
 
+input User_address__street_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input User_address__city_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input User_address__state_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input User_address__zipCode_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input User_address__country_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
 input User_skipSync_operator {
   equals: Boolean
   not_equals: Boolean
@@ -6663,6 +6732,11 @@ input User_where_and {
   cart__items__product: User_cart__items__product_operator
   cart__items__quantity: User_cart__items__quantity_operator
   cart__items__id: User_cart__items__id_operator
+  address__street: User_address__street_operator
+  address__city: User_address__city_operator
+  address__state: User_address__state_operator
+  address__zipCode: User_address__zipCode_operator
+  address__country: User_address__country_operator
   skipSync: User_skipSync_operator
   updatedAt: User_updatedAt_operator
   createdAt: User_createdAt_operator
@@ -6680,6 +6754,11 @@ input User_where_or {
   cart__items__product: User_cart__items__product_operator
   cart__items__quantity: User_cart__items__quantity_operator
   cart__items__id: User_cart__items__id_operator
+  address__street: User_address__street_operator
+  address__city: User_address__city_operator
+  address__state: User_address__state_operator
+  address__zipCode: User_address__zipCode_operator
+  address__country: User_address__country_operator
   skipSync: User_skipSync_operator
   updatedAt: User_updatedAt_operator
   createdAt: User_createdAt_operator
@@ -6708,6 +6787,7 @@ type UsersDocAccessFields {
   purchases: UsersDocAccessFields_purchases
   stripeCustomerID: UsersDocAccessFields_stripeCustomerID
   cart: UsersDocAccessFields_cart
+  address: UsersDocAccessFields_address
   skipSync: UsersDocAccessFields_skipSync
   updatedAt: UsersDocAccessFields_updatedAt
   createdAt: UsersDocAccessFields_createdAt
@@ -6934,6 +7014,153 @@ type UsersDocAccessFields_cart_items_id_Delete {
   permission: Boolean!
 }
 
+type UsersDocAccessFields_address {
+  create: UsersDocAccessFields_address_Create
+  read: UsersDocAccessFields_address_Read
+  update: UsersDocAccessFields_address_Update
+  delete: UsersDocAccessFields_address_Delete
+  fields: UsersDocAccessFields_address_Fields
+}
+
+type UsersDocAccessFields_address_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_Fields {
+  street: UsersDocAccessFields_address_street
+  city: UsersDocAccessFields_address_city
+  state: UsersDocAccessFields_address_state
+  zipCode: UsersDocAccessFields_address_zipCode
+  country: UsersDocAccessFields_address_country
+}
+
+type UsersDocAccessFields_address_street {
+  create: UsersDocAccessFields_address_street_Create
+  read: UsersDocAccessFields_address_street_Read
+  update: UsersDocAccessFields_address_street_Update
+  delete: UsersDocAccessFields_address_street_Delete
+}
+
+type UsersDocAccessFields_address_street_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_street_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_street_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_street_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_city {
+  create: UsersDocAccessFields_address_city_Create
+  read: UsersDocAccessFields_address_city_Read
+  update: UsersDocAccessFields_address_city_Update
+  delete: UsersDocAccessFields_address_city_Delete
+}
+
+type UsersDocAccessFields_address_city_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_city_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_city_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_city_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_state {
+  create: UsersDocAccessFields_address_state_Create
+  read: UsersDocAccessFields_address_state_Read
+  update: UsersDocAccessFields_address_state_Update
+  delete: UsersDocAccessFields_address_state_Delete
+}
+
+type UsersDocAccessFields_address_state_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_state_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_state_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_state_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_zipCode {
+  create: UsersDocAccessFields_address_zipCode_Create
+  read: UsersDocAccessFields_address_zipCode_Read
+  update: UsersDocAccessFields_address_zipCode_Update
+  delete: UsersDocAccessFields_address_zipCode_Delete
+}
+
+type UsersDocAccessFields_address_zipCode_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_zipCode_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_zipCode_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_zipCode_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_country {
+  create: UsersDocAccessFields_address_country_Create
+  read: UsersDocAccessFields_address_country_Read
+  update: UsersDocAccessFields_address_country_Update
+  delete: UsersDocAccessFields_address_country_Delete
+}
+
+type UsersDocAccessFields_address_country_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_country_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_country_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_address_country_Delete {
+  permission: Boolean!
+}
+
 type UsersDocAccessFields_skipSync {
   create: UsersDocAccessFields_skipSync_Create
   read: UsersDocAccessFields_skipSync_Read
@@ -7077,6 +7304,7 @@ type UsersUnlockDocAccess {
 type usersMe {
   collection: String
   exp: Int
+  strategy: String
   token: String
   user: User
 }
@@ -8341,7 +8569,7 @@ type HeaderUpdateDocAccess {
 }
 
 type Footer {
-  copyright: String!
+  copyright: String
   navItems: [Footer_NavItems!]
   updatedAt: DateTime
   createdAt: DateTime
@@ -10905,6 +11133,7 @@ type UsersFields {
   purchases: UsersFields_purchases
   stripeCustomerID: UsersFields_stripeCustomerID
   cart: UsersFields_cart
+  address: UsersFields_address
   skipSync: UsersFields_skipSync
   updatedAt: UsersFields_updatedAt
   createdAt: UsersFields_createdAt
@@ -11128,6 +11357,153 @@ type UsersFields_cart_items_id_Update {
 }
 
 type UsersFields_cart_items_id_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_address {
+  create: UsersFields_address_Create
+  read: UsersFields_address_Read
+  update: UsersFields_address_Update
+  delete: UsersFields_address_Delete
+  fields: UsersFields_address_Fields
+}
+
+type UsersFields_address_Create {
+  permission: Boolean!
+}
+
+type UsersFields_address_Read {
+  permission: Boolean!
+}
+
+type UsersFields_address_Update {
+  permission: Boolean!
+}
+
+type UsersFields_address_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_address_Fields {
+  street: UsersFields_address_street
+  city: UsersFields_address_city
+  state: UsersFields_address_state
+  zipCode: UsersFields_address_zipCode
+  country: UsersFields_address_country
+}
+
+type UsersFields_address_street {
+  create: UsersFields_address_street_Create
+  read: UsersFields_address_street_Read
+  update: UsersFields_address_street_Update
+  delete: UsersFields_address_street_Delete
+}
+
+type UsersFields_address_street_Create {
+  permission: Boolean!
+}
+
+type UsersFields_address_street_Read {
+  permission: Boolean!
+}
+
+type UsersFields_address_street_Update {
+  permission: Boolean!
+}
+
+type UsersFields_address_street_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_address_city {
+  create: UsersFields_address_city_Create
+  read: UsersFields_address_city_Read
+  update: UsersFields_address_city_Update
+  delete: UsersFields_address_city_Delete
+}
+
+type UsersFields_address_city_Create {
+  permission: Boolean!
+}
+
+type UsersFields_address_city_Read {
+  permission: Boolean!
+}
+
+type UsersFields_address_city_Update {
+  permission: Boolean!
+}
+
+type UsersFields_address_city_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_address_state {
+  create: UsersFields_address_state_Create
+  read: UsersFields_address_state_Read
+  update: UsersFields_address_state_Update
+  delete: UsersFields_address_state_Delete
+}
+
+type UsersFields_address_state_Create {
+  permission: Boolean!
+}
+
+type UsersFields_address_state_Read {
+  permission: Boolean!
+}
+
+type UsersFields_address_state_Update {
+  permission: Boolean!
+}
+
+type UsersFields_address_state_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_address_zipCode {
+  create: UsersFields_address_zipCode_Create
+  read: UsersFields_address_zipCode_Read
+  update: UsersFields_address_zipCode_Update
+  delete: UsersFields_address_zipCode_Delete
+}
+
+type UsersFields_address_zipCode_Create {
+  permission: Boolean!
+}
+
+type UsersFields_address_zipCode_Read {
+  permission: Boolean!
+}
+
+type UsersFields_address_zipCode_Update {
+  permission: Boolean!
+}
+
+type UsersFields_address_zipCode_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_address_country {
+  create: UsersFields_address_country_Create
+  read: UsersFields_address_country_Read
+  update: UsersFields_address_country_Update
+  delete: UsersFields_address_country_Delete
+}
+
+type UsersFields_address_country_Create {
+  permission: Boolean!
+}
+
+type UsersFields_address_country_Read {
+  permission: Boolean!
+}
+
+type UsersFields_address_country_Update {
+  permission: Boolean!
+}
+
+type UsersFields_address_country_Delete {
   permission: Boolean!
 }
 
@@ -12343,7 +12719,7 @@ type Mutation {
   createUser(data: mutationUserInput!): User
   updateUser(id: Int!, autosave: Boolean, data: mutationUserUpdateInput!): User
   deleteUser(id: Int!): User
-  refreshTokenUser(token: String): usersRefreshedUser
+  refreshTokenUser: usersRefreshedUser
   logoutUser: String
   unlockUser(email: String!): Boolean!
   loginUser(email: String, password: String): usersLoginResult
@@ -12655,6 +13031,7 @@ input mutationUserInput {
   purchases: [Int]
   stripeCustomerID: String
   cart: mutationUser_CartInput
+  address: mutationUser_AddressInput
   skipSync: Boolean
   updatedAt: String
   createdAt: String
@@ -12683,12 +13060,21 @@ input mutationUser_Cart_ItemsInput {
   id: String
 }
 
+input mutationUser_AddressInput {
+  street: String
+  city: String
+  state: String
+  zipCode: String
+  country: String
+}
+
 input mutationUserUpdateInput {
   name: String
   roles: [UserUpdate_roles_MutationInput]
   purchases: [Int]
   stripeCustomerID: String
   cart: mutationUserUpdate_CartInput
+  address: mutationUserUpdate_AddressInput
   skipSync: Boolean
   updatedAt: String
   createdAt: String
@@ -12717,9 +13103,18 @@ input mutationUserUpdate_Cart_ItemsInput {
   id: String
 }
 
+input mutationUserUpdate_AddressInput {
+  street: String
+  city: String
+  state: String
+  zipCode: String
+  country: String
+}
+
 type usersRefreshedUser {
   exp: Int
   refreshedToken: String
+  strategy: String
   user: usersJWT
 }
 
@@ -12855,7 +13250,7 @@ enum Header_NavItems_Link_ReferenceRelationshipInputRelationTo {
 }
 
 input mutationFooterInput {
-  copyright: String!
+  copyright: String
   navItems: [mutationFooter_NavItemsInput]
   updatedAt: String
   createdAt: String

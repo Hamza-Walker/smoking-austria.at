@@ -18,7 +18,7 @@
   color: white;
   position: relative;
   z-index: 0;
-  width: 20%;
+  width: 26%;
 }
 
 .buttonSubmit::before {
@@ -44,6 +44,69 @@
 }
 
 .buttonSubmit:active {
+  transform: scale(0.95);
+}
+
+
+.container {
+  display: flex;
+  justify-content: flex-start; /* Distributes space between the two columns */
+  align-items: flex-start; /* Aligns items at the top */
+  gap: 1rem;
+}
+
+.bankDetails {
+  flex: 1;
+  margin-right: 1rem; /* Space between bank details and address form */
+}
+
+.addressFormContainer {
+  flex: 1;
+  max-width: 500px; /* Optional: Set a max-width for the address form */
+}
+
+.addressForm {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.addressForm h3 {
+  margin-bottom: 1rem;
+}
+
+.addressForm label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.addressForm input {
+  width: calc(100% - 1rem); /* Ensure inputs fit well within the container */
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.addressForm button {
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.addressForm button:hover {
+  transform: scale(1.05);
+}
+
+.addressForm button:active {
   transform: scale(0.95);
 }
 
