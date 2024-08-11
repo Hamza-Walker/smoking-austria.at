@@ -119,14 +119,7 @@ export const CheckoutPage: React.FC<{
         </div>
       </div>
       {paymentMethod === 'stripe' && <StripePayment />} */}
-      {paymentMethod === 'bankTransfer' && (
-        <BankTransferPayment
-          userId={user.id}
-          cartItems={cart.items}
-          cartTotal={cartTotal}
-          onApplyCoupon={handleApplyCoupon}
-        />
-      )}
+      {paymentMethod === 'bankTransfer' && <BankTransferPayment userId={user.id} />}
     </Fragment>
   )
 }

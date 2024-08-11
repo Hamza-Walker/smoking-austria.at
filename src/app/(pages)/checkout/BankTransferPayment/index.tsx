@@ -13,16 +13,13 @@ import AddressForm from './AddressForm'
 
 const BankTransferPayment: React.FC<{
   userId: string
-  cartItems: any[]
-  cartTotal: { formatted: string; raw: number }
-  onApplyCoupon: (discount: number) => void
-}> = ({ userId, cartItems, cartTotal, onApplyCoupon }) => {
+}> = ({ userId }) => {
   const [termsAccepted, setTermsAccepted] = useState(false)
   const [discount, setDiscount] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const { cart } = useCart()
+  const { applyCoupon, removeCoupon, couponDiscount, cart, cartTotal } = useCart()
   const addressFormRef = useRef<{ submitAddress: () => Promise<void> }>(null)
 
   const handleTermsAccept = (accepted: boolean) => {
@@ -87,20 +84,11 @@ const BankTransferPayment: React.FC<{
   )
 
   const handleApplyCoupon = (promoCode: string) => {
-    let discountAmount = 0
-
-    if (promoCode === 'DISCOUNT20') {
-      discountAmount = cartTotal.raw * 0.2 // Assuming a 20% discount
-    } else {
-      setError('Invalid promo code.')
-    }
-
-    discountAmount = isNaN(discountAmount) || discountAmount < 0 ? 0 : discountAmount
-
-    setDiscount(discountAmount)
-    onApplyCoupon(discountAmount)
+    applyCoupon(promoCode)
   }
-
+  const handleRemoveCoupon = () => {
+    removeCoupon()
+  }
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - rect.left
@@ -122,17 +110,18 @@ const BankTransferPayment: React.FC<{
         <p>Bank: BAWAG</p>
         <p>IBAN: AT39 60000 0104 1019 7559</p>
         <p>Reference Number: {userId}</p>
-        <p>
-          Amount:{' '}
-          {new Intl.NumberFormat('de-DE', {
-            style: 'currency',
-            currency: 'EUR',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          }).format((cartTotal.raw - discount) / 100)}
-        </p>
+        <p>Amount: {cartTotal.raw}</p>
 
-        <PromoCodeInput onApplyPromoCode={handleApplyCoupon} />
+        <PromoCodeInput
+          onApplyPromoCode={handleApplyCoupon}
+          onRemovePromoCode={handleRemoveCoupon}
+        />
+        {couponDiscount > 0 && (
+          <p>
+            Discount applied:{' '}
+            {(couponDiscount / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+          </p>
+        )}
         <TermsAndConditions termsUrl="/terms-and-conditions" onAccept={handleTermsAccept} />
         <div className={classes.buttonContainer}>
           <Button
@@ -155,7 +144,7 @@ const BankTransferPayment: React.FC<{
       </div>
       <div className={classes.addressFormContainer}>
         <div className={classes.addressForm}>
-          <AddressForm ref={addressFormRef} userId={userId} onSubmit={() => {}} />
+          <AddressForm ref={addressFormRef} userId={userId} onSubmit={() => { }} />
         </div>
       </div>
     </div>

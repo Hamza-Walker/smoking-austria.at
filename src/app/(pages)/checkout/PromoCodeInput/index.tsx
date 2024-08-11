@@ -1,24 +1,29 @@
 import React, { useState } from 'react'
-
 import classes from './index.module.scss'
 
 const PromoCodeInput: React.FC<{
   onApplyPromoCode: (promoCode: string) => void
-}> = ({ onApplyPromoCode }) => {
+  onRemovePromoCode: () => void
+}> = ({ onApplyPromoCode, onRemovePromoCode }) => {
   const [promoCode, setPromoCode] = useState('')
   const [invalidPromo, setInvalidPromo] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPromoCode(e.target.value)
-    setInvalidPromo(false) // Reset invalid promo state on input change
+    setInvalidPromo(false)
   }
 
   const handleApplyPromoCode = () => {
     if (promoCode.trim()) {
       onApplyPromoCode(promoCode)
     } else {
-      setInvalidPromo(true) // Set state to show invalid promo message
+      setInvalidPromo(true)
     }
+  }
+
+  const handleRemovePromoCode = () => {
+    setPromoCode('')
+    onRemovePromoCode()
   }
 
   return (
@@ -34,6 +39,9 @@ const PromoCodeInput: React.FC<{
       />
       <button className={classes.applyButton} onClick={handleApplyPromoCode}>
         Apply
+      </button>
+      <button className={classes.removeButton} onClick={handleRemovePromoCode}>
+        Remove
       </button>
       {invalidPromo && <p className={classes.errorMsg}>Invalid promo code. Please try again.</p>}
     </div>
