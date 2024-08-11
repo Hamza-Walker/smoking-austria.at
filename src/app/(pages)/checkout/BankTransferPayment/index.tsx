@@ -48,7 +48,7 @@ const BankTransferPayment: React.FC<{
       <p>Bank: BAWAG</p>
       <p>IBAN: AT39 60000 0104 1019 7559</p>
       <p>Reference Number: {userId}</p>
-      <p>Amount: {cartTotal.formatted}</p>
+      <p>Amount: {cartTotal.raw}</p>
       <PromoCodeInput onApplyPromoCode={handleApplyCoupon} />
       <TermsAndConditions
         termsUrl="/terms-and-conditions" // Change this URL to the actual terms page URL
