@@ -1,33 +1,37 @@
 import React, { useState } from 'react'
-
 import classes from './index.module.scss'
 
 const PromoCodeInput: React.FC<{
-  onApplyPromoCode: (promoCode: string) => void // Update prop type
-}> = ({ onApplyPromoCode }) => {
+  onApplyPromoCode: (promoCode: string) => void
+  onRemovePromoCode: () => void
+}> = ({ onApplyPromoCode, onRemovePromoCode }) => {
   const [promoCode, setPromoCode] = useState('')
   const [invalidPromo, setInvalidPromo] = useState(false)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPromoCode(e.target.value)
-    setInvalidPromo(false) // Reset invalid promo state on input change
+    setInvalidPromo(false)
   }
 
   const handleApplyPromoCode = () => {
-    if (promoCode === 'DISCOUNT20') {
+    if (promoCode.trim()) {
       onApplyPromoCode(promoCode)
-      setPromoCode('') // Clear input after applying promo code
     } else {
-      setInvalidPromo(true) // Set state to show invalid promo message
+      setInvalidPromo(true)
     }
   }
 
+  const handleRemovePromoCode = () => {
+    setPromoCode('')
+    onRemovePromoCode()
+  }
+
   return (
-    <div className={classes.promoCodeInput}>
+    <div className={classes.promoCodeInputContainer}>
       <h3>Redeem promotional coupon</h3>
-      <p>Enter your promotional code below:</p>
+      <label>Enter your promotional code below:</label>
       <input
-        className={`${classes.input} ${invalidPromo ? classes.invalid : ''}`}
+        className={classes.promoCodeInput}
         type="text"
         placeholder="Promotional Code"
         value={promoCode}
@@ -35,6 +39,9 @@ const PromoCodeInput: React.FC<{
       />
       <button className={classes.applyButton} onClick={handleApplyPromoCode}>
         Apply
+      </button>
+      <button className={classes.removeButton} onClick={handleRemovePromoCode}>
+        Remove
       </button>
       {invalidPromo && <p className={classes.errorMsg}>Invalid promo code. Please try again.</p>}
     </div>

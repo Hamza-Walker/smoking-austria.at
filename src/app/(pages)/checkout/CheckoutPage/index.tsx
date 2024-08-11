@@ -8,10 +8,10 @@ import { Button } from '../../../_components/Button'
 import { useAuth } from '../../../_providers/Auth'
 import { useCart } from '../../../_providers/Cart'
 import BankTransferPayment from '../BankTransferPayment'
-import { CheckoutItem } from '../CheckoutItem'
-import StripePayment from '../StripePayment'
+// import StripePayment from '../StripePayment'
 
 import classes from './index.module.scss'
+import { CheckoutItem } from '../CheckoutItem'
 
 export const CheckoutPage: React.FC<{
   settings: Settings
@@ -22,7 +22,9 @@ export const CheckoutPage: React.FC<{
 
   const { user } = useAuth()
   const router = useRouter()
-  const [paymentMethod, setPaymentMethod] = React.useState<'stripe' | 'bankTransfer'>('stripe')
+  const [paymentMethod, setPaymentMethod] = React.useState<'stripe' | 'bankTransfer'>(
+    'bankTransfer',
+  )
   const { cart, cartIsEmpty, cartTotal, applyCoupon } = useCart()
 
   const handleApplyCoupon = (discount: number) => {
@@ -97,7 +99,7 @@ export const CheckoutPage: React.FC<{
         </div>
       )}
 
-      <div className={classes.paymentMethod}>
+      {/* <div className={classes.paymentMethod}>
         <h3>Select Payment Method</h3>
         <div className={classes.buttonContainer}>
           <Button
@@ -116,15 +118,8 @@ export const CheckoutPage: React.FC<{
           </Button>
         </div>
       </div>
-      {paymentMethod === 'stripe' && <StripePayment />}
-      {paymentMethod === 'bankTransfer' && (
-        <BankTransferPayment
-          userId={user.id}
-          cartItems={cart.items}
-          cartTotal={cartTotal}
-          onApplyCoupon={handleApplyCoupon}
-        />
-      )}
+      {paymentMethod === 'stripe' && <StripePayment />} */}
+      {paymentMethod === 'bankTransfer' && <BankTransferPayment userId={user.id} />}
     </Fragment>
   )
 }

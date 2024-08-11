@@ -120,25 +120,38 @@ const Users: CollectionConfig = {
             },
           ],
         },
-        // If you wanted to maintain a 'created on'
-        // or 'last modified' date for the cart
-        // you could do so here:
-        // {
-        //   name: 'createdOn',
-        //   label: 'Created On',
-        //   type: 'date',
-        //   admin: {
-        //     readOnly: true
-        //   }
-        // },
-        // {
-        //   name: 'lastModified',
-        //   label: 'Last Modified',
-        //   type: 'date',
-        //   admin: {
-        //     readOnly: true
-        //   }
-        // },
+      ],
+    },
+    {
+      name: 'address',
+      label: 'Address',
+      type: 'group',
+      fields: [
+        {
+          name: 'street',
+          type: 'text',
+          label: 'Street Address',
+        },
+        {
+          name: 'city',
+          type: 'text',
+          label: 'City',
+        },
+        {
+          name: 'state',
+          type: 'text',
+          label: 'State/Province/Region',
+        },
+        {
+          name: 'zipCode',
+          type: 'text',
+          label: 'Postal/Zip Code',
+        },
+        {
+          name: 'country',
+          type: 'text',
+          label: 'Country',
+        },
       ],
     },
     {
