@@ -109,16 +109,16 @@ const BankTransferPayment: React.FC<{
         <p>Bank: BAWAG</p>
         <p>IBAN: AT39 60000 0104 1019 7559</p>
         <p>Reference Number: {userId}</p>
-        <p>Amount: {cartTotal.raw}</p>
+        <p>Amount: {cartTotal.formatted}</p>
 
         <PromoCodeInput
           onApplyPromoCode={handleApplyCoupon}
           onRemovePromoCode={handleRemoveCoupon}
         />
         {couponDiscount > 0 && (
-          <p>
+          <p className={classes.discountApplied}>
             Discount applied:{' '}
-            {(couponDiscount / 100).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+            {(couponDiscount / 100).toLocaleString('en-US', { style: 'currency', currency: 'EUR' })}
           </p>
         )}
         <TermsAndConditions termsUrl="/terms-and-conditions" onAccept={handleTermsAccept} />

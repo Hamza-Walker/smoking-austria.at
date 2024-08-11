@@ -45,7 +45,9 @@
 .buttonSubmit:active {
   transform: scale(0.95);
 }
-
+.discountApplied {
+  color: orange;
+}
 
 .container {
   display: flex;
