@@ -29,9 +29,6 @@ export const Orders: CollectionConfig = {
       name: 'orderedBy',
       type: 'relationship',
       relationTo: 'users',
-      hooks: {
-        //    beforeChange: [populateOrderedBy],
-      },
     },
     {
       name: 'stripePaymentIntentID',
@@ -71,6 +68,13 @@ export const Orders: CollectionConfig = {
           min: 0,
         },
       ],
+    },
+    // Add the couponUsed field here
+    {
+      name: 'couponUsed',
+      type: 'relationship',
+      relationTo: 'coupons',
+      hasMany: false, // Assuming one coupon per order
     },
   ],
 }

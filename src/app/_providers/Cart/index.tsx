@@ -1,5 +1,3 @@
-'use client'
-
 import React, {
   createContext,
   useCallback,
@@ -29,13 +27,14 @@ export type CartContext = {
   applyCoupon: (promoCode: string) => void
   removeCoupon: () => void
   couponDiscount: number
+  couponId: string | null // Add couponId to the context type
 }
 
 const Context = createContext({} as CartContext)
 
 export const useCart = () => useContext(Context)
 
-const arrayHasItems = array => Array.isArray(array) && array.length > 0
+const arrayHasItems = (array: any[]) => Array.isArray(array) && array.length > 0
 
 const flattenCart = (cart: User['cart']): User['cart'] => ({
   ...cart,
@@ -54,12 +53,13 @@ const flattenCart = (cart: User['cart']): User['cart'] => ({
     .filter(Boolean) as CartItem[],
 })
 
-export const CartProvider = props => {
+export const CartProvider = (props: any) => {
   const { children } = props
   const { user, status: authStatus } = useAuth()
 
   const [cart, dispatchCart] = useReducer(cartReducer, {})
   const [couponDiscount, setCouponDiscount] = useState(0)
+  const [couponId, setCouponId] = useState<string | null>(null) // Define couponId state
 
   const [total, setTotal] = useState<{
     formatted: string
@@ -72,6 +72,7 @@ export const CartProvider = props => {
   const hasInitialized = useRef(false)
   const [hasInitializedCart, setHasInitialized] = useState(false)
 
+  // Sync cart from local storage or payload
   useEffect(() => {
     if (user === undefined) return
     if (!hasInitialized.current) {
@@ -116,6 +117,7 @@ export const CartProvider = props => {
     }
   }, [user])
 
+  // Sync cart to payload
   useEffect(() => {
     if (!hasInitialized.current) return
 
@@ -212,19 +214,40 @@ export const CartProvider = props => {
   }, [])
 
   const applyCoupon = useCallback(
-    (promoCode: string) => {
-      if (promoCode === 'DISCOUNT20') {
-        const discountAmount = Math.round(total.raw * 0.2) // 20% discount
+    async (promoCode: string) => {
+      if (!user?.id) {
+        console.error('User is not defined.')
+        return
+      }
+
+      try {
+        const response = await fetch('/next/apply-coupon', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ code: promoCode, userId: user.id }),
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          throw new Error(errorData.error)
+        }
+
+        const { discountPercentage, couponId } = await response.json()
+        const discountAmount = Math.round(total.raw * (discountPercentage / 100))
         setCouponDiscount(discountAmount)
-      } else {
-        console.error('Invalid promo code.')
+        setCouponId(couponId) // Set the couponId state
+      } catch (error) {
+        console.error('Error applying coupon:', error.message)
       }
     },
-    [total.raw],
+    [total.raw, user?.id], // Dependencies
   )
 
   const removeCoupon = useCallback(() => {
     setCouponDiscount(0)
+    setCouponId(null) // Clear the couponId
   }, [])
 
   useEffect(() => {
@@ -236,7 +259,7 @@ export const CartProvider = props => {
           acc +
           (typeof item.product === 'object'
             ? JSON.parse(item?.product?.priceJSON || '{}').data?.[0].unit_amount *
-            (typeof item.quantity === 'number' ? item.quantity : 0)
+              (typeof item.quantity === 'number' ? item.quantity : 0)
             : 0)
         )
       }, 0) || 0) - couponDiscount
@@ -248,7 +271,7 @@ export const CartProvider = props => {
       }),
       raw: newTotal,
     })
-  }, [cart, hasInitialized.current, couponDiscount])
+  }, [cart, couponDiscount])
 
   return (
     <Context.Provider
@@ -264,6 +287,7 @@ export const CartProvider = props => {
         applyCoupon,
         removeCoupon,
         couponDiscount,
+        couponId, // Make couponId available through the context
       }}
     >
       {children}

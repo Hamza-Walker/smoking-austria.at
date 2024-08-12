@@ -18,7 +18,7 @@ const BankTransferPayment: React.FC<{
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const { applyCoupon, removeCoupon, couponDiscount, cart, cartTotal } = useCart()
+  const { applyCoupon, removeCoupon, couponDiscount, cart, cartTotal, couponId } = useCart()
   const addressFormRef = useRef<{ submitAddress: () => Promise<void> }>(null)
 
   const handleTermsAccept = (accepted: boolean) => {
@@ -51,6 +51,7 @@ const BankTransferPayment: React.FC<{
                   typeof product === 'object'
                     ? priceFromJSON(product.priceJSON, 1, true)
                     : undefined,
+                couponUsed: couponId,
               })),
             }),
           })
@@ -143,7 +144,7 @@ const BankTransferPayment: React.FC<{
       </div>
       <div className={classes.addressFormContainer}>
         <div className={classes.addressForm}>
-          <AddressForm ref={addressFormRef} userId={userId} onSubmit={() => { }} />
+          <AddressForm ref={addressFormRef} userId={userId} onSubmit={() => {}} />
         </div>
       </div>
     </div>

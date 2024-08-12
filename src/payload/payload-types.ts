@@ -26,6 +26,7 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    coupons: Coupon;
     redirects: Redirect;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -433,6 +434,7 @@ export interface Order {
         id?: string | null;
       }[]
     | null;
+  couponUsed?: (number | null) | Coupon;
   updatedAt: string;
   createdAt: string;
 }
@@ -467,6 +469,21 @@ export interface User {
   loginAttempts?: number | null;
   lockUntil?: string | null;
   password: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "coupons".
+ */
+export interface Coupon {
+  id: number;
+  code: string;
+  discountPercentage: number;
+  expirationDate: string;
+  maxUses: number;
+  currentUses?: number | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
