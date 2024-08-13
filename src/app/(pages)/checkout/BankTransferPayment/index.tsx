@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState, useEffect } from 'react'
 
 import AddressForm from './AddressForm'
 import { Button } from '../../../_components/Button'
@@ -17,18 +17,49 @@ const BankTransferPayment: React.FC<{
   const [discount, setDiscount] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isAddressComplete, setIsAddressComplete] = useState(false)
   const router = useRouter()
   const { applyCoupon, removeCoupon, couponDiscount, cart, cartTotal, couponId } = useCart()
-  const addressFormRef = useRef<{ submitAddress: () => Promise<void> }>(null)
+  const addressFormRef = useRef<{ submitAddress: () => Promise<void>; isAddressComplete: boolean }>(
+    null,
+  )
 
   const handleTermsAccept = (accepted: boolean) => {
     setTermsAccepted(accepted)
+    if (accepted && isAddressComplete) {
+      setError(null)
+    }
   }
+
+  const handleAddressCompleteChange = (isComplete: boolean) => {
+    setIsAddressComplete(isComplete)
+  }
+
+  useEffect(() => {
+    if (addressFormRef.current) {
+      setIsAddressComplete(addressFormRef.current.isAddressComplete)
+      if (addressFormRef.current.isAddressComplete && termsAccepted) {
+        setError(null)
+      }
+    }
+  }, [addressFormRef.current?.isAddressComplete, termsAccepted])
 
   const handleSubmit = useCallback(
     async e => {
       e.preventDefault()
+
+      if (!isAddressComplete) {
+        setError('Please complete all address fields.')
+        return
+      }
+
+      if (!termsAccepted) {
+        setError('Please accept the terms and conditions.')
+        return
+      }
+
       setIsLoading(true)
+      setError(null)
 
       try {
         if (addressFormRef.current) {
@@ -80,7 +111,7 @@ const BankTransferPayment: React.FC<{
         setIsLoading(false)
       }
     },
-    [router, cart, cartTotal, discount],
+    [router, cart, cartTotal, discount, isAddressComplete, termsAccepted],
   )
 
   const handleApplyCoupon = (promoCode: string) => {
@@ -133,7 +164,6 @@ const BankTransferPayment: React.FC<{
           <Button
             label={isLoading ? 'Loading...' : 'Confirm Order'}
             type="submit"
-            disabled={!termsAccepted || isLoading}
             className={classes.buttonSubmit}
             onClick={handleSubmit}
             onMouseMove={handleMouseMove}
@@ -144,7 +174,12 @@ const BankTransferPayment: React.FC<{
       </div>
       <div className={classes.addressFormContainer}>
         <div className={classes.addressForm}>
-          <AddressForm ref={addressFormRef} userId={userId} onSubmit={() => {}} />
+          <AddressForm
+            ref={addressFormRef}
+            userId={userId}
+            onAddressCompleteChange={handleAddressCompleteChange}
+            onSubmit={() => {}}
+          />
         </div>
       </div>
     </div>
