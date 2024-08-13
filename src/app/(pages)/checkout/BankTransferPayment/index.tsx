@@ -67,6 +67,7 @@ const BankTransferPayment: React.FC<{
         }
 
         try {
+          console.log(couponDiscount, couponId)
           const orderReq = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/orders`, {
             method: 'POST',
             credentials: 'include',
@@ -74,7 +75,7 @@ const BankTransferPayment: React.FC<{
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              total: cartTotal.raw - discount,
+              total: cartTotal.raw - (couponDiscount ? couponDiscount / 100 : 0),
               items: (cart?.items || [])?.map(({ product, quantity }) => ({
                 product: typeof product === 'string' ? product : product.id,
                 quantity,
@@ -82,11 +83,12 @@ const BankTransferPayment: React.FC<{
                   typeof product === 'object'
                     ? priceFromJSON(product.priceJSON, 1, true)
                     : undefined,
-                couponUsed: couponId,
               })),
+              couponUsed: couponId,
+              discountAmount: couponDiscount ? couponDiscount : 0,
             }),
           })
-
+          handleRemoveCoupon()
           if (!orderReq.ok) throw new Error(orderReq.statusText || 'Something went wrong.')
 
           const {
@@ -99,7 +101,6 @@ const BankTransferPayment: React.FC<{
           } = await orderReq.json()
 
           if (errorFromRes) throw new Error(errorFromRes)
-
           router.push(`/order-confirmation?order_id=${doc.id}`)
         } catch (err) {
           console.error(err.message)
@@ -111,7 +112,7 @@ const BankTransferPayment: React.FC<{
         setIsLoading(false)
       }
     },
-    [router, cart, cartTotal, discount, isAddressComplete, termsAccepted],
+    [router, cart, cartTotal, isAddressComplete, couponDiscount, termsAccepted, couponId],
   )
 
   const handleApplyCoupon = (promoCode: string) => {

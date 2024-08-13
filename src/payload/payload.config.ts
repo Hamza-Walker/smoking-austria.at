@@ -51,7 +51,7 @@ const storageAdapter = s3Adapter({
 const emptyObjectPath = path.resolve(__dirname, './mocks/emptyObject.js')
 const fullFilePath = path.resolve(
   __dirname,
-  'collections/Orders/hooks/sendOrderConfirmationWithReciept.ts',
+  'collections/Orders/hooks/sendOrderConfirmationWithReceipt.ts',
 )
 dotenv.config({
   path: path.resolve(__dirname, '../../.env'),

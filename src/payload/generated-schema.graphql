@@ -5056,6 +5056,7 @@ type Order {
   total: Float!
   items: [Order_Items!]
   couponUsed: Coupon
+  discountAmount: Float
   updatedAt: DateTime
   createdAt: DateTime
 }
@@ -5151,6 +5152,7 @@ input Order_where {
   items__quantity: Order_items__quantity_operator
   items__id: Order_items__id_operator
   couponUsed: Order_couponUsed_operator
+  discountAmount: Order_discountAmount_operator
   updatedAt: Order_updatedAt_operator
   createdAt: Order_createdAt_operator
   id: Order_id_operator
@@ -5235,6 +5237,16 @@ input Order_couponUsed_operator {
   exists: Boolean
 }
 
+input Order_discountAmount_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
 input Order_updatedAt_operator {
   equals: DateTime
   not_equals: DateTime
@@ -5276,6 +5288,7 @@ input Order_where_and {
   items__quantity: Order_items__quantity_operator
   items__id: Order_items__id_operator
   couponUsed: Order_couponUsed_operator
+  discountAmount: Order_discountAmount_operator
   updatedAt: Order_updatedAt_operator
   createdAt: Order_createdAt_operator
   id: Order_id_operator
@@ -5292,6 +5305,7 @@ input Order_where_or {
   items__quantity: Order_items__quantity_operator
   items__id: Order_items__id_operator
   couponUsed: Order_couponUsed_operator
+  discountAmount: Order_discountAmount_operator
   updatedAt: Order_updatedAt_operator
   createdAt: Order_createdAt_operator
   id: Order_id_operator
@@ -5317,6 +5331,7 @@ type OrdersDocAccessFields {
   total: OrdersDocAccessFields_total
   items: OrdersDocAccessFields_items
   couponUsed: OrdersDocAccessFields_couponUsed
+  discountAmount: OrdersDocAccessFields_discountAmount
   updatedAt: OrdersDocAccessFields_updatedAt
   createdAt: OrdersDocAccessFields_createdAt
 }
@@ -5533,6 +5548,29 @@ type OrdersDocAccessFields_couponUsed_Update {
 }
 
 type OrdersDocAccessFields_couponUsed_Delete {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_discountAmount {
+  create: OrdersDocAccessFields_discountAmount_Create
+  read: OrdersDocAccessFields_discountAmount_Read
+  update: OrdersDocAccessFields_discountAmount_Update
+  delete: OrdersDocAccessFields_discountAmount_Delete
+}
+
+type OrdersDocAccessFields_discountAmount_Create {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_discountAmount_Read {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_discountAmount_Update {
+  permission: Boolean!
+}
+
+type OrdersDocAccessFields_discountAmount_Delete {
   permission: Boolean!
 }
 
@@ -10686,6 +10724,7 @@ type OrdersFields {
   total: OrdersFields_total
   items: OrdersFields_items
   couponUsed: OrdersFields_couponUsed
+  discountAmount: OrdersFields_discountAmount
   updatedAt: OrdersFields_updatedAt
   createdAt: OrdersFields_createdAt
 }
@@ -10902,6 +10941,29 @@ type OrdersFields_couponUsed_Update {
 }
 
 type OrdersFields_couponUsed_Delete {
+  permission: Boolean!
+}
+
+type OrdersFields_discountAmount {
+  create: OrdersFields_discountAmount_Create
+  read: OrdersFields_discountAmount_Read
+  update: OrdersFields_discountAmount_Update
+  delete: OrdersFields_discountAmount_Delete
+}
+
+type OrdersFields_discountAmount_Create {
+  permission: Boolean!
+}
+
+type OrdersFields_discountAmount_Read {
+  permission: Boolean!
+}
+
+type OrdersFields_discountAmount_Update {
+  permission: Boolean!
+}
+
+type OrdersFields_discountAmount_Delete {
   permission: Boolean!
 }
 
@@ -13610,6 +13672,7 @@ input mutationOrderInput {
   total: Float!
   items: [mutationOrder_ItemsInput]
   couponUsed: Int
+  discountAmount: Float
   updatedAt: String
   createdAt: String
 }
@@ -13627,6 +13690,7 @@ input mutationOrderUpdateInput {
   total: Float
   items: [mutationOrderUpdate_ItemsInput]
   couponUsed: Int
+  discountAmount: Float
   updatedAt: String
   createdAt: String
 }

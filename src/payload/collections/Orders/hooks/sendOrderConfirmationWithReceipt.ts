@@ -7,7 +7,7 @@ import { generatePDF } from './utilities/generatePDF'
 import inlineCSS from 'inline-css'
 import path from 'path'
 
-export const sendOrderConfirmationWithReciept: AfterChangeHook<Order> = async ({
+export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
   doc,
   req,
   operation,
@@ -38,6 +38,8 @@ export const sendOrderConfirmationWithReciept: AfterChangeHook<Order> = async ({
         const uniqueID = Math.floor(1000 + Math.random() * 9000)
         const invoiceNumber = `INV-${user.id}-${date}-${uniqueID}`
         const paymentMethod = doc.stripePaymentIntentID ? 'Card' : 'Check'
+        const totalAfterDiscount = doc.discountAmount ? doc.total - doc.discountAmount : doc.total
+        // Calculate discount and total
 
         const emailData = {
           invoiceNumber,
@@ -48,7 +50,11 @@ export const sendOrderConfirmationWithReciept: AfterChangeHook<Order> = async ({
           },
           recipient: {
             name: user.name,
-            address: user.email,
+            address: user.address
+              ? `${user.address.street || ''}, ${user.address.city || ''}, ${
+                  user.address.zipCode || ''
+                }, ${user.address.country || ''}`
+              : '',
           },
           paymentMethod,
           items: doc.items.map(item => ({
@@ -60,9 +66,13 @@ export const sendOrderConfirmationWithReciept: AfterChangeHook<Order> = async ({
             totalBrutto: formatCurrency(item.price * item.quantity),
             mwst: formatCurrency(item.price * item.quantity * 0.2),
           })),
-          total: formatCurrency(doc.total),
+          subtotal: formatCurrency(doc.total),
+          discount: doc.discountAmount ? formatCurrency(doc.discountAmount) : null,
+          total: formatCurrency(totalAfterDiscount),
+          hasDiscount: !!doc.discountAmount,
         }
-
+        console.log(doc.discountAmount)
+        console.log(doc.couponUsed)
         // Paths
         const emailTemplatePath = path.join(__dirname, 'utilities', 'emailTemplate.html')
         const receiptTemplatePath = path.join(__dirname, 'utilities', 'recieptTemplate.html')

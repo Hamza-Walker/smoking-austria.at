@@ -9,12 +9,13 @@ const PromoCodeInput: React.FC<{
   const [promoCode, setPromoCode] = useState('')
   const [invalidPromo, setInvalidPromo] = useState(false)
   const { couponDiscount } = useCart()
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPromoCode(e.target.value)
     setInvalidPromo(false)
   }
 
-  const handleApplyPromoCode = () => {
+  const handleApplyPromoCode = async () => {
     if (promoCode.trim()) {
       onApplyPromoCode(promoCode)
     } else {

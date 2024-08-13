@@ -435,6 +435,7 @@ export interface Order {
       }[]
     | null;
   couponUsed?: (number | null) | Coupon;
+  discountAmount?: number | null;
   updatedAt: string;
   createdAt: string;
 }

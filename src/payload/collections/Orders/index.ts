@@ -5,8 +5,8 @@ import { adminsOrLoggedIn } from '../../access/adminsOrLoggedIn'
 import { adminsOrOrderedBy } from './access/adminsOrOrderedBy'
 import { clearUserCart } from './hooks/clearUserCart'
 // import { populateOrderedBy } from './hooks/populateOrderedBy'
-import { sendOrderConfirmationWithReciept } from './hooks/sendOrderConfirmationWithReciept'
 import { updateUserPurchases } from './hooks/updateUserPurchases'
+import { sendOrderConfirmationWithReceipt } from './hooks/sendOrderConfirmationWithReceipt'
 
 export const Orders: CollectionConfig = {
   slug: 'orders',
@@ -16,7 +16,7 @@ export const Orders: CollectionConfig = {
     preview: doc => `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/orders/${doc.id}`,
   },
   hooks: {
-    afterChange: [updateUserPurchases, clearUserCart, sendOrderConfirmationWithReciept],
+    afterChange: [updateUserPurchases, clearUserCart, sendOrderConfirmationWithReceipt],
   },
   access: {
     read: adminsOrOrderedBy,
@@ -75,6 +75,11 @@ export const Orders: CollectionConfig = {
       type: 'relationship',
       relationTo: 'coupons',
       hasMany: false, // Assuming one coupon per order
+    },
+    {
+      name: 'discountAmount',
+      type: 'number',
+      min: 0,
     },
   ],
 }
