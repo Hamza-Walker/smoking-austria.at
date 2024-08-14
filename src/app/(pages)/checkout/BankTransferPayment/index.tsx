@@ -14,7 +14,6 @@ const BankTransferPayment: React.FC<{
   userId: string
 }> = ({ userId }) => {
   const [termsAccepted, setTermsAccepted] = useState(false)
-  const [discount, setDiscount] = useState(0)
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isAddressComplete, setIsAddressComplete] = useState(false)
@@ -75,7 +74,7 @@ const BankTransferPayment: React.FC<{
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              total: cartTotal.raw - (couponDiscount ? couponDiscount / 100 : 0),
+              total: cartTotal.raw,
               items: (cart?.items || [])?.map(({ product, quantity }) => ({
                 product: typeof product === 'string' ? product : product.id,
                 quantity,

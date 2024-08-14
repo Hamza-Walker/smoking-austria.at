@@ -38,7 +38,9 @@ export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
         const uniqueID = Math.floor(1000 + Math.random() * 9000)
         const invoiceNumber = `INV-${user.id}-${date}-${uniqueID}`
         const paymentMethod = doc.stripePaymentIntentID ? 'Card' : 'Check'
-        const totalAfterDiscount = doc.discountAmount ? doc.total - doc.discountAmount : doc.total
+
+        // The discount is already applied in the BankTransferPayment Component
+        // const totalAfterDiscount = doc.discountAmount ? doc.total - doc.discountAmount : doc.total
         // Calculate discount and total
 
         const emailData = {
@@ -66,13 +68,12 @@ export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
             totalBrutto: formatCurrency(item.price * item.quantity),
             mwst: formatCurrency(item.price * item.quantity * 0.2),
           })),
-          subtotal: formatCurrency(doc.total),
           discount: doc.discountAmount ? formatCurrency(doc.discountAmount) : null,
-          total: formatCurrency(totalAfterDiscount),
+          total: doc.total,
           hasDiscount: !!doc.discountAmount,
         }
-        console.log(doc.discountAmount)
-        console.log(doc.couponUsed)
+        console.log('discount:', doc.discountAmount)
+        console.log('total:', doc.total)
         // Paths
         const emailTemplatePath = path.join(__dirname, 'utilities', 'emailTemplate.html')
         const receiptTemplatePath = path.join(__dirname, 'utilities', 'recieptTemplate.html')
