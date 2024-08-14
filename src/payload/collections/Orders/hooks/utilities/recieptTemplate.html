@@ -6,7 +6,7 @@
     <style>
       .invoice-box {
         max-width: 800px;
-        margin: auto;
+        margin: 50px auto;
         padding: 30px;
         border: 1px solid #eee;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
@@ -121,13 +121,13 @@
       <td colspan="2">
         <table>
           <tr>
-            <td>
+             <td>
               {{sender.name}}<br>
-              {{{sender.address}}}
+                  {{#if sender.address}}<span>{{{sender.address}}}</span>{{/if}}
             </td>
             <td>
               {{recipient.name}}<br>
-              {{{recipient.address}}}
+                  {{#if recipient.address}}<span>{{{recipient.address}}}</span>{{/if}}
             </td>
           </tr>
         </table>

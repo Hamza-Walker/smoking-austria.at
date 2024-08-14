@@ -48,14 +48,14 @@ export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
           date,
           sender: {
             name: 'Toifl Hans Christian e.U.',
-            address: 'Meinhartsdorfergasse 10/2,\n1150 Wien,\nÖsterreich',
+            address: 'Meinhartsdorfergasse 10/2,<br>1150 Wien,<br>Österreich',
           },
           recipient: {
             name: user.name,
             address: user.address
-              ? `${user.address.street || ''}, ${user.address.city || ''}, ${
-                  user.address.zipCode || ''
-                }, ${user.address.country || ''}`
+              ? `${user.address.street || ''},<br> ${user.address.zipCode || ''} ${
+                  user.address.city || ''
+                },<br> ${user.address.country || ''}`
               : '',
           },
           paymentMethod,
