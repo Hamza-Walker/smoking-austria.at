@@ -18,6 +18,11 @@ export type CartItems =
     }[]
   | null;
 
+export interface CouponResponse {
+  success: boolean
+  message?: string
+}
+
 export interface Config {
   collections: {
     pages: Page;

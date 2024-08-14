@@ -13,7 +13,11 @@
     font-weight: bold;
     color: #555;
   }
-
+  .buttonContainer {
+      width: 65%; // Match the input width for consistency
+      display: flex;
+      flex-direction: row; // Stack buttons vertically
+    }
   input {
     padding: 12px 20px; // Increased padding for better touch targets
     border-radius: 5px; // Rounded corners

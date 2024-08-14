@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react'
 
-import { Product, User } from '../../../payload/payload-types'
+import { CouponResponse, Product, User } from '../../../payload/payload-types'
 import { useAuth } from '../Auth'
 import { CartItem, cartReducer } from './reducer'
 
@@ -214,10 +214,10 @@ export const CartProvider = (props: any) => {
   }, [])
 
   const applyCoupon = useCallback(
-    async (promoCode: string) => {
+    async (promoCode: string): Promise<CouponResponse> => {
       if (!user?.id) {
         console.error('User is not defined.')
-        return
+        return { success: false, message: 'User is not defined.' }
       }
 
       try {
@@ -231,15 +231,18 @@ export const CartProvider = (props: any) => {
 
         if (!response.ok) {
           const errorData = await response.json()
-          throw new Error(errorData.error)
+          return { success: false, message: errorData.error }
         }
 
         const { discountPercentage, couponId } = await response.json()
         const discountAmount = Math.round(total.raw * (discountPercentage / 100))
         setCouponDiscount(discountAmount)
         setCouponId(couponId) // Set the couponId state
+
+        return { success: true }
       } catch (error) {
         console.error('Error applying coupon:', error.message)
+        return { success: false, message: error.message }
       }
     },
     [total.raw, user?.id], // Dependencies

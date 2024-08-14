@@ -39,17 +39,19 @@ const PromoCodeInput: React.FC<{
         value={promoCode}
         onChange={handleInputChange}
       />
-      <button
-        className={classes.applyButton}
-        onClick={handleApplyPromoCode}
-        disabled={couponDiscount > 0}
-      >
-        Apply
-      </button>
+      <div className={classes.buttonContainer}>
+        <button
+          className={classes.applyButton}
+          onClick={handleApplyPromoCode}
+          disabled={couponDiscount > 0}
+        >
+          Apply
+        </button>
 
-      <button className={classes.removeButton} onClick={handleRemovePromoCode}>
-        Remove
-      </button>
+        <button className={classes.removeButton} onClick={handleRemovePromoCode}>
+          Remove
+        </button>
+      </div>
       {invalidPromo && <p className={classes.errorMsg}>Invalid promo code. Please try again.</p>}
     </div>
   )

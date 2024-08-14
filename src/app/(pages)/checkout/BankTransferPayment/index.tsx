@@ -114,9 +114,14 @@ const BankTransferPayment: React.FC<{
     [router, cart, cartTotal, isAddressComplete, couponDiscount, termsAccepted, couponId],
   )
 
-  const handleApplyCoupon = (promoCode: string) => {
-    applyCoupon(promoCode)
+  const handleApplyCoupon = async (promoCode: string) => {
+    const result = await applyCoupon(promoCode)
+
+    if (!result.success) {
+      setError(result.message || 'Invalid promo code or no more coupons available.')
+    }
   }
+
   const handleRemoveCoupon = () => {
     removeCoupon()
   }

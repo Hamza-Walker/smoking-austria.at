@@ -11,6 +11,11 @@
   width: 12%;
 }
 /* index.module.scss */
+.error {
+  color: darkred;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
 
 .buttonSubmit {
   background: linear-gradient(to right, #ff7e5f, #feb47b);
