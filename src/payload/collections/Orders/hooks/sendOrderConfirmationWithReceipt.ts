@@ -53,9 +53,9 @@ export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
           recipient: {
             name: user.name,
             address: user.address
-              ? `${user.address.street || ''},<br> ${user.address.zipCode || ''} ${
-                  user.address.city || ''
-                },<br> ${user.address.country || ''}`
+              ? `${user.address.street || ''},
+              <br> ${user.address.zipCode || ''} ${user.address.city || ''},
+              <br> ${user.address.country || ''}`
               : '',
           },
           paymentMethod,
@@ -69,7 +69,7 @@ export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
             mwst: formatCurrency(item.price * item.quantity * 0.2),
           })),
           discount: doc.discountAmount ? formatCurrency(doc.discountAmount) : null,
-          total: doc.total,
+          total: formatCurrency(doc.total),
           hasDiscount: !!doc.discountAmount,
         }
         console.log('discount:', doc.discountAmount)
