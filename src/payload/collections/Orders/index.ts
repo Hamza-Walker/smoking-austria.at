@@ -4,9 +4,9 @@ import { admins } from '../../access/admins'
 import { adminsOrLoggedIn } from '../../access/adminsOrLoggedIn'
 import { adminsOrOrderedBy } from './access/adminsOrOrderedBy'
 import { clearUserCart } from './hooks/clearUserCart'
-// import { populateOrderedBy } from './hooks/populateOrderedBy'
-import { updateUserPurchases } from './hooks/updateUserPurchases'
+import { populateOrderedBy } from './hooks/populateOrderedBy'
 import { sendOrderConfirmationWithReceipt } from './hooks/sendOrderConfirmationWithReceipt'
+import { updateUserPurchases } from './hooks/updateUserPurchases'
 
 export const Orders: CollectionConfig = {
   slug: 'orders',
@@ -16,7 +16,15 @@ export const Orders: CollectionConfig = {
     preview: doc => `${process.env.PAYLOAD_PUBLIC_SERVER_URL}/orders/${doc.id}`,
   },
   hooks: {
-    afterChange: [updateUserPurchases, clearUserCart, sendOrderConfirmationWithReceipt],
+    afterChange: [
+      async args => {
+        await Promise.all([
+          clearUserCart,
+          updateUserPurchases,
+          sendOrderConfirmationWithReceipt(args),
+        ])
+      },
+    ],
   },
   access: {
     read: adminsOrOrderedBy,
@@ -29,6 +37,10 @@ export const Orders: CollectionConfig = {
       name: 'orderedBy',
       type: 'relationship',
       relationTo: 'users',
+      required: true,
+      hooks: {
+        beforeChange: [populateOrderedBy],
+      },
     },
     {
       name: 'stripePaymentIntentID',
