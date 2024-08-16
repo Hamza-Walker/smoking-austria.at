@@ -1,5 +1,4 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react'
-
 import AddressForm from './AddressForm'
 import { Button } from '../../../_components/Button'
 import { Order } from '../../../../payload/payload-types'
@@ -36,6 +35,18 @@ const BankTransferPayment: React.FC<{
     setIsAddressComplete(isComplete)
   }
 
+  const handleRemoveCoupon = useCallback(() => {
+    removeCoupon()
+  }, [removeCoupon])
+
+  const handleApplyCoupon = async (promoCode: string) => {
+    const result = await applyCoupon(promoCode)
+
+    if (!result.success) {
+      setError(result.message || 'Invalid promo code or no more coupons available.')
+    }
+  }
+
   useEffect(() => {
     if (addressFormRef.current) {
       setIsAddressComplete(addressFormRef.current.isAddressComplete)
@@ -46,7 +57,7 @@ const BankTransferPayment: React.FC<{
   }, [addressFormRef.current?.isAddressComplete, termsAccepted])
 
   const handleSubmit = useCallback(
-    async e => {
+    async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
 
       if (!isAddressComplete) {
@@ -113,20 +124,18 @@ const BankTransferPayment: React.FC<{
         setIsLoading(false)
       }
     },
-    [router, cart, cartTotal, isAddressComplete, couponDiscount, termsAccepted, couponId],
+    [
+      router,
+      cart,
+      cartTotal,
+      isAddressComplete,
+      couponDiscount,
+      termsAccepted,
+      couponId,
+      handleRemoveCoupon,
+    ],
   )
 
-  const handleApplyCoupon = async (promoCode: string) => {
-    const result = await applyCoupon(promoCode)
-
-    if (!result.success) {
-      setError(result.message || 'Invalid promo code or no more coupons available.')
-    }
-  }
-
-  const handleRemoveCoupon = () => {
-    removeCoupon()
-  }
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - rect.left

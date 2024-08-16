@@ -1,22 +1,24 @@
-import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react'
+import React, { useState, useEffect, useImperativeHandle, forwardRef, useCallback } from 'react'
 import classes from './index.module.scss'
+
+type Address = {
+  street: string
+  city: string
+  state: string
+  postalCode: string
+  country: string
+}
 
 type AddressFormProps = {
   userId: string
-  initialAddress?: {
-    street: string
-    city: string
-    state: string
-    postalCode: string
-    country: string
-  }
+  initialAddress?: Address
   onSubmit: (address: Address) => void
   onAddressCompleteChange: (isComplete: boolean) => void
 }
 
 const AddressForm = forwardRef(
   ({ userId, initialAddress, onSubmit, onAddressCompleteChange }: AddressFormProps, ref) => {
-    const [address, setAddress] = useState(
+    const [address, setAddress] = useState<Address>(
       initialAddress || {
         street: '',
         city: '',
@@ -26,7 +28,6 @@ const AddressForm = forwardRef(
       },
     )
 
-    // Fetch address from server if needed
     useEffect(() => {
       const fetchAddress = async () => {
         try {
@@ -49,8 +50,8 @@ const AddressForm = forwardRef(
       fetchAddress()
     }, [userId])
 
-    // Function to check if the address is complete
-    const checkAddressComplete = () => {
+    // Memoized function to check if the address is complete
+    const checkAddressComplete = useCallback(() => {
       return (
         address.street.trim() !== '' &&
         address.city.trim() !== '' &&
@@ -58,12 +59,12 @@ const AddressForm = forwardRef(
         address.postalCode.trim() !== '' &&
         address.country.trim() !== ''
       )
-    }
+    }, [address])
 
     // Effect to notify parent about address completion status
     useEffect(() => {
       onAddressCompleteChange(checkAddressComplete())
-    }, [address, onAddressCompleteChange])
+    }, [address, onAddressCompleteChange, checkAddressComplete])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target
