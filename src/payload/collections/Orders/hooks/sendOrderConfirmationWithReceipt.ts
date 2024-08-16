@@ -1,6 +1,6 @@
 import type { AfterChangeHook } from 'payload/dist/collections/config/types'
 import Handlebars from 'handlebars'
-import type { Order } from '../../../payload-types'
+import type { Order, Product } from '../../../payload-types'
 import { formatCurrency } from './utilities/formatCurrency'
 import fs from 'fs'
 import { generatePDF } from './utilities/generatePDF'
@@ -62,7 +62,10 @@ export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
           items: doc.items.map(item => ({
             quantity: item.quantity,
             description:
-              typeof item.product === 'string' ? 'No title' : item.product.title || 'No title',
+              typeof item.product === 'string'
+                ? 'No title'
+                : (item.product as Product).title || 'No title',
+
             unitPriceBrutto: formatCurrency(item.price),
             totalNetto: formatCurrency(item.price * item.quantity * 0.8),
             totalBrutto: formatCurrency(item.price * item.quantity),

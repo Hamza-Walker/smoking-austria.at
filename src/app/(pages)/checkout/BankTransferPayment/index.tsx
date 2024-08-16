@@ -19,9 +19,11 @@ const BankTransferPayment: React.FC<{
   const [isAddressComplete, setIsAddressComplete] = useState(false)
   const router = useRouter()
   const { applyCoupon, removeCoupon, couponDiscount, cart, cartTotal, couponId } = useCart()
-  const addressFormRef = useRef<{ submitAddress: () => Promise<void>; isAddressComplete: boolean }>(
-    null,
-  )
+
+  const addressFormRef = useRef<{
+    submitAddress: () => Promise<void>
+    isAddressComplete: boolean
+  }>(null)
 
   const handleTermsAccept = (accepted: boolean) => {
     setTermsAccepted(accepted)

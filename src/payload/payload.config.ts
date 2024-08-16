@@ -28,7 +28,6 @@ import seo from '@payloadcms/plugin-seo'
 import { slateEditor } from '@payloadcms/richtext-slate'
 import stripePlugin from '@payloadcms/plugin-stripe'
 import { webpackBundler } from '@payloadcms/bundler-webpack'
-import { seed } from './endpoints/seed'
 import Coupons from './collections/Coupons'
 const generateTitle: GenerateTitle = () => {
   return 'My Store'
@@ -83,7 +82,6 @@ export default buildConfig({
             [path.resolve(__dirname, 'endpoints/create-payment-intent')]: mockModulePath,
             [path.resolve(__dirname, 'endpoints/customers')]: mockModulePath,
             [path.resolve(__dirname, 'endpoints/products')]: mockModulePath,
-            [path.resolve(__dirname, 'endpoints/seed')]: mockModulePath,
             stripe: mockModulePath,
             express: mockModulePath,
             [fullFilePath]: emptyObjectPath,
@@ -135,13 +133,6 @@ export default buildConfig({
       path: '/stripe/products',
       method: 'get',
       handler: productsProxy,
-    },
-    // The seed endpoint is used to populate the database with some example data
-    // You should delete this endpoint before deploying your site to production
-    {
-      path: '/seed',
-      method: 'get',
-      handler: seed,
     },
   ],
   plugins: [

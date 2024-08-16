@@ -1,7 +1,7 @@
 import type { PayloadHandler } from 'payload/config'
 import Stripe from 'stripe'
 
-import type { CartItems } from '../payload-types'
+import type { CartItems, Product } from '../payload-types'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2022-08-01',
@@ -67,12 +67,12 @@ export const createPaymentIntent: PayloadHandler = async (req, res): Promise<voi
           return null
         }
 
-        if (typeof product === 'string' || !product?.stripeProductID) {
+        if (typeof product === 'string' || !(product as Product)?.stripeProductID) {
           throw new Error('No Stripe Product ID')
         }
 
         const prices = await stripe.prices.list({
-          product: product.stripeProductID,
+          product: (product as Product)?.stripeProductID,
           limit: 100,
           expand: ['data.product'],
         })

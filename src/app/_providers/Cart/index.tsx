@@ -1,3 +1,5 @@
+import { CartItem, cartReducer } from './reducer'
+import { CouponResponse, Product, User } from '../../../payload/payload-types'
 import React, {
   createContext,
   useCallback,
@@ -8,9 +10,7 @@ import React, {
   useState,
 } from 'react'
 
-import { CouponResponse, Product, User } from '../../../payload/payload-types'
 import { useAuth } from '../Auth'
-import { CartItem, cartReducer } from './reducer'
 
 export type CartContext = {
   cart: User['cart']
@@ -179,15 +179,20 @@ export const CartProvider = (props: any) => {
     (incomingProduct: Product): boolean => {
       let isInCart = false
       const { items: itemsInCart } = cart || {}
+
       if (Array.isArray(itemsInCart) && itemsInCart.length > 0) {
         isInCart = Boolean(
-          itemsInCart.find(({ product }) =>
-            typeof product === 'string'
-              ? product === incomingProduct.id
-              : product?.id === incomingProduct.id,
-          ),
+          itemsInCart.find(({ product }) => {
+            // Check if product is a Product and has an 'id' property
+            if (typeof product === 'object' && product !== null && 'id' in product) {
+              return product.id === incomingProduct.id
+            }
+            // If product is a string, compare directly with incomingProduct.id
+            return typeof product === 'string' && product === incomingProduct.id
+          }),
         )
       }
+
       return isInCart
     },
     [cart],
