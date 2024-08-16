@@ -40,11 +40,15 @@ const AccountForm: React.FC = () => {
   const onSubmit = useCallback(
     async (data: FormData) => {
       if (user) {
+        // Remove empty fields from the data object
+        const filteredData = Object.fromEntries(
+          Object.entries(data).filter(([key, value]) => value !== ''),
+        )
+
         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${user.id}`, {
-          // Make sure to include cookies with fetch
           credentials: 'include',
           method: 'PATCH',
-          body: JSON.stringify(data),
+          body: JSON.stringify(filteredData),
           headers: {
             'Content-Type': 'application/json',
           },
