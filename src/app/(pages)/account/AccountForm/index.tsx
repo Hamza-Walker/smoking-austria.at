@@ -11,11 +11,20 @@ import { useAuth } from '../../../_providers/Auth'
 
 import classes from './index.module.scss'
 
+type Address = {
+  street: string
+  city: string
+  state: string
+  zipCode: string
+  country: string
+}
+
 type FormData = {
   email: string
   name: string
   password: string
   passwordConfirm: string
+  address: Address
 }
 
 const AccountForm: React.FC = () => {
@@ -42,7 +51,9 @@ const AccountForm: React.FC = () => {
       if (user) {
         // Remove empty fields from the data object
         const filteredData = Object.fromEntries(
-          Object.entries(data).filter(([key, value]) => value !== ''),
+          Object.entries(data).filter(
+            ([key, value]) => value !== '' && value !== undefined && value !== null,
+          ),
         )
 
         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${user.id}`, {
@@ -65,6 +76,13 @@ const AccountForm: React.FC = () => {
             name: json.doc.name,
             password: '',
             passwordConfirm: '',
+            address: json.doc.address || {
+              street: '',
+              city: '',
+              state: '',
+              zipCode: '',
+              country: '',
+            },
           })
         } else {
           setError('There was a problem updating your account.')
@@ -90,6 +108,13 @@ const AccountForm: React.FC = () => {
         name: user.name,
         password: '',
         passwordConfirm: '',
+        address: user.address || {
+          street: '',
+          city: '',
+          state: '',
+          zipCode: '',
+          country: '',
+        },
       })
     }
   }, [user, router, reset, changePassword])
@@ -108,6 +133,36 @@ const AccountForm: React.FC = () => {
             type="email"
           />
           <Input name="name" label="Name" register={register} error={errors.name} />
+          <Input
+            name="address.street"
+            label="Street Address"
+            register={register}
+            error={errors.address?.street}
+          />
+          <Input
+            name="address.city"
+            label="City"
+            register={register}
+            error={errors.address?.city}
+          />
+          <Input
+            name="address.state"
+            label="State/Province/Region"
+            register={register}
+            error={errors.address?.state}
+          />
+          <Input
+            name="address.zipCode"
+            label="Postal/Zip Code"
+            register={register}
+            error={errors.address?.zipCode}
+          />
+          <Input
+            name="address.country"
+            label="Country"
+            register={register}
+            error={errors.address?.country}
+          />
 
           <p>
             {'Change your account details below, or '}
