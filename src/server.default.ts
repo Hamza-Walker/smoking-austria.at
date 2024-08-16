@@ -12,8 +12,6 @@ dotenv.config({
 import express from 'express'
 import payload from 'payload'
 
-import { seed } from './payload/seed'
-
 const app = express()
 const PORT = process.env.PORT || 3000
 
@@ -32,7 +30,7 @@ const start = async (): Promise<void> => {
   })
 
   if (process.env.PAYLOAD_SEED === 'true') {
-    await seed(payload)
+    console.log('Seeding Payload... not gonna happen no seed directroy ')
     process.exit()
   }
 
