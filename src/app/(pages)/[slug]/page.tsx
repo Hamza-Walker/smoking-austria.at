@@ -26,6 +26,7 @@ import Categories from '../../_components/Categories'
 import Promotion from '../../_components/Promotion'
 
 import classes from './index.module.scss'
+import MediaCarousel from '../../_components/MediaCarousel'
 
 export default async function Page({ params: { slug = 'home' } }) {
   const { isEnabled: isDraftMode } = draftMode()
@@ -62,6 +63,7 @@ export default async function Page({ params: { slug = 'home' } }) {
     <React.Fragment>
       {slug === 'home' ? (
         <section>
+          <MediaCarousel mediaBlocks={layout} />
           <Hero {...hero} />
 
           <Gutter className={classes.home}>
