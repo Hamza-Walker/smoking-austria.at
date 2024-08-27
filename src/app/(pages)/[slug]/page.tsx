@@ -64,9 +64,9 @@ export default async function Page({ params: { slug = 'home' } }) {
       {slug === 'home' ? (
         <section>
           <MediaCarousel mediaBlocks={layout} />
-          <Hero {...hero} />
 
           <Gutter className={classes.home}>
+            <Hero {...hero} />
             <Categories categories={categories} />
             <Promotion />
           </Gutter>
