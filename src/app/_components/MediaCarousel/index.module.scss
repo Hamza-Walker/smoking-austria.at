@@ -28,6 +28,7 @@ introduced in the home page */
   display: flex;
   justify-content: center;
   margin-top: 10px; /* Space between the image and the buttons */
+  gap: 5px;
 }
 
 .navButton {
@@ -37,7 +38,7 @@ introduced in the home page */
   font-size: 24px;
   cursor: pointer;
   padding: 10px;
-  margin: 0 5px; /* Space between the buttons */
+  margin: 0 15px; /* Space between the buttons */
   z-index: 1;
   outline: none;
 }
