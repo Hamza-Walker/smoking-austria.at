@@ -12,7 +12,6 @@ dotenv.config({
 import express from 'express'
 import payload from 'payload'
 
-
 const app = express()
 const PORT = process.env.PORT || 3000
 
