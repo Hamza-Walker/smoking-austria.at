@@ -5,6 +5,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: -80px; /* set a negative margin to escape the gutter space
+introduced in the home page */
 }
 
 .imageContainer {
