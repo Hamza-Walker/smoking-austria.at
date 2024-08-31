@@ -2,12 +2,13 @@ import type { Metadata } from 'next'
 
 const defaultOpenGraph: Metadata['openGraph'] = {
   type: 'website',
-  siteName: 'Payload E-Commerce Template',
-  title: 'Payload E-Commerce Template',
-  description: 'An open-source e-commerce store built with Payload and Next.js.',
+  siteName: 'Smoking-Austria E-Commerce',
+  title: 'Smoking-Austria',
+  description:
+    'Smoking-Austria offers a variety of rolling papers, cones, filters, tubes and accessories for all types of tobacco and cannabis.',
   images: [
     {
-      url: 'https://payloadcms.com/images/og-image.jpg',
+      url: 'https://www.smokingpaper.com/wp-content/uploads/2021/11/smoking-logo.svg',
     },
   ],
 }

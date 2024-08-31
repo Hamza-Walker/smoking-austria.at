@@ -9,8 +9,25 @@
   transition: opacity 100ms linear;
   visibility: visible;
 
-  > * {
+  a {
     text-decoration: none;
+    color: #666; /* Default text color */
+    font-weight: 500; /* Slightly bold text */
+    transition: color 0.3s ease; /* Smooth color transition */
+
+    /* Specific styles for nested span elements if needed */
+    .Button_label__pYjjJ {
+      color: inherit; /* Ensure span inherits color from parent a */
+    }
+
+    &:hover {
+      color: #000; /* Change text color to black on hover */
+    }
+  }
+
+  /* Optional: Additional styling for divs or other elements within links */
+  .Button_content__rz2Uk {
+    /* Styles for divs inside button links */
   }
 }
 
@@ -18,3 +35,4 @@
   opacity: 0;
   visibility: hidden;
 }
+

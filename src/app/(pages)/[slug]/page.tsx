@@ -26,6 +26,7 @@ import Categories from '../../_components/Categories'
 import Promotion from '../../_components/Promotion'
 
 import classes from './index.module.scss'
+import MediaCarousel from '../../_components/MediaCarousel'
 
 export default async function Page({ params: { slug = 'home' } }) {
   const { isEnabled: isDraftMode } = draftMode()
@@ -51,9 +52,6 @@ export default async function Page({ params: { slug = 'home' } }) {
   // if no `home` page exists, render a static one using dummy content
   // you should delete this code once you have a home page in the CMS
   // this is really only useful for those who are demoing this template
-  if (!page && slug === 'home') {
-    page = staticHome
-  }
 
   if (!page) {
     return notFound()
@@ -65,9 +63,10 @@ export default async function Page({ params: { slug = 'home' } }) {
     <React.Fragment>
       {slug === 'home' ? (
         <section>
-          <Hero {...hero} />
+          <MediaCarousel mediaBlocks={layout} />
 
           <Gutter className={classes.home}>
+            <Hero {...hero} />
             <Categories categories={categories} />
             <Promotion />
           </Gutter>

@@ -29,11 +29,6 @@ const start = async (): Promise<void> => {
     },
   })
 
-  if (process.env.PAYLOAD_SEED === 'true') {
-    console.log('Seeding Payload... not gonna happen no seed directroy ')
-    process.exit()
-  }
-
   app.listen(PORT, async () => {
     payload.logger.info(`App URL: ${process.env.PAYLOAD_PUBLIC_SERVER_URL}`)
   })
