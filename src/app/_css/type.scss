@@ -35,8 +35,8 @@
 %h3 {
   font-size: 32px;
   line-height: 40px;
-  font-weight: bold;
-
+  font-weight: 600;
+  letter-spacing: -0.025em;
   @include mid-break {
     font-size: 26px;
     line-height: 32px;

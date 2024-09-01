@@ -5,17 +5,17 @@ import { AdminBar } from './_components/AdminBar'
 import { Footer } from './_components/Footer'
 import { Header } from './_components/Header'
 import { InitTheme } from './_providers/Theme/InitTheme'
-import { Jost } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import { Metadata } from 'next'
 import { Providers } from './_providers'
 import React from 'react'
 import { mergeOpenGraph } from './_utilities/mergeOpenGraph'
 
-const jost = Jost({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-jost',
+  variable: '--font-sans',
 })
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -24,7 +24,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="icon" href="/favicon.ico" sizes="32x32" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       </head>
-      <body className={jost.variable}>
+      <body className={inter.variable}>
         <Providers>
           <AdminBar />
           {/* @ts-expect-error */}
