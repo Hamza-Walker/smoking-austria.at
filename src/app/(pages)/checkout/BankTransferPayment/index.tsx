@@ -158,7 +158,6 @@ const BankTransferPayment: React.FC<{
         <p>IBAN: AT39 60000 0104 1019 7559</p>
         <p>Reference Number: {userId}</p>
         <p>Amount: {cartTotal.formatted}</p>
-
         <PromoCodeInput
           onApplyPromoCode={handleApplyCoupon}
           onRemovePromoCode={handleRemoveCoupon}

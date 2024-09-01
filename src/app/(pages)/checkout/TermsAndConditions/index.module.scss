@@ -1,16 +1,19 @@
 .termsContainer {
-  margin-top: 1rem;
   display: flex;
   align-items: center;
 }
 
 .termsLabel {
+  font-size: 18px;
   display: flex;
   align-items: center;
 }
 
 .termsLabel input {
   margin-right: 0.5rem;
+  transform: scale(1.5); /* Adjust scale as needed */
+  width: 20px; /* Optional: Set a specific width */
+  height: 20px; /* Optional: Set a specific height */
 }
 
 .termsLabel a {

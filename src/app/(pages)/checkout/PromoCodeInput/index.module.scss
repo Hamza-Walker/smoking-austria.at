@@ -1,35 +1,65 @@
 .promoCodeInputContainer {
   margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
   align-items: center;
 
   label, button {
-    width: 100%; /* Ensure full width */
-    margin-bottom: 1rem; /* Add some space between elements */
+    width: 100%;
+    margin-bottom: 1rem;
   }
+
   label {
     display: block;
-    margin-bottom: 0rem; /* Reduce spacing between label and input */
+    margin-bottom: 0.5rem;
     font-weight: bold;
     color: #555;
   }
+
   .buttonContainer {
-      width: 65%; // Match the input width for consistency
-      display: flex;
-      flex-direction: row; // Stack buttons vertically
-    }
+    width: 65%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; // This will add space between the buttons
+  }
+
   input {
-    padding: 12px 20px; // Increased padding for better touch targets
-    border-radius: 5px; // Rounded corners
-    font-size: 18px; // Larger font size
-    outline: none; // Remove focus outline for consistency
+    padding: 12px 20px;
+    border-radius: 10px; // More rounded corners
+    font-size: 18px;
+    outline: none;
     border: 1px solid #ddd;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     width: 65%;
+    margin-bottom: 1rem; // Add some space between input and buttons
   }
-    button {
-    width: auto; /* Allow the button to size based on content */
-    padding: 10px 20px;
+
+  button {
+    width: 46%; // Adjust width to fit both buttons side by side with space
+    padding: 5px 10px;
+    border-radius: 10px; // More rounded corners
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease; // Smooth transition for hover effect
+    font-size: 16px;
+    background-color: #e0e0e0; // Red background color
+    &:hover {
+      box-shadow: 0 0 10px rgba(255, 255, 0, 0.5); // Yellow glow on hover
+    }
+  }
+
+  .applyButton {
+    color: black;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  .removeButton {
+    color: black;
+  }
+
+  .errorMsg {
+    color: #f44336;
+    margin-top: 0.5rem;
   }
 }
-
