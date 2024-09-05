@@ -1,12 +1,22 @@
 .termsContainer {
   display: flex;
   align-items: center;
+  gap: 1rem; /* Add spacing between elements */
+
+  @media (max-width: 768px) {
+    flex-direction: column; /* Stack vertically on smaller screens */
+    align-items: flex-start; /* Align items to the start */
+  }
 }
 
 .termsLabel {
   font-size: 18px;
   display: flex;
   align-items: center;
+
+  @media (max-width: 768px) {
+    font-size: 16px; /* Adjust font size for smaller screens */
+  }
 }
 
 .termsLabel input {
@@ -22,6 +32,10 @@
 
   &:hover {
     text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 16px; /* Adjust font size for smaller screens */
   }
 }
 

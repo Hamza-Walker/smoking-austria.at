@@ -8,12 +8,21 @@
   margin-top: 1rem;
   width: 70%;
   align-items: center;
+
+  @media (max-width: 768px) {
+      flex-direction: column; /* Stack buttons vertically on smaller screens */
+      width: 100%;
+      gap: 1rem; /* Add space between buttons */
+    }
 }
 
 .buttonCart {
-  width:42%
-}
+  width:42%;
 
+  @media (max-width: 768px) {
+    width: 100%; /* Buttons take up full width on smaller screens */
+  }
+}
 .error {
   color: darkred;
   font-weight: bold;
@@ -25,7 +34,11 @@
   color: white;
   position: relative;
   z-index: 0;
-  width:50%
+  width:50%;
+
+  @media (max-width: 768px) {
+    width: 100%; /* Buttons take up full width on smaller screens */
+  }
 }
 
 .buttonSubmit::before {
@@ -57,17 +70,33 @@
   color: orange;
 }
 
-.container {
+.parentContainer {
   display: flex;
+  flex-direction: row;
   align-items: flex-start; /* Aligns items at the top */
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 }
 
 .bankDetails {
   flex: 1;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 }
 
 .addressFormContainer {
   flex: 1;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    order: -1;
+  }
+
 }
 
 .addressForm {

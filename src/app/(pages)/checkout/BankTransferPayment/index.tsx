@@ -124,16 +124,7 @@ const BankTransferPayment: React.FC<{
         setIsLoading(false)
       }
     },
-    [
-      router,
-      cart,
-      cartTotal,
-      isAddressComplete,
-      couponDiscount,
-      termsAccepted,
-      couponId,
-      handleRemoveCoupon,
-    ],
+    [router, cart, cartTotal, isAddressComplete, couponDiscount, termsAccepted, couponId],
   )
 
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -150,7 +141,7 @@ const BankTransferPayment: React.FC<{
   }
 
   return (
-    <div className={classes.container}>
+    <div className={classes.parentContainer}>
       <div className={classes.bankDetails}>
         <h3 className={classes.payment}>Bank Transfer Details</h3>
         <p>Please transfer the total amount to the following bank account:</p>
