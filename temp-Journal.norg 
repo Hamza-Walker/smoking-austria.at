@@ -1,0 +1,5 @@
+apparently im not cappable of logging into the server:
+- main issue is the denial of access. error also appears when the wrong password
+  is entered so now i will try and see of the sshd_config file can be changed.
+
+  server password : giHRVsCNUnp94J7wgcup on hetzner
