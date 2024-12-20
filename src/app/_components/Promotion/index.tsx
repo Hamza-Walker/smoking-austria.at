@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState, useMemo } from 'react'
 import classes from './index.module.scss'
+import { useRouter } from 'next/navigation'
 
 const Promotion = () => {
   const [time, setTime] = useState({
@@ -9,7 +10,7 @@ const Promotion = () => {
     minutes: 0,
     seconds: 0,
   })
-
+  const router = useRouter()
   // Calculate the target date as the last day of the current month
   const targetDate = useMemo(() => {
     const date = new Date()
@@ -45,8 +46,8 @@ const Promotion = () => {
     <section className={classes.promotion}>
       <div className={classes.container}>
         <div className={classes.textBox}>
-          <h3 className={classes.title}>Ready to</h3>
-          <p>Discover the best deals on your favorite smoking essentials. ✨</p>
+          <h3 className={classes.title}>Ready</h3>
+          <p>To Discover the best deals on your favorite smoking essentials. ✨</p>
         </div>
 
         <div className={classes.countdownBox}>
@@ -59,7 +60,9 @@ const Promotion = () => {
         </div>
 
         <div className={classes.ctaBox}>
-          <button className={classes.ctaButton}>Shop Now</button>
+          <button className={classes.ctaButton} onClick={() => router.push('/products')}>
+            Shop Now
+          </button>
         </div>
       </div>
     </section>
