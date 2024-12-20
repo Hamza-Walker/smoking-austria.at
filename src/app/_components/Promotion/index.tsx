@@ -41,28 +41,32 @@ const Promotion = () => {
       clearInterval(timerInterval) // Cleanup the interval when the component unmounts.
     }
   }, [targetDate])
-
   return (
     <section className={classes.promotion}>
-      <div className={classes.textBox}>
-        <h3 className={classes.title}>Deals of the Month</h3>
-        <p>
-          Discover the best deals on your favorite smoking essentials. This month's exclusive offers
-          include premium papers and filters at unbeatable prices. Stock up and enjoy the smoothest
-          experience. ✨
-        </p>
+      <div className={classes.container}>
+        <div className={classes.textBox}>
+          <h3 className={classes.title}>Ready to</h3>
+          <p>
+            Discover the best deals on your favorite smoking essentials. ✨
+          </p>
+        </div>
 
-        <ul className={classes.stats}>
-          <StatBox label="Days" value={time.days} />
-          <StatBox label="Hours" value={time.hours} />
-          <StatBox label="Minutes" value={time.minutes} />
-          <StatBox label="Seconds" value={time.seconds} />
-        </ul>
+        <div className={classes.countdownBox}>
+          <ul className={classes.stats}>
+            <StatBox label="Days" value={time.days} />
+            <StatBox label="Hours" value={time.hours} />
+            <StatBox label="Minutes" value={time.minutes} />
+            <StatBox label="Seconds" value={time.seconds} />
+          </ul>
+        </div>
+
+        <div className={classes.ctaBox}>
+          <button className={classes.ctaButton}>Shop Now</button>
+        </div>
       </div>
     </section>
   )
 }
-
 const StatBox = ({ label, value }: { label: string; value: number }) => (
   <li className={classes.statBox}>
     <h4>{value}</h4>
