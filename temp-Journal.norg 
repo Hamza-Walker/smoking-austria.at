@@ -3,3 +3,31 @@ apparently im not cappable of logging into the server:
   is entered so now i will try and see of the sshd_config file can be changed.
 
   server password : giHRVsCNUnp94J7wgcup on hetzner
+
+  coolify env :
+  DATABASE_URI=postgres://default:yKqtb1BIRQd0@ep-misty-poetry-a2noz08q.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require
+EMAIL_HOST=smtp0001.neo.space
+EMAIL_PASSWORD=Feelthevibe123!
+EMAIL_PORT=587
+EMAIL_SALES=hamza@walker-vienna.com
+NEXT_PRIVATE_DRAFT_SECRET=demo-draft-secret
+NEXT_PRIVATE_REVALIDATION_KEY=demo-revalation-key
+NEXT_PUBLIC_IS_LIVE=
+NEXT_PUBLIC_SERVER_URL=https://smoking-austria.at
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_51P9MeI06UTZ8nZjbhT9a0vjDWOyXf0oKkOvRpONxQCY0R20OvSLUxrkEHOpHCxOK1Su4xt7zRp4BpPEUWYlHkGT700IuTEle1F
+NODE_ENV=development
+PAYLOAD_PUBLIC_DRAFT_SECRET=demo-draft-secret
+PAYLOAD_PUBLIC_SERVER_URL=https://smoking-austria.at
+PAYLOAD_PUBLIC_STRIPE_IS_TEST_KEY=true
+PAYLOAD_SECRET=0xCp+KlNVvjOzJljlnrPxgyA9gWdzobpDEbG1D/eQ1o=
+PAYLOAD_SECRET_KEY=0xCp+KlNVvjOzJljlnrPxgyA9gWdzobpDEbG1D/eQ1o=
+PORT=3000
+REVALIDATION_KEY=demo-revalation-key
+S3_ACCESS_KEY=DO00RQEXRA8DPYAJXQP6
+S3_BUCKET_NAME=smoking-austria
+S3_ENDPOINT=https://fra1.digitaloceanspaces.com
+S3_REGION=fra1
+S3_SECRET_KEY=1o3Qck7wLHsHXURzbZeVGUrZYUhuuaFuVlIfQIqXmJY
+SECRET_KEY=0xCp+KlNVvjOzJljlnrPxgyA9gWdzobpDEbG1D/eQ1o=
+STRIPE_SECRET_KEY=sk_test_51P9MeI06UTZ8nZjbfPriTUnoW8axI61HEGNFALJT37hAcAjrsgSeiNwqo1SD95JVKgfeOZn89p2fcxEH0hPP8R3Q008l9sJOn2
+STRIPE_WEBHOOKS_SIGNING_SECRET=whsec_d9e2d483052c3248dd4e720ff83495b9a95120952249bb53d7e993e84ecf5f3a
