@@ -46,9 +46,7 @@ const Promotion = () => {
       <div className={classes.container}>
         <div className={classes.textBox}>
           <h3 className={classes.title}>Ready to</h3>
-          <p>
-            Discover the best deals on your favorite smoking essentials. ✨
-          </p>
+          <p>Discover the best deals on your favorite smoking essentials. ✨</p>
         </div>
 
         <div className={classes.countdownBox}>
