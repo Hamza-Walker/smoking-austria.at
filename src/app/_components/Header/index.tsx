@@ -3,7 +3,6 @@ import HeaderComponent from './HeaderComponent'
 import { Header as HeaderType } from '../../../payload/payload-types'
 import React from 'react'
 import { fetchHeader } from '../../_api/fetchGlobals'
-import Promotion from '../Promotion'
 
 export async function Header() {
   let header: HeaderType | null = null
@@ -17,7 +16,6 @@ export async function Header() {
   return (
     <>
       <HeaderComponent header={header} />
-      <Promotion />
     </>
   )
 }

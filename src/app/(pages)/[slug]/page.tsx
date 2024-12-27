@@ -20,7 +20,7 @@ import { generateMeta } from '../../_utilities/generateMeta'
 export const dynamic = 'force-dynamic'
 
 //import Categories from '../../_components/Categories'
-//import Promotion from '../../_components/Promotion'
+import Promotion from '../../_components/Promotion'
 
 import Categories from '../../_components/Categories'
 
@@ -62,6 +62,7 @@ export default async function Page({ params: { slug = 'home' } }) {
     <React.Fragment>
       {slug === 'home' ? (
         <section>
+          <Promotion />
           <MediaCarousel mediaBlocks={layout} />
 
           <Gutter className={classes.home}>
