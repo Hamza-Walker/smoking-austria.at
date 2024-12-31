@@ -1,10 +1,10 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-
 import { Product } from '../../../payload/payload-types'
 import { AddToCartButton } from '../AddToCartButton'
 import { RemoveFromCartButton } from '../RemoveFromCartButton'
+import { useAuth } from '../../_providers/Auth' // Assuming you have an auth provider
 
 import classes from './index.module.scss'
 
@@ -15,14 +15,17 @@ export const priceFromJSON = (priceJSON: string, quantity: number = 1, raw?: boo
     try {
       const parsed = JSON.parse(priceJSON)?.data[0]
       const priceValue = parsed.unit_amount * quantity
+      const currencySymbol =
+        parsed.currency === 'usd'
+          ? '$'
+          : parsed.currency === 'eur'
+          ? '€'
+          : parsed.currency.toUpperCase()
       const priceType = parsed.type
 
       if (raw) return priceValue.toString()
 
-      price = (priceValue / 100).toLocaleString('en-US', {
-        style: 'currency',
-        currency: 'USD', // TODO: use `parsed.currency`
-      })
+      price = `${currencySymbol}${(priceValue / 100).toFixed(2)}`
 
       if (priceType === 'recurring') {
         price += `/${
@@ -32,7 +35,7 @@ export const priceFromJSON = (priceJSON: string, quantity: number = 1, raw?: boo
         }`
       }
     } catch (e) {
-      console.error(`Cannot parse priceJSON`) // eslint-disable-line no-console
+      console.error(`Cannot parse priceJSON`, e)
     }
   }
 
@@ -46,6 +49,7 @@ export const Price: React.FC<{
 }> = props => {
   const { product, product: { priceJSON } = {}, button = 'addToCart', quantity } = props
 
+  const { status } = useAuth() // Fetch user status
   const [price, setPrice] = useState<{
     actualPrice: string
     withQuantity: string
@@ -63,18 +67,24 @@ export const Price: React.FC<{
 
   return (
     <div className={classes.actions}>
-      {typeof price?.actualPrice !== 'undefined' && price?.withQuantity !== '' && (
-        <div className={classes.price}>
-          <p>{price?.withQuantity}</p>
-          {quantity > 1 && (
-            <small className={classes.priceBreakdown}>{`${price.actualPrice} x ${quantity}`}</small>
+      {status === 'loggedIn' ? (
+        <>
+          {typeof price?.actualPrice !== 'undefined' && price?.withQuantity !== '' && (
+            <div className={classes.price}>
+              <p>{price?.withQuantity}</p>
+              {quantity > 1 && (
+                <small className={classes.priceBreakdown}>
+                  {`${price.actualPrice} x ${quantity}`}
+                </small>
+              )}
+            </div>
           )}
-        </div>
+          {button === 'addToCart' && <AddToCartButton product={product} appearance="default" />}
+          {button === 'removeFromCart' && <RemoveFromCartButton product={product} />}
+        </>
+      ) : (
+        <p className={classes.priceHidden}>Login to view price</p>
       )}
-      {button && button === 'addToCart' && (
-        <AddToCartButton product={product} appearance="default" />
-      )}
-      {button && button === 'removeFromCart' && <RemoveFromCartButton product={product} />}
     </div>
   )
 }
