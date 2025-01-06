@@ -18,11 +18,6 @@ export type CartItems =
     }[]
   | null;
 
-export interface CouponResponse {
-  success: boolean
-  message?: string
-}
-
 export interface Config {
   collections: {
     pages: Page;
@@ -428,7 +423,7 @@ export interface Product {
  */
 export interface Order {
   id: number;
-  orderedBy?: (number | null) | User;
+  orderedBy: number | User;
   stripePaymentIntentID?: string | null;
   total: number;
   items?:
@@ -450,7 +445,9 @@ export interface Order {
  */
 export interface User {
   id: number;
-  name?: string | null;
+  name: string;
+  businessLicense: string;
+  taxNumber?: string | null;
   roles?: ('admin' | 'customer')[] | null;
   purchases?: (number | Product)[] | null;
   stripeCustomerID?: string | null;

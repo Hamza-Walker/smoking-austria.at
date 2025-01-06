@@ -17,6 +17,8 @@ type FormData = {
   email: string
   password: string
   passwordConfirm: string
+  businessLicense: string // Required
+  taxNumber?: string // Optional
 }
 
 const CreateAccountForm: React.FC = () => {
@@ -113,6 +115,44 @@ const CreateAccountForm: React.FC = () => {
         register={register}
         validate={value => value === password.current || 'The passwords do not match'}
         error={errors.passwordConfirm}
+      />
+      {/* Business License (Required) */}
+      <Input
+        name="businessLicense"
+        label={
+          <>
+            Business License (Gewerbeschein)
+            <span className={classes.tooltip}>
+              ❓
+              <span className={classes.tooltipText}>
+                Please enter your valid business license number.
+              </span>
+            </span>
+          </>
+        }
+        required
+        register={register}
+        error={errors.businessLicense}
+        type="text"
+      />
+
+      {/* Tax Number (Optional) */}
+      <Input
+        name="taxNumber"
+        label={
+          <>
+            Tax Number (Steuernummer) (Optional)
+            <span className={classes.tooltip}>
+              ❓
+              <span className={classes.tooltipText}>
+                If applicable, provide your tax number for invoicing.
+              </span>
+            </span>
+          </>
+        }
+        register={register}
+        error={errors.taxNumber}
+        type="text"
       />
       <Button
         type="submit"

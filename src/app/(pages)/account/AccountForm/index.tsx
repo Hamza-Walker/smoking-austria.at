@@ -25,6 +25,8 @@ type FormData = {
   password: string
   passwordConfirm: string
   address: Address
+  business_license: string
+  tax_number?: string
 }
 
 const AccountForm: React.FC = () => {
@@ -83,6 +85,8 @@ const AccountForm: React.FC = () => {
               zipCode: '',
               country: '',
             },
+            business_license: json.doc.businessLicense,
+            tax_number: json.doc.taxNumber,
           })
         } else {
           setError('There was a problem updating your account.')
@@ -100,6 +104,7 @@ const AccountForm: React.FC = () => {
         )}&redirect=${encodeURIComponent('/account')}`,
       )
     }
+    console.log(user)
 
     // Once user is loaded, reset form to have default values
     if (user) {
@@ -115,6 +120,8 @@ const AccountForm: React.FC = () => {
           zipCode: '',
           country: '',
         },
+        business_license: user.businessLicense,
+        tax_number: user.taxNumber,
       })
     }
   }, [user, router, reset, changePassword])
@@ -162,6 +169,21 @@ const AccountForm: React.FC = () => {
             label="Country"
             register={register}
             error={errors.address?.country}
+          />
+          <Input
+            name="businessLicense"
+            label="Business License (Gewerbeschein)"
+            required
+            register={register}
+            error={errors.business_license}
+            type="text"
+          />
+          <Input
+            name="taxNumber"
+            label="Tax Number (Steuernummer) (Optional)"
+            register={register}
+            error={errors.tax_number}
+            type="text"
           />
 
           <p>

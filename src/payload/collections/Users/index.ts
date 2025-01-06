@@ -15,7 +15,7 @@ const Users: CollectionConfig = {
   slug: 'users',
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'email'],
+    defaultColumns: ['name', 'email', 'businessLicense', 'taxNumber'],
   },
   access: {
     read: adminsAndUser,
@@ -45,6 +45,31 @@ const Users: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
+      required: true,
+    },
+    {
+      name: 'email',
+      type: 'email',
+      required: true,
+      unique: true,
+    },
+    {
+      name: 'businessLicense',
+      label: 'Business License (Gewerbeschein)',
+      type: 'text',
+      required: true,
+      admin: {
+        description: 'Please enter your valid business license number.',
+      },
+    },
+    {
+      name: 'taxNumber',
+      label: 'Tax Number (Steuernummer)',
+      type: 'text',
+      required: false,
+      admin: {
+        description: 'If applicable, provide your tax number for invoicing.',
+      },
     },
     {
       name: 'roles',

@@ -1,19 +1,56 @@
-@import "../../../_css/common";
-
-.form {
-  margin-bottom: var(--base);
+.inputWrapper {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  align-items: flex-start;
   width: 100%;
-  margin-top: 30px;
 }
 
 .submit {
-  width: 100%;
+  width: 100% !important; /* Ensure the button takes full width */
+  max-width: none; /* Remove any width limitation */
+  margin-top: 20px;
 }
 
-.message {
-  margin-bottom: var(--base);
+.label {
+  font-weight: inherit; /* Inherit default form styles */
+  display: flex;
+  align-items: center;
+  gap: 6px; /* Adjust spacing */
 }
+
+.required {
+  color: red;
+}
+
+.tooltip {
+  cursor: pointer;
+  position: relative;
+  font-size: 14px;
+  font-weight: normal; /* Match existing text style */
+  color: inherit;
+}
+
+.tooltipText {
+  visibility: hidden;
+  width: max-content;
+  max-width: 220px;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  text-align: center;
+  padding: 6px 10px;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  font-size: 12px;
+  white-space: normal;
+  z-index: 10;
+}
+
+.tooltip:hover .tooltipText {
+  visibility: visible;
+  opacity: 1;
+}
+

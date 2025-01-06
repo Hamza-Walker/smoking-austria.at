@@ -2035,6 +2035,7 @@ input Page_hero__links__id_operator {
 input Page_hero__media_operator {
   equals: String
   not_equals: String
+  exists: Boolean
 }
 
 input Page_slug_operator {
@@ -3663,6 +3664,7 @@ input versionsPage_version__hero__links__id_operator {
 input versionsPage_version__hero__media_operator {
   equals: String
   not_equals: String
+  exists: Boolean
 }
 
 input versionsPage_version__slug_operator {
@@ -5051,7 +5053,7 @@ input versionsProduct_where_or {
 
 type Order {
   id: Int
-  orderedBy: User
+  orderedBy: User!
   stripePaymentIntentID: String
   total: Float!
   items: [Order_Items!]
@@ -5063,7 +5065,9 @@ type Order {
 
 type User {
   id: Int
-  name: String
+  name: String!
+  businessLicense: String!
+  taxNumber: String
   roles: [User_roles!]
   purchases(draft: Boolean): [Product!]
   stripeCustomerID: String
@@ -5166,7 +5170,6 @@ input Order_orderedBy_operator {
   in: [JSON]
   not_in: [JSON]
   all: [JSON]
-  exists: Boolean
 }
 
 input Order_stripePaymentIntentID_operator {
@@ -6617,6 +6620,8 @@ type Users {
 
 input User_where {
   name: User_name_operator
+  businessLicense: User_businessLicense_operator
+  taxNumber: User_taxNumber_operator
   roles: User_roles_operator
   purchases: User_purchases_operator
   stripeCustomerID: User_stripeCustomerID_operator
@@ -6638,6 +6643,26 @@ input User_where {
 }
 
 input User_name_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input User_businessLicense_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+}
+
+input User_taxNumber_operator {
   equals: String
   not_equals: String
   like: String
@@ -6817,6 +6842,8 @@ input User_id_operator {
 
 input User_where_and {
   name: User_name_operator
+  businessLicense: User_businessLicense_operator
+  taxNumber: User_taxNumber_operator
   roles: User_roles_operator
   purchases: User_purchases_operator
   stripeCustomerID: User_stripeCustomerID_operator
@@ -6839,6 +6866,8 @@ input User_where_and {
 
 input User_where_or {
   name: User_name_operator
+  businessLicense: User_businessLicense_operator
+  taxNumber: User_taxNumber_operator
   roles: User_roles_operator
   purchases: User_purchases_operator
   stripeCustomerID: User_stripeCustomerID_operator
@@ -6874,6 +6903,8 @@ type usersDocAccess {
 
 type UsersDocAccessFields {
   name: UsersDocAccessFields_name
+  businessLicense: UsersDocAccessFields_businessLicense
+  taxNumber: UsersDocAccessFields_taxNumber
   roles: UsersDocAccessFields_roles
   purchases: UsersDocAccessFields_purchases
   stripeCustomerID: UsersDocAccessFields_stripeCustomerID
@@ -6906,6 +6937,52 @@ type UsersDocAccessFields_name_Update {
 }
 
 type UsersDocAccessFields_name_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_businessLicense {
+  create: UsersDocAccessFields_businessLicense_Create
+  read: UsersDocAccessFields_businessLicense_Read
+  update: UsersDocAccessFields_businessLicense_Update
+  delete: UsersDocAccessFields_businessLicense_Delete
+}
+
+type UsersDocAccessFields_businessLicense_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_businessLicense_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_businessLicense_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_businessLicense_Delete {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_taxNumber {
+  create: UsersDocAccessFields_taxNumber_Create
+  read: UsersDocAccessFields_taxNumber_Read
+  update: UsersDocAccessFields_taxNumber_Update
+  delete: UsersDocAccessFields_taxNumber_Delete
+}
+
+type UsersDocAccessFields_taxNumber_Create {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_taxNumber_Read {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_taxNumber_Update {
+  permission: Boolean!
+}
+
+type UsersDocAccessFields_taxNumber_Delete {
   permission: Boolean!
 }
 
@@ -11638,6 +11715,8 @@ type usersAccess {
 
 type UsersFields {
   name: UsersFields_name
+  businessLicense: UsersFields_businessLicense
+  taxNumber: UsersFields_taxNumber
   roles: UsersFields_roles
   purchases: UsersFields_purchases
   stripeCustomerID: UsersFields_stripeCustomerID
@@ -11670,6 +11749,52 @@ type UsersFields_name_Update {
 }
 
 type UsersFields_name_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_businessLicense {
+  create: UsersFields_businessLicense_Create
+  read: UsersFields_businessLicense_Read
+  update: UsersFields_businessLicense_Update
+  delete: UsersFields_businessLicense_Delete
+}
+
+type UsersFields_businessLicense_Create {
+  permission: Boolean!
+}
+
+type UsersFields_businessLicense_Read {
+  permission: Boolean!
+}
+
+type UsersFields_businessLicense_Update {
+  permission: Boolean!
+}
+
+type UsersFields_businessLicense_Delete {
+  permission: Boolean!
+}
+
+type UsersFields_taxNumber {
+  create: UsersFields_taxNumber_Create
+  read: UsersFields_taxNumber_Read
+  update: UsersFields_taxNumber_Update
+  delete: UsersFields_taxNumber_Delete
+}
+
+type UsersFields_taxNumber_Create {
+  permission: Boolean!
+}
+
+type UsersFields_taxNumber_Read {
+  permission: Boolean!
+}
+
+type UsersFields_taxNumber_Update {
+  permission: Boolean!
+}
+
+type UsersFields_taxNumber_Delete {
   permission: Boolean!
 }
 
@@ -13765,7 +13890,9 @@ input mutationCategoryUpdate_BreadcrumbsInput {
 }
 
 input mutationUserInput {
-  name: String
+  name: String!
+  businessLicense: String!
+  taxNumber: String
   roles: [User_roles_MutationInput]
   purchases: [Int]
   stripeCustomerID: String
@@ -13809,6 +13936,8 @@ input mutationUser_AddressInput {
 
 input mutationUserUpdateInput {
   name: String
+  businessLicense: String
+  taxNumber: String
   roles: [UserUpdate_roles_MutationInput]
   purchases: [Int]
   stripeCustomerID: String
