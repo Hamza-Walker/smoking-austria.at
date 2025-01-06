@@ -605,6 +605,13 @@ export interface Footer {
     | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+
+}
+export interface CouponResponse {
+  success: boolean;
+  message?: string;
+  discountPercentage?: number;  // Optional, if the coupon response contains discount info
+  couponId?: string;            // Optional, if the coupon response contains a coupon ID
 }
 
 
