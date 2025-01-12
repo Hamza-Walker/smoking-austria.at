@@ -4,3 +4,14 @@
    - Added dynamic currency symbol logic for USD, EUR, and other currencies.
    - Updated price formatting to show currency symbols with two decimal places.
    - Implemented conditional price display based on user authentication status.
+
+** 2025-01-12:
+   feat: add validation for tax number and business license fields
+
+   - Implemented regex validation for tax numbers (optional field)
+     to support EU formats such as ATU12345678 and DE123456789.
+   - Added validation for business licenses (required field) to ensure alphanumeric values with
+     optional dashes.
+   - Included error messages for invalid inputs to improve user feedback.
+   - Updated form configuration in `CreateAccountForm` to integrate validation logic.
+

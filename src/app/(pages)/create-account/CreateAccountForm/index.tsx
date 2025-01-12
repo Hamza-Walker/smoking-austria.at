@@ -1,5 +1,4 @@
 'use client'
-
 import React, { useCallback, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Link from 'next/link'
@@ -19,6 +18,17 @@ type FormData = {
   passwordConfirm: string
   businessLicense: string // Required
   taxNumber?: string // Optional
+}
+
+const validateTaxNumber = (value: string | undefined) => {
+  if (!value) return true // Tax number is optional
+  const taxNumberRegex = /^[A-Z]{0,2}[0-9A-Z]{8,12}$/
+  return taxNumberRegex.test(value) || 'Please enter a valid 9-digit tax number.'
+}
+
+const validateBusinessLicense = (value: string) => {
+  const businessLicenseRegex = /^[A-Za-z0-9-]{8,15}$/
+  return businessLicenseRegex.test(value) || 'Please enter a valid business license.'
 }
 
 const CreateAccountForm: React.FC = () => {
@@ -77,11 +87,6 @@ const CreateAccountForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
-      {/*<p>
-        {`This is where new customers can signup and create a new account. To manage all users, `}
-        <Link href="/admin/collections/users">login to the admin dashboard</Link>
-        {'.'}
-      </p>*/}
       <Message error={error} className={classes.message} />
       <Input
         name="email"
@@ -116,7 +121,6 @@ const CreateAccountForm: React.FC = () => {
         validate={value => value === password.current || 'The passwords do not match'}
         error={errors.passwordConfirm}
       />
-      {/* Business License (Required) */}
       <Input
         name="businessLicense"
         label={
@@ -132,11 +136,10 @@ const CreateAccountForm: React.FC = () => {
         }
         required
         register={register}
+        validate={validateBusinessLicense}
         error={errors.businessLicense}
         type="text"
       />
-
-      {/* Tax Number (Optional) */}
       <Input
         name="taxNumber"
         label={
@@ -151,6 +154,7 @@ const CreateAccountForm: React.FC = () => {
           </>
         }
         register={register}
+        validate={validateTaxNumber}
         error={errors.taxNumber}
         type="text"
       />
