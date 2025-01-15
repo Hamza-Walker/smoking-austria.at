@@ -5,6 +5,20 @@
    - Updated price formatting to show currency symbols with two decimal places.
    - Implemented conditional price display based on user authentication status.
 
+** 2025-01-06:
+   "Feat: Add and display Business License and Tax Number. and display and edit
+   values on the Account Page
+
+   - Add business_license and tax_number to the rgistration form.
+   - Added `business_license` and `tax_number` fields to the user collection in PayloadCMS.
+   - Updated the user model and database schema to store business license and tax number.
+   - Modified the account page form to include fields for business license and tax number.
+   - Ensured that the `reset` function correctly populates form fields with values from the `user` object,
+     including business license and tax number.
+   - Implemented backend logic to handle updates for business license and tax number during account editing.
+   - Fixed issue with incorrect field names in the form by aligning with the backend
+     field names (`businessLicense` and `taxNumber`).
+
 ** 2025-01-12:
    feat: add validation for tax number and business license fields
 
