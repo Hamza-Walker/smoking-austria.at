@@ -47,7 +47,7 @@ export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
         const emailData = {
           invoiceNumber,
           date,
-          taxNumber, 
+          taxNumber,
           sender: {
             name: 'Toifl Hans Christian e.U.',
             address: 'Meinhartsdorfergasse 10/2,<br>1150 Wien,<br>Österreich',
