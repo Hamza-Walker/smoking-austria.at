@@ -38,6 +38,7 @@ export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
         const uniqueID = Math.floor(1000 + Math.random() * 9000)
         const invoiceNumber = `INV-${user.id}-${date}-${uniqueID}`
         const paymentMethod = doc.stripePaymentIntentID ? 'Card' : 'Check'
+        const taxNumber = user.taxNumber || 'ATU-'
 
         // The discount is already applied in the BankTransferPayment Component
         // const totalAfterDiscount = doc.discountAmount ? doc.total - doc.discountAmount : doc.total
@@ -46,6 +47,7 @@ export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
         const emailData = {
           invoiceNumber,
           date,
+          taxNumber, 
           sender: {
             name: 'Toifl Hans Christian e.U.',
             address: 'Meinhartsdorfergasse 10/2,<br>1150 Wien,<br>Österreich',
@@ -107,7 +109,7 @@ export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
         // Send confirmation email with PDF attachment
         await payload.sendEmail({
           from: 'hamza@walker-vienna.com',
-          to: user.email,
+          to: [user.email, 'hamza@walker-vienna.com'],
           subject: 'Order Confirmation',
           html: emailHTML,
           attachments: [
