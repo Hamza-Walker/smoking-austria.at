@@ -12,15 +12,11 @@ import classes from './index.module.scss'
 const Filters = ({ categories }: { categories: Category[] }) => {
   const { categoryFilters, sort, setCategoryFilters, setSort } = useFilter()
 
-  // Debug the incoming data
-  console.log('Raw Categories:', categories)
-
-  // First, separate parent and child categories
+  // Only get top-level categories (those without parents)
   const parentCategories = categories.filter(cat => !cat.parentCategory)
-  const childCategories = categories.filter(cat => cat.parentCategory)
 
-  // Create hierarchy map
-  const categoryMap = childCategories.reduce<{ [key: string]: Category[] }>((acc, category) => {
+  // Create map of child categories
+  const categoryMap = categories.reduce<{ [key: string]: Category[] }>((acc, category) => {
     if (category.parentCategory) {
       const parentId =
         typeof category.parentCategory === 'object'
@@ -31,15 +27,9 @@ const Filters = ({ categories }: { categories: Category[] }) => {
         acc[parentId] = []
       }
       acc[parentId].push(category)
-    } else {
-      const catId = category.id.toString()
-      acc[catId] = acc[catId] || [] // Ensure every category has an entry
     }
     return acc
   }, {})
-
-  // Debug logging
-  console.log('Category Map:', categoryMap)
 
   const handleCategories = (categoryId: string) => {
     if (categoryFilters.includes(categoryId)) {
@@ -51,8 +41,8 @@ const Filters = ({ categories }: { categories: Category[] }) => {
 
   const handleSort = (value: string) => setSort(value)
 
-  const renderCategories = (categories: Category[], level = 0) => {
-    return categories.map(category => (
+  const renderCategories = (categories: Category[], level = 0) =>
+    categories.map(category => (
       <div key={category.id} className={classes.categoryGroup}>
         <div className={level === 0 ? classes.parentCategory : classes.subcategoryItem}>
           {level > 0 && (
@@ -87,13 +77,19 @@ const Filters = ({ categories }: { categories: Category[] }) => {
         )}
       </div>
     ))
-  }
+
+  // Sort parent categories alphabetically
+  /* eslint-disable function-paren-newline */
+  const sortedParentCategories = [...parentCategories].sort((a, b) =>
+    a.title.localeCompare(b.title),
+  )
+  /* eslint-enable function-paren-newline */
 
   return (
     <div className={classes.filters}>
       <div>
         <h6 className={classes.title}>Product Categories</h6>
-        <div className={classes.categories}>{renderCategories(categories)}</div>
+        <div className={classes.categories}>{renderCategories(sortedParentCategories)}</div>
         <HR className={classes.hr} />
         <h6 className={classes.title}>Sort By</h6>
         <div className={classes.categories}>
