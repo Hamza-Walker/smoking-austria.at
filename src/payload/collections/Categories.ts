@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload/types'
+import { CollectionConfig } from 'payload/types'
 
 const Categories: CollectionConfig = {
   slug: 'categories',
@@ -15,9 +15,22 @@ const Categories: CollectionConfig = {
       required: true,
     },
     {
+      name: 'parentCategory',
+      type: 'relationship',
+      relationTo: 'categories',
+      hasMany: false,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'media',
       type: 'upload',
       relationTo: 'media',
+      required: false,
+      admin: {
+        position: 'sidebar',
+      },
     },
   ],
 }

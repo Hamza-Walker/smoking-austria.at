@@ -22,7 +22,7 @@ const Products = async () => {
       slug: 'products',
       draft: isDraftMode,
     })
-    console.log('Page fetched successfully:', page)
+    //console.log('Page fetched successfully:', page)
 
     categories = await fetchDocs<Category>('categories')
     console.log('Categories fetched successfully:', categories)

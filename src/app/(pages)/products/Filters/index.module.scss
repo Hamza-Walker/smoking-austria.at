@@ -61,3 +61,23 @@
   margin: 20px 0;
 }
 
+.subcategoryItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+}
+
+.treeLine {
+  color: #666;
+  margin-right: 0.5rem;
+  font-family: monospace;
+  user-select: none;
+  display: inline-block;
+}
+
+.checkboxWrapper {
+  display: inline-block;
+  flex: 1;
+}
+

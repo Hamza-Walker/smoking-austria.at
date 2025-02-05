@@ -1,7 +1,6 @@
 'use client'
 
 import { Category, Media } from '../../../../payload/payload-types'
-
 import Link from 'next/link'
 import React from 'react'
 import classes from './index.module.scss'
@@ -12,13 +11,19 @@ type CategoryCardProps = {
 }
 
 const CategoryCard = ({ category }: CategoryCardProps) => {
-  const media = category.media as Media
   const { setCategoryFilters } = useFilter()
+  // Skip rendering if category has a parent
+  if (category.parentCategory) {
+    return null
+  }
+
+  const media = category.media as Media
+
   return (
     <Link
       href="/products"
       className={classes.card}
-      style={{ backgroundImage: `url(${media.url})` }}
+      style={{ backgroundImage: `url(${media?.url})` }}
       onClick={() => {
         setCategoryFilters([category.id])
       }}

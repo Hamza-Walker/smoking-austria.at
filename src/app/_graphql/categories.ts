@@ -13,6 +13,10 @@ export const CATEGORIES = `
       docs {
         id
         title
+      parentCategory {
+        id
+        title
+        }
         media {
           alt
           width

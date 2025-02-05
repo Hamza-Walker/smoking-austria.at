@@ -29,3 +29,45 @@
    - Included error messages for invalid inputs to improve user feedback.
    - Updated form configuration in `CreateAccountForm` to integrate validation logic.
 
+** 
+
+*Steps to add subcategories* 
+Task_1: update GraphQL queries and collection config  
+
+- Refactored GraphQL file to include the parent field   
+- Updated `Categories` collection file to include the parent relationship   
+
+After making these changes, ran the `regenerate` command and restarted the server.  
+
+Task_2: Implement hierarchical category filters with nested subcategories on Product page
+
+This commit adds support for displaying categories in a hierarchical tree structure
+with proper parent-child relationships in the product filters.
+
+Key implementations:
+1. Added recursive category rendering with proper nesting levels
+2. Implemented visual tree structure with indentation and tree lines
+3. Fixed category sorting and display order
+4. Added proper styling for nested categories
+5. Improved category mapping logic to handle parent-child relationships
+
+Technical changes:
+- Created categoryMap to organize parent-child relationships
+- Added recursive renderCategories function for nested display
+- Implemented proper CSS for visual hierarchy
+- Fixed alignment issues with tree lines and checkboxes
+- Added proper type handling for category relationships
+
+Steps taken:
+1. Fixed category collection configuration
+2. Implemented proper category mapping
+3. Added recursive rendering logic
+4. Styled nested categories with proper indentation
+5. Fixed alignment issues with tree lines
+6. Added proper sorting at each category level
+
+The feature now correctly displays categories like:
+Papers
+└── Rolls
+Cones
+Filters 
