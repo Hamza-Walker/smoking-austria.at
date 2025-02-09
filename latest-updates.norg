@@ -29,45 +29,74 @@
    - Included error messages for invalid inputs to improve user feedback.
    - Updated form configuration in `CreateAccountForm` to integrate validation logic.
 
-** 
+**** TODO:
+     - (x) compressed images on the home page.
+           https://imagecompressor.com
+     - ( ) further style the Promotion Component
+     - what we do and why it matters and call to action. include an image as it
+       will be seen for at least 6 seconds.
 
-*Steps to add subcategories* 
-Task_1: update GraphQL queries and collection config  
+** 2025-01-22 Wednesday:
+**** Todo:
+     - ( ) add sub categories to the categories.
+     - ( ) filter by sub category as well.
 
-- Refactored GraphQL file to include the parent field   
-- Updated `Categories` collection file to include the parent relationship   
+** 2025-01-26 Sunday:
+*** Issue:
+    when unpublishing a product its is still viewd.
+    chatgpt recommended to look at the fectchdoc function and see if its
+    filtering for isdraftmode. test this and see if the property is set
+    correctly. for now the graphql schemas seem correct. and one more hint. is
+    draft mode enabled in your project perhaps you have to set it as an
+    evironmental variable.
 
-After making these changes, ran the `regenerate` command and restarted the server.  
+** 2025-02-05:
 
-Task_2: Implement hierarchical category filters with nested subcategories on Product page
+   *Steps to add subcategories*
+   Task_1: update GraphQL queries and collection config
 
-This commit adds support for displaying categories in a hierarchical tree structure
-with proper parent-child relationships in the product filters.
+   - Refactored GraphQL file to include the parent field
+   - Updated `Categories` collection file to include the parent relationship
 
-Key implementations:
-1. Added recursive category rendering with proper nesting levels
-2. Implemented visual tree structure with indentation and tree lines
-3. Fixed category sorting and display order
-4. Added proper styling for nested categories
-5. Improved category mapping logic to handle parent-child relationships
+   After making these changes, ran the `regenerate` command and restarted the server.
 
-Technical changes:
-- Created categoryMap to organize parent-child relationships
-- Added recursive renderCategories function for nested display
-- Implemented proper CSS for visual hierarchy
-- Fixed alignment issues with tree lines and checkboxes
-- Added proper type handling for category relationships
+   Task_2: Implement hierarchical category filters with nested subcategories on Product page
 
-Steps taken:
-1. Fixed category collection configuration
-2. Implemented proper category mapping
-3. Added recursive rendering logic
-4. Styled nested categories with proper indentation
-5. Fixed alignment issues with tree lines
-6. Added proper sorting at each category level
+   This commit adds support for displaying categories in a hierarchical tree structure
+   with proper parent-child relationships in the product filters.
 
-The feature now correctly displays categories like:
-Papers
-└── Rolls
-Cones
-Filters 
+   Key implementations:
+   1. Added recursive category rendering with proper nesting levels
+   2. Implemented visual tree structure with indentation and tree lines
+   3. Fixed category sorting and display order
+   4. Added proper styling for nested categories
+   5. Improved category mapping logic to handle parent-child relationships
+
+   Technical changes:
+   - Created categoryMap to organize parent-child relationships
+   - Added recursive renderCategories function for nested display
+   - Implemented proper CSS for visual hierarchy
+   - Fixed alignment issues with tree lines and checkboxes
+   - Added proper type handling for category relationships
+
+   Steps taken:
+   1. Fixed category collection configuration
+   2. Implemented proper category mapping
+   3. Added recursive rendering logic
+   4. Styled nested categories with proper indentation
+   5. Fixed alignment issues with tree lines
+   6. Added proper sorting at each category level
+
+   The feature now correctly displays categories like:
+   Papers
+   └── Rolls
+   Cones
+   Filters
+** 2025-02-09:
+
+   - ( ) Feature: add the sender email to the .env file. update coolify and test it.
+   - ( ) Improve the home page, by removing the extra business details.
+   - ( ) increase the spacing between the subcategories. set the products page
+         to a specific size. inorder for it to render properly.
+   - ( ) grant ottmar admin privilages.
+   - ( ) write email informing him that the website is ready.

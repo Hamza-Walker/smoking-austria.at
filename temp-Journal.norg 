@@ -2,8 +2,10 @@ apparently im not cappable of logging into the server:
 - main issue is the denial of access. error also appears when the wrong password
   is entered so now i will try and see of the sshd_config file can be changed.
 
-  server password : giHRVsCNUnp94J7wgcup on hetzner
-
+ Temporary server password : giHRVsCNUnp94J7wgcup on hetzner
+server ip address : 49.13.145.198
+email:hamzawalker.vienna@gmail.com
+password:Admin123!
   coolify env :
 DATABASE_URI=postgres://default:yKqtb1BIRQd0@ep-misty-poetry-a2noz08q.eu-central-1.aws.neon.tech:5432/verceldb?sslmode=require
 EMAIL_HOST=smtp0001.neo.space

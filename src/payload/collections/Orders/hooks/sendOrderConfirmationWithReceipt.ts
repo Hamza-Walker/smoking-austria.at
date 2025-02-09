@@ -6,6 +6,9 @@ import fs from 'fs'
 import { generatePDF } from './utilities/generatePDF'
 import inlineCSS from 'inline-css'
 import path from 'path'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
   doc,
@@ -106,10 +109,24 @@ export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
         // Read the generated PDF file as a Buffer
         const pdfBuffer = fs.readFileSync(pdfPath)
 
-        // Send confirmation email with PDF attachment
+        // Send confirmation email with PDF attachment to sales
         await payload.sendEmail({
-          from: 'hamza@walker-vienna.com',
-          to: [user.email, 'hamza@walker-vienna.com'],
+          from: process.env.EMAIL_SALES,
+          to: process.env.EMAIL_SALES,
+          subject: 'Order Confirmation',
+          html: emailHTML,
+          attachments: [
+            {
+              filename: 'receipt.pdf',
+              content: pdfBuffer,
+              contentType: 'application/pdf',
+            },
+          ],
+        })
+        // Second email to the customer
+        await payload.sendEmail({
+          from: process.env.EMAIL_SALES || 'office@stamm-baum.at',
+          to: user.email,
           subject: 'Order Confirmation',
           html: emailHTML,
           attachments: [
