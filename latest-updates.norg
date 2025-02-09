@@ -94,9 +94,18 @@
    Filters
 ** 2025-02-09:
 
-   - ( ) Feature: add the sender email to the .env file. update coolify and test it.
-   - ( ) Improve the home page, by removing the extra business details.
-   - ( ) increase the spacing between the subcategories. set the products page
-         to a specific size. inorder for it to render properly.
-   - ( ) grant ottmar admin privilages.
+   - (x) Feature: add the sender email to the .env file. update coolify and test it.
+         done! and variables updated on coolify as well. and is now sending from
+         ottmars email.
+   - (x) Improve the home page, by removing the extra business details.
+         done! simply commendted out the gutter in the *FooterComponent*
+         page looks cleaner but some touches need to be made!
+
+   - (x) increase the spacing between the subcategories. s
+         spacing added to the subcategory items buy adding magin top.
+
+   - (x) grant ottmar admin privilages.
+
+   - ( ) Implement the after to piece discount offer!
+
    - ( ) write email informing him that the website is ready.

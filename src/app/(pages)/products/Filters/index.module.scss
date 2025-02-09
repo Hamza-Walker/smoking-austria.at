@@ -26,6 +26,7 @@
   flex-direction: column;
   gap: 16px;
   margin-top: 20px;
+  margin-bottom: 2.25rem;
 
   @include large-break {
     flex-direction: row;
@@ -64,7 +65,8 @@
 .subcategoryItem {
   display: flex;
   align-items: center;
-  margin-bottom: 0.25rem;
+  margin-top: 0.55rem;
+  margin-bottom: 0.55rem;
   white-space: nowrap;
 }
 
