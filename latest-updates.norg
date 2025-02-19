@@ -111,3 +111,12 @@
    - ( ) Implement the sending costs calculation.
 
    - ( ) write email informing him that the website is ready.
+
+** 2025-02-19 :
+   implmented the discounts fully, needs debugging , try this test
+   cURL (Terminal)
+
+Run this in your terminal (replace URL_HERE with the actual API URL):
+
+curl -X GET "https://yourdomain.com/api/get-active-discounts" -H "Content-Type: application/json"
+
