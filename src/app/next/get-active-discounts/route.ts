@@ -1,35 +1,32 @@
-import { NextApiRequest, NextApiResponse } from 'next'
-import { getPayloadClient } from '../../../utils/payload'
+// app/api/get-active-discounts/route.ts
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method Not Allowed' })
-  }
+import { NextResponse } from 'next/server'
+import payload from 'payload'
 
+// Define return type for the handler
+export async function GET(): Promise<NextResponse> {
   try {
-    const payload = await getPayloadClient()
+    //    const now = new Date()
 
-    // Fetch active discounts from PayloadCMS
-    const { docs: discounts } = await payload.find({
+    // Fetch active discounts
+    const discounts = await payload.find({
       collection: 'discounts',
       where: {
-        active: {
-          equals: true,
-        },
-        startDate: {
-          less_than_equal: new Date().toISOString(),
-        },
-        $or: [
-          { endDate: { greater_than_equal: new Date().toISOString() } },
-          { endDate: { exists: false } },
+        and: [
+          {
+            isActive: {
+              equals: true,
+            },
+          },
+          // Add any other conditions you need
         ],
       },
     })
 
-    return res.status(200).json(discounts)
-  } catch (error) {
+    return NextResponse.json(discounts.docs)
+  } catch (error: unknown) {
+    // Explicitly type the error
     console.error('Error fetching active discounts:', error)
-    return res.status(500).json({ error: 'Internal Server Error' })
+    return NextResponse.json({ error: 'Failed to fetch discounts' }, { status: 500 })
   }
 }
-
