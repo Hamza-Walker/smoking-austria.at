@@ -81,12 +81,12 @@ export const Orders: CollectionConfig = {
         },
       ],
     },
-    // Add the discountUsed field here
+    // Single discount per order — hasMany = false
     {
       name: 'discountUsed',
       type: 'relationship',
       relationTo: 'discounts',
-      hasMany: false, // Assuming one coupon per order
+      hasMany: false,
     },
     {
       name: 'discountAmount',
@@ -95,3 +95,5 @@ export const Orders: CollectionConfig = {
     },
   ],
 }
+
+export default Orders

@@ -1,9 +1,18 @@
 import { CollectionConfig } from 'payload/types'
+import { adminsOrOrderedBy } from '../Orders/access/adminsOrOrderedBy'
+import { admins } from '../../access/admins'
+import { adminsOrLoggedIn } from '../../access/adminsOrLoggedIn'
 
 const Discounts: CollectionConfig = {
   slug: 'discounts',
   admin: {
     useAsTitle: 'name', // You can display "name" in the admin UI
+  },
+  access: {
+    read: adminsOrOrderedBy,
+    update: admins,
+    create: adminsOrLoggedIn,
+    delete: admins,
   },
   fields: [
     {
