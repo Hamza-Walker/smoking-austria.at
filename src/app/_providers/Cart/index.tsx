@@ -1,5 +1,5 @@
 import { CartItem, cartReducer } from './reducer'
-import { CouponResponse, Product, User } from '../../../payload/payload-types'
+import { Product, User } from '../../../payload/payload-types'
 import React, {
   createContext,
   useCallback,
@@ -9,9 +9,14 @@ import React, {
   useRef,
   useState,
 } from 'react'
-
 import { useAuth } from '../Auth'
 
+export type DiscountResponse = {
+  success: boolean
+  message?: string
+  discountPercentage?: number
+  discountId?: string
+}
 export type CartContext = {
   cart: User['cart']
   addItemToCart: (item: CartItem) => void
@@ -24,10 +29,12 @@ export type CartContext = {
     raw: number
   }
   hasInitializedCart: boolean
-  applyCoupon: (promoCode: string) => void
-  removeCoupon: () => void
-  couponDiscount: number
-  couponId: string | null // Add couponId to the context type
+
+  // Our renamed function and data fields for manual “coupon” logic
+  applyDiscount: (promoCode: string) => Promise<DiscountResponse>
+  removeDiscount: () => void
+  discountAmount: number
+  discountId: string | null
 }
 
 const Context = createContext({} as CartContext)
@@ -43,7 +50,6 @@ const flattenCart = (cart: User['cart']): User['cart'] => ({
       if (!item?.product || typeof item?.product !== 'object') {
         return null
       }
-
       return {
         ...item,
         product: item?.product?.id,
@@ -58,13 +64,17 @@ export const CartProvider = (props: any) => {
   const { user, status: authStatus } = useAuth()
 
   const [cart, dispatchCart] = useReducer(cartReducer, {})
-  const [couponDiscount, setCouponDiscount] = useState(0)
-  const [couponId, setCouponId] = useState<string | null>(null) // Define couponId state
 
-  const [total, setTotal] = useState<{
-    formatted: string
-    raw: number
-  }>({
+  // 1) State for MANUAL discount (applied via code)
+  const [discountAmount, setDiscountAmount] = useState(0)
+  const [discountId, setDiscountId] = useState<string | null>(null)
+
+  // 2) **New**: State for AUTOMATIC discount
+  //    If you want to show how much is automatically discounted, store it separately.
+  const [autoDiscount, setAutoDiscount] = useState<number>(0)
+
+  // Combined total
+  const [total, setTotal] = useState<{ formatted: string; raw: number }>({
     formatted: '0.00',
     raw: 0,
   })
@@ -72,7 +82,9 @@ export const CartProvider = (props: any) => {
   const hasInitialized = useRef(false)
   const [hasInitializedCart, setHasInitialized] = useState(false)
 
-  // Sync cart from local storage or payload
+  // ----------------------------
+  // SYNC cart from Local Storage
+  // ----------------------------
   useEffect(() => {
     if (user === undefined) return
     if (!hasInitialized.current) {
@@ -80,7 +92,6 @@ export const CartProvider = (props: any) => {
 
       const syncCartFromLocalStorage = async () => {
         const localCart = localStorage.getItem('cart')
-
         const parsedCart = JSON.parse(localCart || '{}')
 
         if (parsedCart?.items && parsedCart?.items?.length > 0) {
@@ -112,16 +123,18 @@ export const CartProvider = (props: any) => {
           })
         }
       }
-
       syncCartFromLocalStorage()
     }
   }, [user])
 
-  // Sync cart to payload
+  // ----------------------------
+  // SYNC cart to Payload
+  // ----------------------------
   useEffect(() => {
     if (!hasInitialized.current) return
 
     if (authStatus === 'loggedIn') {
+      // Merge server cart with local cart
       dispatchCart({
         type: 'MERGE_CART',
         payload: user?.cart,
@@ -141,64 +154,59 @@ export const CartProvider = (props: any) => {
     const flattenedCart = flattenCart(cart)
 
     if (user) {
+      // If cart on server == cart in local state, skip
       if (JSON.stringify(flattenCart(user.cart)) === JSON.stringify(flattenedCart)) {
         setHasInitialized(true)
         return
       }
 
+      // Otherwise, push local cart to server
       try {
         const syncCartToPayload = async () => {
           const req = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${user.id}`, {
             credentials: 'include',
             method: 'PATCH',
-            body: JSON.stringify({
-              cart: flattenedCart,
-            }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            body: JSON.stringify({ cart: flattenedCart }),
+            headers: { 'Content-Type': 'application/json' },
           })
-
           if (req.ok) {
             localStorage.setItem('cart', '[]')
           }
         }
-
         syncCartToPayload()
       } catch (e) {
         console.error('Error while syncing cart to Payload.')
       }
     } else {
+      // Not logged in: store cart in localStorage
       localStorage.setItem('cart', JSON.stringify(flattenedCart))
     }
 
     setHasInitialized(true)
   }, [user, cart])
 
+  // ----------------------------
+  // CART HELPER METHODS
+  // ----------------------------
   const isProductInCart = useCallback(
     (incomingProduct: Product): boolean => {
-      let isInCart = false
       const { items: itemsInCart } = cart || {}
-
       if (Array.isArray(itemsInCart) && itemsInCart.length > 0) {
-        isInCart = Boolean(
+        return Boolean(
           itemsInCart.find(({ product }) => {
-            // Check if product is a Product and has an 'id' property
             if (typeof product === 'object' && product !== null && 'id' in product) {
               return product.id === incomingProduct.id
             }
-            // If product is a string, compare directly with incomingProduct.id
             return typeof product === 'string' && product === incomingProduct.id
           }),
         )
       }
-
-      return isInCart
+      return false
     },
     [cart],
   )
 
-  const addItemToCart = useCallback(incomingItem => {
+  const addItemToCart = useCallback((incomingItem: CartItem) => {
     dispatchCart({
       type: 'ADD_ITEM',
       payload: incomingItem,
@@ -213,24 +221,23 @@ export const CartProvider = (props: any) => {
   }, [])
 
   const clearCart = useCallback(() => {
-    dispatchCart({
-      type: 'CLEAR_CART',
-    })
+    dispatchCart({ type: 'CLEAR_CART' })
   }, [])
 
-  const applyCoupon = useCallback(
-    async (promoCode: string): Promise<CouponResponse> => {
+  // ----------------------------
+  // APPLY / REMOVE MANUAL DISCOUNT (coupon code)
+  // ----------------------------
+  const applyDiscount = useCallback(
+    async (promoCode: string): Promise<DiscountResponse> => {
       if (!user?.id) {
         console.error('User is not defined.')
         return { success: false, message: 'User is not defined.' }
       }
 
       try {
-        const response = await fetch('/next/apply-coupon', {
+        const response = await fetch('/next/apply-discount', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ code: promoCode, userId: user.id }),
         })
 
@@ -239,47 +246,171 @@ export const CartProvider = (props: any) => {
           return { success: false, message: errorData.error }
         }
 
-        const { discountPercentage, couponId } = await response.json()
-        const discountAmount = Math.round(total.raw * (discountPercentage / 100))
-        setCouponDiscount(discountAmount)
-        setCouponId(couponId) // Set the couponId state
+        const { discountPercentage, discountId: returnedId } = await response.json()
+        // Calculate the manual discount based on current total.raw
+        const calcDiscount = Math.round(total.raw * (discountPercentage / 100))
+
+        setDiscountAmount(calcDiscount)
+        setDiscountId(returnedId)
 
         return { success: true }
-      } catch (error) {
-        console.error('Error applying coupon:', error.message)
+      } catch (error: any) {
+        console.error('Error applying discount:', error.message)
         return { success: false, message: error.message }
       }
     },
-    [total.raw, user?.id], // Dependencies
+    [total.raw, user?.id],
   )
 
-  const removeCoupon = useCallback(() => {
-    setCouponDiscount(0)
-    setCouponId(null) // Clear the couponId
+  const removeDiscount = useCallback(() => {
+    setDiscountAmount(0)
+    setDiscountId(null)
   }, [])
 
+  // ----------------------------
+  // MAIN EFFECT: Calculate & Update `total`
+  //   - 1) compute baseSubtotal from cart items
+  //   - 2) fetch & sum up AUTO discounts
+  //   - 3) combine with manual discount
+  //   - 4) update state
+  // ----------------------------
   useEffect(() => {
     if (!hasInitialized.current) return
 
-    const newTotal =
-      (cart?.items?.reduce((acc, item) => {
-        return (
-          acc +
-          (typeof item.product === 'object'
-            ? JSON.parse(item?.product?.priceJSON || '{}').data?.[0].unit_amount *
-              (typeof item.quantity === 'number' ? item.quantity : 0)
-            : 0)
-        )
-      }, 0) || 0) - couponDiscount
+    // 1) Calculate base subtotal
+    const baseSubtotal =
+      cart?.items?.reduce((acc, item) => {
+        if (typeof item.product === 'object' && item.product !== null) {
+          const priceData = JSON.parse(item.product?.priceJSON || '{}')
+          const unitPrice = priceData?.data?.[0]?.unit_amount || 0
+          const qty = typeof item.quantity === 'number' ? item.quantity : 0
+          return acc + unitPrice * qty
+        }
+        return acc
+      }, 0) || 0
 
-    setTotal({
-      formatted: (newTotal / 100).toLocaleString('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }),
-      raw: newTotal,
-    })
-  }, [cart, couponDiscount])
+    // Helper to compute the total cost of items in a category
+    /* eslint-disable function-paren-newline */
+    const getCategorySubtotal = (categoryId: number) => {
+      return (
+        cart?.items?.reduce((acc, item) => {
+          if (
+            typeof item.product === 'object' &&
+            item.product !== null &&
+            item.product.categories?.some(c =>
+              typeof c === 'number' ? c === categoryId : c.id === categoryId,
+            )
+          ) {
+            // product belongs to that category
+            const priceData = JSON.parse(item.product?.priceJSON || '{}')
+            const unitPrice = priceData?.data?.[0]?.unit_amount || 0
+            const qty = typeof item.quantity === 'number' ? item.quantity : 0
+            return acc + unitPrice * qty
+          }
+          return acc
+        }, 0) || 0
+      )
+    }
+
+    // Helper to compute the total quantity of items in a category
+    const getCategoryQuantity = (categoryId: number) => {
+      return (
+        cart?.items?.reduce((acc, item) => {
+          if (
+            typeof item.product === 'object' &&
+            item.product !== null &&
+            item.product.categories?.some(c =>
+              typeof c === 'number' ? c === categoryId : c.id === categoryId,
+            )
+          ) {
+            const qty = typeof item.quantity === 'number' ? item.quantity : 0
+            return acc + qty
+          }
+          return acc
+        }, 0) || 0
+      )
+    }
+    /* eslint-enable function-paren-newline */
+
+    // We'll define an async wrapper to fetch auto + bulk discounts
+    const fetchActiveDiscounts = async () => {
+      try {
+        // 2) Fetch "active" discounts from your endpoint
+        //    This single route could return both automatic & bulk mode discounts
+        //    e.g. /next/get-active-discounts? (or directly from Payload's /api/discounts)
+        const res = await fetch('/next/get-active-discounts')
+        if (!res.ok) {
+          console.error('Failed to fetch active discounts')
+          return 0
+        }
+
+        const discounts = await res.json()
+        if (!Array.isArray(discounts)) {
+          console.error('Invalid discount data')
+          return 0
+        }
+
+        let autoDiscountSum = 0
+
+        // 3) Combine logic for "automatic" and "bulk"
+        discounts.forEach(d => {
+          // For each discount, check "discountMode" and "appliesTo"
+          if (d.discountMode === 'automatic') {
+            // Simple auto discount across entire cart
+            const discountValue = Math.round(baseSubtotal * (d.discountPercentage / 100))
+            autoDiscountSum += discountValue
+          } else if (d.discountMode === 'bulk') {
+            // Bulk discount logic:
+            // 1) Check category or entire cart
+            let quantityInCategory = 0
+            let subtotalForCategory = 0
+
+            if (d.appliesTo === 'all') {
+              // sum entire cart quantity
+              const totalQty = cart?.items?.reduce((acc, i) => acc + (i.quantity || 0), 0) || 0
+              quantityInCategory = totalQty
+              subtotalForCategory = baseSubtotal
+            } else if (d.appliesTo === 'category' && d.category?.id) {
+              // sum only that category
+              quantityInCategory = getCategoryQuantity(d.category.id)
+              subtotalForCategory = getCategorySubtotal(d.category.id)
+            }
+
+            // 2) If quantityInCategory >= d.bulkQuantity, apply discount
+            if (quantityInCategory >= (d.bulkQuantity || 0)) {
+              // discount just that category portion
+              const bulkDiscountValue = Math.round(
+                subtotalForCategory * (d.discountPercentage / 100),
+              )
+              autoDiscountSum += bulkDiscountValue
+            }
+          }
+          // else if you have other modes (like 'manual'), skip because those require a code
+        })
+
+        return autoDiscountSum
+      } catch (e) {
+        console.error('Error fetching active discounts:', e)
+        return 0
+      }
+    }
+
+    // 4) Combine auto/bulk discount + manual discount
+    ;(async () => {
+      const sumOfAutoDiscounts = await fetchActiveDiscounts()
+      setAutoDiscount(sumOfAutoDiscounts)
+
+      // "discountAmount" is from manual/coupon discount
+      const newTotal = baseSubtotal - sumOfAutoDiscounts - discountAmount
+      setTotal({
+        formatted: (newTotal / 100).toLocaleString('en-US', {
+          style: 'currency',
+          currency: 'USD',
+        }),
+        raw: newTotal,
+      })
+    })()
+  }, [cart, discountAmount])
 
   return (
     <Context.Provider
@@ -292,10 +423,14 @@ export const CartProvider = (props: any) => {
         isProductInCart,
         cartTotal: total,
         hasInitializedCart,
-        applyCoupon,
-        removeCoupon,
-        couponDiscount,
-        couponId, // Make couponId available through the context
+
+        applyDiscount,
+        removeDiscount,
+        discountAmount, // manual discount
+        discountId, // id of the manual discount
+
+        // (Optional) If you want to expose the auto discount in context:
+        // autoDiscount,
       }}
     >
       {children}

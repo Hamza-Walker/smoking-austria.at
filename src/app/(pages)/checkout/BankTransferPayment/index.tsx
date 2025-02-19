@@ -17,7 +17,20 @@ const BankTransferPayment: React.FC<{
   const [isLoading, setIsLoading] = useState(false)
   const [isAddressComplete, setIsAddressComplete] = useState(false)
   const router = useRouter()
-  const { applyCoupon, removeCoupon, couponDiscount, cart, cartTotal, couponId } = useCart()
+
+  // ----------------------------
+  // 1) Destructure your new autoDiscount (if you have it in your CartContext)
+  //    plus existing manual discount data
+  // ----------------------------
+  const {
+    applyDiscount,
+    removeDiscount,
+    discountAmount, // manual discount in cents
+    autoDiscount, // automatic discount in cents (if you exposed it)
+    cart,
+    cartTotal,
+    discountId,
+  } = useCart()
 
   const addressFormRef = useRef<{
     submitAddress: () => Promise<void>
@@ -35,12 +48,13 @@ const BankTransferPayment: React.FC<{
     setIsAddressComplete(isComplete)
   }
 
-  const handleRemoveCoupon = useCallback(() => {
-    removeCoupon()
-  }, [removeCoupon])
+  // Wrappers for discount
+  const handleremoveDiscount = useCallback(() => {
+    removeDiscount()
+  }, [removeDiscount])
 
-  const handleApplyCoupon = async (promoCode: string) => {
-    const result = await applyCoupon(promoCode)
+  const handleapplyDiscount = async (promoCode: string) => {
+    const result = await applyDiscount(promoCode)
 
     if (!result.success) {
       setError(result.message || 'Invalid promo code or no more coupons available.')
@@ -56,6 +70,11 @@ const BankTransferPayment: React.FC<{
     }
   }, [addressFormRef.current?.isAddressComplete, termsAccepted])
 
+  // ----------------------------
+  // 2) Final submit
+  //    We pass the final cartTotal.raw as "total" to the API
+  //    And optionally store discountAmount / autoDiscount
+  // ----------------------------
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
@@ -79,7 +98,10 @@ const BankTransferPayment: React.FC<{
         }
 
         try {
-          console.log(couponDiscount, couponId)
+          console.log('Manual discount:', discountAmount, 'Discount ID:', discountId)
+          console.log('Auto discount:', autoDiscount)
+
+          // POST to create the order
           const orderReq = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/orders`, {
             method: 'POST',
             credentials: 'include',
@@ -87,7 +109,7 @@ const BankTransferPayment: React.FC<{
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              total: cartTotal.raw,
+              total: cartTotal.raw, // final price after all discounts
               items: (cart?.items || [])?.map(({ product, quantity }) => ({
                 product: typeof product === 'string' ? product : product.id,
                 quantity,
@@ -96,11 +118,19 @@ const BankTransferPayment: React.FC<{
                     ? priceFromJSON(product.priceJSON, 1, true)
                     : undefined,
               })),
-              couponUsed: couponId,
-              discountAmount: couponDiscount ? couponDiscount : 0,
+
+              // If your "orders" collection tracks manual discount usage
+              discountUsed: discountId || undefined,
+
+              // Distinguish or combine discounts however you like
+              discountAmount: discountAmount, // manual discount (cents)
+              autoDiscount: autoDiscount, // automatic discount (cents)
             }),
           })
-          handleRemoveCoupon()
+
+          // Remove the manual discount after order creation
+          handleremoveDiscount()
+
           if (!orderReq.ok) throw new Error(orderReq.statusText || 'Something went wrong.')
 
           const {
@@ -113,25 +143,35 @@ const BankTransferPayment: React.FC<{
           } = await orderReq.json()
 
           if (errorFromRes) throw new Error(errorFromRes)
+
+          // On success, navigate to confirmation page
           router.push(`/order-confirmation?order_id=${doc.id}`)
-        } catch (err) {
+        } catch (err: any) {
           console.error(err.message)
           router.push(`/order-confirmation?error=${encodeURIComponent(err.message)}`)
         }
-      } catch (err) {
+      } catch (err: any) {
         const msg = err instanceof Error ? err.message : 'Something went wrong.'
         setError(`Error while submitting payment: ${msg}`)
         setIsLoading(false)
       }
     },
-    [router, cart, cartTotal, isAddressComplete, couponDiscount, termsAccepted, couponId],
+    [
+      router,
+      cart,
+      cartTotal,
+      isAddressComplete,
+      discountAmount,
+      autoDiscount,
+      termsAccepted,
+      discountId,
+    ],
   )
 
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
-
     e.currentTarget.style.setProperty('--x', `${x}px`)
     e.currentTarget.style.setProperty('--y', `${y}px`)
   }
@@ -148,25 +188,47 @@ const BankTransferPayment: React.FC<{
         <p>Bank: BAWAG</p>
         <p>IBAN: AT39 60000 0104 1019 7559</p>
         <p>Reference Number: {userId}</p>
+
+        {/*
+          cartTotal.formatted is your final total (cents / 100)
+          after all discounts have been applied
+        */}
         <p>Amount: {cartTotal.formatted}</p>
+
+        {/*
+          3) PromoCodeInput usage remains the same, but we now
+             also handle auto discount in the cart context
+        */}
         <PromoCodeInput
-          onApplyPromoCode={handleApplyCoupon}
-          onRemovePromoCode={handleRemoveCoupon}
+          onApplyPromoCode={handleapplyDiscount}
+          onRemovePromoCode={handleremoveDiscount}
         />
-        {couponDiscount > 0 && (
+
+        {/*
+          4) Show manual discount if present
+        */}
+        {discountAmount > 0 && (
           <p className={classes.discountApplied}>
-            Discount applied:{' '}
-            {(couponDiscount / 100).toLocaleString('en-US', { style: 'currency', currency: 'EUR' })}
+            Manual discount applied:{' '}
+            {(discountAmount / 100).toLocaleString('en-US', { style: 'currency', currency: 'EUR' })}
           </p>
         )}
+
+        {/*
+          5) (Optional) Show automatic discount if present
+              If you'd prefer to show a combined discount line, skip this
+        */}
+        {autoDiscount > 0 && (
+          <p className={classes.discountApplied}>
+            Automatic discount:{' '}
+            {(autoDiscount / 100).toLocaleString('en-US', { style: 'currency', currency: 'EUR' })}
+          </p>
+        )}
+
         <TermsAndConditions termsUrl="/terms-and-conditions" onAccept={handleTermsAccept} />
+
         <div className={classes.buttonContainer}>
-          <Button
-            className={classes.buttonCart}
-            label="Back"
-            appearance="primary"
-            href="/cart"
-          ></Button>
+          <Button className={classes.buttonCart} label="Back" appearance="primary" href="/cart" />
           <Button
             label={isLoading ? 'Loading...' : 'Confirm Order'}
             type="submit"
@@ -174,7 +236,7 @@ const BankTransferPayment: React.FC<{
             onClick={handleSubmit}
             onMouseMove={handleMouseMove}
             onMouseDown={handleMouseDown}
-          ></Button>
+          />
         </div>
         {error && <div className={classes.error}>{error}</div>}
       </div>

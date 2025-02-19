@@ -81,11 +81,11 @@ export const Orders: CollectionConfig = {
         },
       ],
     },
-    // Add the couponUsed field here
+    // Add the discountUsed field here
     {
-      name: 'couponUsed',
+      name: 'discountUsed',
       type: 'relationship',
-      relationTo: 'coupons',
+      relationTo: 'discounts',
       hasMany: false, // Assuming one coupon per order
     },
     {

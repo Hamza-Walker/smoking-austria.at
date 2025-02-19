@@ -26,7 +26,7 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
-    coupons: Coupon;
+    discounts: Discount;
     redirects: Redirect;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -198,6 +198,7 @@ export interface Media {
 export interface Category {
   id: number;
   title: string;
+  parentCategory?: (number | null) | Category;
   media?: number | Media | null;
   parent?: (number | null) | Category;
   breadcrumbs?:
@@ -434,7 +435,7 @@ export interface Order {
         id?: string | null;
       }[]
     | null;
-  couponUsed?: (number | null) | Coupon;
+  discountUsed?: (number | null) | Discount;
   discountAmount?: number | null;
   updatedAt: string;
   createdAt: string;
@@ -475,12 +476,18 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "coupons".
+ * via the `definition` "discounts".
  */
-export interface Coupon {
+export interface Discount {
   id: number;
-  code: string;
+  name: string;
+  discountMode: 'manual' | 'automatic' | 'bulk';
+  code?: string | null;
   discountPercentage: number;
+  appliesTo: 'all' | 'category';
+  category?: (number | null) | Category;
+  bulkQuantity?: number | null;
+  startDate?: string | null;
   expirationDate: string;
   maxUses: number;
   currentUses?: number | null;
@@ -605,13 +612,6 @@ export interface Footer {
     | null;
   updatedAt?: string | null;
   createdAt?: string | null;
-
-}
-export interface CouponResponse {
-  success: boolean;
-  message?: string;
-  discountPercentage?: number;  // Optional, if the coupon response contains discount info
-  couponId?: string;            // Optional, if the coupon response contains a coupon ID
 }
 
 

@@ -29,10 +29,10 @@ type Query {
   docAccessUser(id: Int!): usersDocAccess
   meUser: usersMe
   initializedUser: Boolean
-  Coupon(id: Int!): Coupon
-  Coupons(where: Coupon_where, limit: Int, page: Int, sort: String): Coupons
-  countCoupons(where: Coupon_where): countCoupons
-  docAccessCoupon(id: Int!): couponsDocAccess
+  Discount(id: Int!): Discount
+  Discounts(where: Discount_where, limit: Int, page: Int, sort: String): Discounts
+  countDiscounts(where: Discount_where): countDiscounts
+  docAccessDiscount(id: Int!): discountsDocAccess
   Redirect(id: Int!): Redirect
   Redirects(where: Redirect_where, limit: Int, page: Int, sort: String): Redirects
   countRedirects(where: Redirect_where): countRedirects
@@ -5058,7 +5058,7 @@ type Order {
   stripePaymentIntentID: String
   total: Float!
   items: [Order_Items!]
-  couponUsed: Coupon
+  discountUsed: Discount
   discountAmount: Float
   updatedAt: DateTime
   createdAt: DateTime
@@ -5122,16 +5122,33 @@ type Order_Items {
   id: String
 }
 
-type Coupon {
+type Discount {
   id: Int
-  code: String!
+  name: String!
+  discountMode: Discount_discountMode!
+  code: String
   discountPercentage: Float!
+  appliesTo: Discount_appliesTo!
+  category: Category
+  bulkQuantity: Float
+  startDate: DateTime
   expirationDate: DateTime!
   maxUses: Float!
   currentUses: Float
   isActive: Boolean
   updatedAt: DateTime
   createdAt: DateTime
+}
+
+enum Discount_discountMode {
+  manual
+  automatic
+  bulk
+}
+
+enum Discount_appliesTo {
+  all
+  category
 }
 
 type Orders {
@@ -5156,7 +5173,7 @@ input Order_where {
   items__price: Order_items__price_operator
   items__quantity: Order_items__quantity_operator
   items__id: Order_items__id_operator
-  couponUsed: Order_couponUsed_operator
+  discountUsed: Order_discountUsed_operator
   discountAmount: Order_discountAmount_operator
   updatedAt: Order_updatedAt_operator
   createdAt: Order_createdAt_operator
@@ -5232,7 +5249,7 @@ input Order_items__id_operator {
   exists: Boolean
 }
 
-input Order_couponUsed_operator {
+input Order_discountUsed_operator {
   equals: JSON
   not_equals: JSON
   in: [JSON]
@@ -5291,7 +5308,7 @@ input Order_where_and {
   items__price: Order_items__price_operator
   items__quantity: Order_items__quantity_operator
   items__id: Order_items__id_operator
-  couponUsed: Order_couponUsed_operator
+  discountUsed: Order_discountUsed_operator
   discountAmount: Order_discountAmount_operator
   updatedAt: Order_updatedAt_operator
   createdAt: Order_createdAt_operator
@@ -5308,7 +5325,7 @@ input Order_where_or {
   items__price: Order_items__price_operator
   items__quantity: Order_items__quantity_operator
   items__id: Order_items__id_operator
-  couponUsed: Order_couponUsed_operator
+  discountUsed: Order_discountUsed_operator
   discountAmount: Order_discountAmount_operator
   updatedAt: Order_updatedAt_operator
   createdAt: Order_createdAt_operator
@@ -5334,7 +5351,7 @@ type OrdersDocAccessFields {
   stripePaymentIntentID: OrdersDocAccessFields_stripePaymentIntentID
   total: OrdersDocAccessFields_total
   items: OrdersDocAccessFields_items
-  couponUsed: OrdersDocAccessFields_couponUsed
+  discountUsed: OrdersDocAccessFields_discountUsed
   discountAmount: OrdersDocAccessFields_discountAmount
   updatedAt: OrdersDocAccessFields_updatedAt
   createdAt: OrdersDocAccessFields_createdAt
@@ -5532,26 +5549,26 @@ type OrdersDocAccessFields_items_id_Delete {
   permission: Boolean!
 }
 
-type OrdersDocAccessFields_couponUsed {
-  create: OrdersDocAccessFields_couponUsed_Create
-  read: OrdersDocAccessFields_couponUsed_Read
-  update: OrdersDocAccessFields_couponUsed_Update
-  delete: OrdersDocAccessFields_couponUsed_Delete
+type OrdersDocAccessFields_discountUsed {
+  create: OrdersDocAccessFields_discountUsed_Create
+  read: OrdersDocAccessFields_discountUsed_Read
+  update: OrdersDocAccessFields_discountUsed_Update
+  delete: OrdersDocAccessFields_discountUsed_Delete
 }
 
-type OrdersDocAccessFields_couponUsed_Create {
+type OrdersDocAccessFields_discountUsed_Create {
   permission: Boolean!
 }
 
-type OrdersDocAccessFields_couponUsed_Read {
+type OrdersDocAccessFields_discountUsed_Read {
   permission: Boolean!
 }
 
-type OrdersDocAccessFields_couponUsed_Update {
+type OrdersDocAccessFields_discountUsed_Update {
   permission: Boolean!
 }
 
-type OrdersDocAccessFields_couponUsed_Delete {
+type OrdersDocAccessFields_discountUsed_Delete {
   permission: Boolean!
 }
 
@@ -7514,8 +7531,8 @@ type usersMe {
   user: User
 }
 
-type Coupons {
-  docs: [Coupon]
+type Discounts {
+  docs: [Discount]
   hasNextPage: Boolean
   hasPrevPage: Boolean
   limit: Int
@@ -7528,21 +7545,27 @@ type Coupons {
   totalPages: Int
 }
 
-input Coupon_where {
-  code: Coupon_code_operator
-  discountPercentage: Coupon_discountPercentage_operator
-  expirationDate: Coupon_expirationDate_operator
-  maxUses: Coupon_maxUses_operator
-  currentUses: Coupon_currentUses_operator
-  isActive: Coupon_isActive_operator
-  updatedAt: Coupon_updatedAt_operator
-  createdAt: Coupon_createdAt_operator
-  id: Coupon_id_operator
-  AND: [Coupon_where_and]
-  OR: [Coupon_where_or]
+input Discount_where {
+  name: Discount_name_operator
+  discountMode: Discount_discountMode_operator
+  code: Discount_code_operator
+  discountPercentage: Discount_discountPercentage_operator
+  appliesTo: Discount_appliesTo_operator
+  category: Discount_category_operator
+  bulkQuantity: Discount_bulkQuantity_operator
+  startDate: Discount_startDate_operator
+  expirationDate: Discount_expirationDate_operator
+  maxUses: Discount_maxUses_operator
+  currentUses: Discount_currentUses_operator
+  isActive: Discount_isActive_operator
+  updatedAt: Discount_updatedAt_operator
+  createdAt: Discount_createdAt_operator
+  id: Discount_id_operator
+  AND: [Discount_where_and]
+  OR: [Discount_where_or]
 }
 
-input Coupon_code_operator {
+input Discount_name_operator {
   equals: String
   not_equals: String
   like: String
@@ -7552,7 +7575,32 @@ input Coupon_code_operator {
   all: [String]
 }
 
-input Coupon_discountPercentage_operator {
+input Discount_discountMode_operator {
+  equals: Discount_discountMode_Input
+  not_equals: Discount_discountMode_Input
+  in: [Discount_discountMode_Input]
+  not_in: [Discount_discountMode_Input]
+  all: [Discount_discountMode_Input]
+}
+
+enum Discount_discountMode_Input {
+  manual
+  automatic
+  bulk
+}
+
+input Discount_code_operator {
+  equals: String
+  not_equals: String
+  like: String
+  contains: String
+  in: [String]
+  not_in: [String]
+  all: [String]
+  exists: Boolean
+}
+
+input Discount_discountPercentage_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -7561,26 +7609,29 @@ input Coupon_discountPercentage_operator {
   less_than: Float
 }
 
-input Coupon_expirationDate_operator {
-  equals: DateTime
-  not_equals: DateTime
-  greater_than_equal: DateTime
-  greater_than: DateTime
-  less_than_equal: DateTime
-  less_than: DateTime
-  like: DateTime
+input Discount_appliesTo_operator {
+  equals: Discount_appliesTo_Input
+  not_equals: Discount_appliesTo_Input
+  in: [Discount_appliesTo_Input]
+  not_in: [Discount_appliesTo_Input]
+  all: [Discount_appliesTo_Input]
 }
 
-input Coupon_maxUses_operator {
-  equals: Float
-  not_equals: Float
-  greater_than_equal: Float
-  greater_than: Float
-  less_than_equal: Float
-  less_than: Float
+enum Discount_appliesTo_Input {
+  all
+  category
 }
 
-input Coupon_currentUses_operator {
+input Discount_category_operator {
+  equals: JSON
+  not_equals: JSON
+  in: [JSON]
+  not_in: [JSON]
+  all: [JSON]
+  exists: Boolean
+}
+
+input Discount_bulkQuantity_operator {
   equals: Float
   not_equals: Float
   greater_than_equal: Float
@@ -7590,13 +7641,53 @@ input Coupon_currentUses_operator {
   exists: Boolean
 }
 
-input Coupon_isActive_operator {
+input Discount_startDate_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+  exists: Boolean
+}
+
+input Discount_expirationDate_operator {
+  equals: DateTime
+  not_equals: DateTime
+  greater_than_equal: DateTime
+  greater_than: DateTime
+  less_than_equal: DateTime
+  less_than: DateTime
+  like: DateTime
+}
+
+input Discount_maxUses_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+}
+
+input Discount_currentUses_operator {
+  equals: Float
+  not_equals: Float
+  greater_than_equal: Float
+  greater_than: Float
+  less_than_equal: Float
+  less_than: Float
+  exists: Boolean
+}
+
+input Discount_isActive_operator {
   equals: Boolean
   not_equals: Boolean
   exists: Boolean
 }
 
-input Coupon_updatedAt_operator {
+input Discount_updatedAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -7607,7 +7698,7 @@ input Coupon_updatedAt_operator {
   exists: Boolean
 }
 
-input Coupon_createdAt_operator {
+input Discount_createdAt_operator {
   equals: DateTime
   not_equals: DateTime
   greater_than_equal: DateTime
@@ -7618,7 +7709,7 @@ input Coupon_createdAt_operator {
   exists: Boolean
 }
 
-input Coupon_id_operator {
+input Discount_id_operator {
   equals: Int
   not_equals: Int
   greater_than_equal: Int
@@ -7628,257 +7719,413 @@ input Coupon_id_operator {
   exists: Boolean
 }
 
-input Coupon_where_and {
-  code: Coupon_code_operator
-  discountPercentage: Coupon_discountPercentage_operator
-  expirationDate: Coupon_expirationDate_operator
-  maxUses: Coupon_maxUses_operator
-  currentUses: Coupon_currentUses_operator
-  isActive: Coupon_isActive_operator
-  updatedAt: Coupon_updatedAt_operator
-  createdAt: Coupon_createdAt_operator
-  id: Coupon_id_operator
-  AND: [Coupon_where_and]
-  OR: [Coupon_where_or]
+input Discount_where_and {
+  name: Discount_name_operator
+  discountMode: Discount_discountMode_operator
+  code: Discount_code_operator
+  discountPercentage: Discount_discountPercentage_operator
+  appliesTo: Discount_appliesTo_operator
+  category: Discount_category_operator
+  bulkQuantity: Discount_bulkQuantity_operator
+  startDate: Discount_startDate_operator
+  expirationDate: Discount_expirationDate_operator
+  maxUses: Discount_maxUses_operator
+  currentUses: Discount_currentUses_operator
+  isActive: Discount_isActive_operator
+  updatedAt: Discount_updatedAt_operator
+  createdAt: Discount_createdAt_operator
+  id: Discount_id_operator
+  AND: [Discount_where_and]
+  OR: [Discount_where_or]
 }
 
-input Coupon_where_or {
-  code: Coupon_code_operator
-  discountPercentage: Coupon_discountPercentage_operator
-  expirationDate: Coupon_expirationDate_operator
-  maxUses: Coupon_maxUses_operator
-  currentUses: Coupon_currentUses_operator
-  isActive: Coupon_isActive_operator
-  updatedAt: Coupon_updatedAt_operator
-  createdAt: Coupon_createdAt_operator
-  id: Coupon_id_operator
-  AND: [Coupon_where_and]
-  OR: [Coupon_where_or]
+input Discount_where_or {
+  name: Discount_name_operator
+  discountMode: Discount_discountMode_operator
+  code: Discount_code_operator
+  discountPercentage: Discount_discountPercentage_operator
+  appliesTo: Discount_appliesTo_operator
+  category: Discount_category_operator
+  bulkQuantity: Discount_bulkQuantity_operator
+  startDate: Discount_startDate_operator
+  expirationDate: Discount_expirationDate_operator
+  maxUses: Discount_maxUses_operator
+  currentUses: Discount_currentUses_operator
+  isActive: Discount_isActive_operator
+  updatedAt: Discount_updatedAt_operator
+  createdAt: Discount_createdAt_operator
+  id: Discount_id_operator
+  AND: [Discount_where_and]
+  OR: [Discount_where_or]
 }
 
-type countCoupons {
+type countDiscounts {
   totalDocs: Int
 }
 
-type couponsDocAccess {
-  fields: CouponsDocAccessFields
-  create: CouponsCreateDocAccess
-  read: CouponsReadDocAccess
-  update: CouponsUpdateDocAccess
-  delete: CouponsDeleteDocAccess
+type discountsDocAccess {
+  fields: DiscountsDocAccessFields
+  create: DiscountsCreateDocAccess
+  read: DiscountsReadDocAccess
+  update: DiscountsUpdateDocAccess
+  delete: DiscountsDeleteDocAccess
 }
 
-type CouponsDocAccessFields {
-  code: CouponsDocAccessFields_code
-  discountPercentage: CouponsDocAccessFields_discountPercentage
-  expirationDate: CouponsDocAccessFields_expirationDate
-  maxUses: CouponsDocAccessFields_maxUses
-  currentUses: CouponsDocAccessFields_currentUses
-  isActive: CouponsDocAccessFields_isActive
-  updatedAt: CouponsDocAccessFields_updatedAt
-  createdAt: CouponsDocAccessFields_createdAt
+type DiscountsDocAccessFields {
+  name: DiscountsDocAccessFields_name
+  discountMode: DiscountsDocAccessFields_discountMode
+  code: DiscountsDocAccessFields_code
+  discountPercentage: DiscountsDocAccessFields_discountPercentage
+  appliesTo: DiscountsDocAccessFields_appliesTo
+  category: DiscountsDocAccessFields_category
+  bulkQuantity: DiscountsDocAccessFields_bulkQuantity
+  startDate: DiscountsDocAccessFields_startDate
+  expirationDate: DiscountsDocAccessFields_expirationDate
+  maxUses: DiscountsDocAccessFields_maxUses
+  currentUses: DiscountsDocAccessFields_currentUses
+  isActive: DiscountsDocAccessFields_isActive
+  updatedAt: DiscountsDocAccessFields_updatedAt
+  createdAt: DiscountsDocAccessFields_createdAt
 }
 
-type CouponsDocAccessFields_code {
-  create: CouponsDocAccessFields_code_Create
-  read: CouponsDocAccessFields_code_Read
-  update: CouponsDocAccessFields_code_Update
-  delete: CouponsDocAccessFields_code_Delete
+type DiscountsDocAccessFields_name {
+  create: DiscountsDocAccessFields_name_Create
+  read: DiscountsDocAccessFields_name_Read
+  update: DiscountsDocAccessFields_name_Update
+  delete: DiscountsDocAccessFields_name_Delete
 }
 
-type CouponsDocAccessFields_code_Create {
+type DiscountsDocAccessFields_name_Create {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_code_Read {
+type DiscountsDocAccessFields_name_Read {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_code_Update {
+type DiscountsDocAccessFields_name_Update {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_code_Delete {
+type DiscountsDocAccessFields_name_Delete {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_discountPercentage {
-  create: CouponsDocAccessFields_discountPercentage_Create
-  read: CouponsDocAccessFields_discountPercentage_Read
-  update: CouponsDocAccessFields_discountPercentage_Update
-  delete: CouponsDocAccessFields_discountPercentage_Delete
+type DiscountsDocAccessFields_discountMode {
+  create: DiscountsDocAccessFields_discountMode_Create
+  read: DiscountsDocAccessFields_discountMode_Read
+  update: DiscountsDocAccessFields_discountMode_Update
+  delete: DiscountsDocAccessFields_discountMode_Delete
 }
 
-type CouponsDocAccessFields_discountPercentage_Create {
+type DiscountsDocAccessFields_discountMode_Create {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_discountPercentage_Read {
+type DiscountsDocAccessFields_discountMode_Read {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_discountPercentage_Update {
+type DiscountsDocAccessFields_discountMode_Update {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_discountPercentage_Delete {
+type DiscountsDocAccessFields_discountMode_Delete {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_expirationDate {
-  create: CouponsDocAccessFields_expirationDate_Create
-  read: CouponsDocAccessFields_expirationDate_Read
-  update: CouponsDocAccessFields_expirationDate_Update
-  delete: CouponsDocAccessFields_expirationDate_Delete
+type DiscountsDocAccessFields_code {
+  create: DiscountsDocAccessFields_code_Create
+  read: DiscountsDocAccessFields_code_Read
+  update: DiscountsDocAccessFields_code_Update
+  delete: DiscountsDocAccessFields_code_Delete
 }
 
-type CouponsDocAccessFields_expirationDate_Create {
+type DiscountsDocAccessFields_code_Create {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_expirationDate_Read {
+type DiscountsDocAccessFields_code_Read {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_expirationDate_Update {
+type DiscountsDocAccessFields_code_Update {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_expirationDate_Delete {
+type DiscountsDocAccessFields_code_Delete {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_maxUses {
-  create: CouponsDocAccessFields_maxUses_Create
-  read: CouponsDocAccessFields_maxUses_Read
-  update: CouponsDocAccessFields_maxUses_Update
-  delete: CouponsDocAccessFields_maxUses_Delete
+type DiscountsDocAccessFields_discountPercentage {
+  create: DiscountsDocAccessFields_discountPercentage_Create
+  read: DiscountsDocAccessFields_discountPercentage_Read
+  update: DiscountsDocAccessFields_discountPercentage_Update
+  delete: DiscountsDocAccessFields_discountPercentage_Delete
 }
 
-type CouponsDocAccessFields_maxUses_Create {
+type DiscountsDocAccessFields_discountPercentage_Create {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_maxUses_Read {
+type DiscountsDocAccessFields_discountPercentage_Read {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_maxUses_Update {
+type DiscountsDocAccessFields_discountPercentage_Update {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_maxUses_Delete {
+type DiscountsDocAccessFields_discountPercentage_Delete {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_currentUses {
-  create: CouponsDocAccessFields_currentUses_Create
-  read: CouponsDocAccessFields_currentUses_Read
-  update: CouponsDocAccessFields_currentUses_Update
-  delete: CouponsDocAccessFields_currentUses_Delete
+type DiscountsDocAccessFields_appliesTo {
+  create: DiscountsDocAccessFields_appliesTo_Create
+  read: DiscountsDocAccessFields_appliesTo_Read
+  update: DiscountsDocAccessFields_appliesTo_Update
+  delete: DiscountsDocAccessFields_appliesTo_Delete
 }
 
-type CouponsDocAccessFields_currentUses_Create {
+type DiscountsDocAccessFields_appliesTo_Create {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_currentUses_Read {
+type DiscountsDocAccessFields_appliesTo_Read {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_currentUses_Update {
+type DiscountsDocAccessFields_appliesTo_Update {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_currentUses_Delete {
+type DiscountsDocAccessFields_appliesTo_Delete {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_isActive {
-  create: CouponsDocAccessFields_isActive_Create
-  read: CouponsDocAccessFields_isActive_Read
-  update: CouponsDocAccessFields_isActive_Update
-  delete: CouponsDocAccessFields_isActive_Delete
+type DiscountsDocAccessFields_category {
+  create: DiscountsDocAccessFields_category_Create
+  read: DiscountsDocAccessFields_category_Read
+  update: DiscountsDocAccessFields_category_Update
+  delete: DiscountsDocAccessFields_category_Delete
 }
 
-type CouponsDocAccessFields_isActive_Create {
+type DiscountsDocAccessFields_category_Create {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_isActive_Read {
+type DiscountsDocAccessFields_category_Read {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_isActive_Update {
+type DiscountsDocAccessFields_category_Update {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_isActive_Delete {
+type DiscountsDocAccessFields_category_Delete {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_updatedAt {
-  create: CouponsDocAccessFields_updatedAt_Create
-  read: CouponsDocAccessFields_updatedAt_Read
-  update: CouponsDocAccessFields_updatedAt_Update
-  delete: CouponsDocAccessFields_updatedAt_Delete
+type DiscountsDocAccessFields_bulkQuantity {
+  create: DiscountsDocAccessFields_bulkQuantity_Create
+  read: DiscountsDocAccessFields_bulkQuantity_Read
+  update: DiscountsDocAccessFields_bulkQuantity_Update
+  delete: DiscountsDocAccessFields_bulkQuantity_Delete
 }
 
-type CouponsDocAccessFields_updatedAt_Create {
+type DiscountsDocAccessFields_bulkQuantity_Create {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_updatedAt_Read {
+type DiscountsDocAccessFields_bulkQuantity_Read {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_updatedAt_Update {
+type DiscountsDocAccessFields_bulkQuantity_Update {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_updatedAt_Delete {
+type DiscountsDocAccessFields_bulkQuantity_Delete {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_createdAt {
-  create: CouponsDocAccessFields_createdAt_Create
-  read: CouponsDocAccessFields_createdAt_Read
-  update: CouponsDocAccessFields_createdAt_Update
-  delete: CouponsDocAccessFields_createdAt_Delete
+type DiscountsDocAccessFields_startDate {
+  create: DiscountsDocAccessFields_startDate_Create
+  read: DiscountsDocAccessFields_startDate_Read
+  update: DiscountsDocAccessFields_startDate_Update
+  delete: DiscountsDocAccessFields_startDate_Delete
 }
 
-type CouponsDocAccessFields_createdAt_Create {
+type DiscountsDocAccessFields_startDate_Create {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_createdAt_Read {
+type DiscountsDocAccessFields_startDate_Read {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_createdAt_Update {
+type DiscountsDocAccessFields_startDate_Update {
   permission: Boolean!
 }
 
-type CouponsDocAccessFields_createdAt_Delete {
+type DiscountsDocAccessFields_startDate_Delete {
   permission: Boolean!
 }
 
-type CouponsCreateDocAccess {
+type DiscountsDocAccessFields_expirationDate {
+  create: DiscountsDocAccessFields_expirationDate_Create
+  read: DiscountsDocAccessFields_expirationDate_Read
+  update: DiscountsDocAccessFields_expirationDate_Update
+  delete: DiscountsDocAccessFields_expirationDate_Delete
+}
+
+type DiscountsDocAccessFields_expirationDate_Create {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_expirationDate_Read {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_expirationDate_Update {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_expirationDate_Delete {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_maxUses {
+  create: DiscountsDocAccessFields_maxUses_Create
+  read: DiscountsDocAccessFields_maxUses_Read
+  update: DiscountsDocAccessFields_maxUses_Update
+  delete: DiscountsDocAccessFields_maxUses_Delete
+}
+
+type DiscountsDocAccessFields_maxUses_Create {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_maxUses_Read {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_maxUses_Update {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_maxUses_Delete {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_currentUses {
+  create: DiscountsDocAccessFields_currentUses_Create
+  read: DiscountsDocAccessFields_currentUses_Read
+  update: DiscountsDocAccessFields_currentUses_Update
+  delete: DiscountsDocAccessFields_currentUses_Delete
+}
+
+type DiscountsDocAccessFields_currentUses_Create {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_currentUses_Read {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_currentUses_Update {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_currentUses_Delete {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_isActive {
+  create: DiscountsDocAccessFields_isActive_Create
+  read: DiscountsDocAccessFields_isActive_Read
+  update: DiscountsDocAccessFields_isActive_Update
+  delete: DiscountsDocAccessFields_isActive_Delete
+}
+
+type DiscountsDocAccessFields_isActive_Create {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_isActive_Read {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_isActive_Update {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_isActive_Delete {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_updatedAt {
+  create: DiscountsDocAccessFields_updatedAt_Create
+  read: DiscountsDocAccessFields_updatedAt_Read
+  update: DiscountsDocAccessFields_updatedAt_Update
+  delete: DiscountsDocAccessFields_updatedAt_Delete
+}
+
+type DiscountsDocAccessFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_createdAt {
+  create: DiscountsDocAccessFields_createdAt_Create
+  read: DiscountsDocAccessFields_createdAt_Read
+  update: DiscountsDocAccessFields_createdAt_Update
+  delete: DiscountsDocAccessFields_createdAt_Delete
+}
+
+type DiscountsDocAccessFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type DiscountsDocAccessFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type DiscountsCreateDocAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type CouponsReadDocAccess {
+type DiscountsReadDocAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type CouponsUpdateDocAccess {
+type DiscountsUpdateDocAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type CouponsDeleteDocAccess {
+type DiscountsDeleteDocAccess {
   permission: Boolean!
   where: JSONObject
 }
@@ -9690,7 +9937,7 @@ type Access {
   media: mediaAccess
   categories: categoriesAccess
   users: usersAccess
-  coupons: couponsAccess
+  discounts: discountsAccess
   redirects: redirectsAccess
   payload_preferences: payload_preferencesAccess
   settings: settingsAccess
@@ -10837,7 +11084,7 @@ type OrdersFields {
   stripePaymentIntentID: OrdersFields_stripePaymentIntentID
   total: OrdersFields_total
   items: OrdersFields_items
-  couponUsed: OrdersFields_couponUsed
+  discountUsed: OrdersFields_discountUsed
   discountAmount: OrdersFields_discountAmount
   updatedAt: OrdersFields_updatedAt
   createdAt: OrdersFields_createdAt
@@ -11035,26 +11282,26 @@ type OrdersFields_items_id_Delete {
   permission: Boolean!
 }
 
-type OrdersFields_couponUsed {
-  create: OrdersFields_couponUsed_Create
-  read: OrdersFields_couponUsed_Read
-  update: OrdersFields_couponUsed_Update
-  delete: OrdersFields_couponUsed_Delete
+type OrdersFields_discountUsed {
+  create: OrdersFields_discountUsed_Create
+  read: OrdersFields_discountUsed_Read
+  update: OrdersFields_discountUsed_Update
+  delete: OrdersFields_discountUsed_Delete
 }
 
-type OrdersFields_couponUsed_Create {
+type OrdersFields_discountUsed_Create {
   permission: Boolean!
 }
 
-type OrdersFields_couponUsed_Read {
+type OrdersFields_discountUsed_Read {
   permission: Boolean!
 }
 
-type OrdersFields_couponUsed_Update {
+type OrdersFields_discountUsed_Update {
   permission: Boolean!
 }
 
-type OrdersFields_couponUsed_Delete {
+type OrdersFields_discountUsed_Delete {
   permission: Boolean!
 }
 
@@ -12342,225 +12589,369 @@ type UsersUnlockAccess {
   where: JSONObject
 }
 
-type couponsAccess {
-  fields: CouponsFields
-  create: CouponsCreateAccess
-  read: CouponsReadAccess
-  update: CouponsUpdateAccess
-  delete: CouponsDeleteAccess
+type discountsAccess {
+  fields: DiscountsFields
+  create: DiscountsCreateAccess
+  read: DiscountsReadAccess
+  update: DiscountsUpdateAccess
+  delete: DiscountsDeleteAccess
 }
 
-type CouponsFields {
-  code: CouponsFields_code
-  discountPercentage: CouponsFields_discountPercentage
-  expirationDate: CouponsFields_expirationDate
-  maxUses: CouponsFields_maxUses
-  currentUses: CouponsFields_currentUses
-  isActive: CouponsFields_isActive
-  updatedAt: CouponsFields_updatedAt
-  createdAt: CouponsFields_createdAt
+type DiscountsFields {
+  name: DiscountsFields_name
+  discountMode: DiscountsFields_discountMode
+  code: DiscountsFields_code
+  discountPercentage: DiscountsFields_discountPercentage
+  appliesTo: DiscountsFields_appliesTo
+  category: DiscountsFields_category
+  bulkQuantity: DiscountsFields_bulkQuantity
+  startDate: DiscountsFields_startDate
+  expirationDate: DiscountsFields_expirationDate
+  maxUses: DiscountsFields_maxUses
+  currentUses: DiscountsFields_currentUses
+  isActive: DiscountsFields_isActive
+  updatedAt: DiscountsFields_updatedAt
+  createdAt: DiscountsFields_createdAt
 }
 
-type CouponsFields_code {
-  create: CouponsFields_code_Create
-  read: CouponsFields_code_Read
-  update: CouponsFields_code_Update
-  delete: CouponsFields_code_Delete
+type DiscountsFields_name {
+  create: DiscountsFields_name_Create
+  read: DiscountsFields_name_Read
+  update: DiscountsFields_name_Update
+  delete: DiscountsFields_name_Delete
 }
 
-type CouponsFields_code_Create {
+type DiscountsFields_name_Create {
   permission: Boolean!
 }
 
-type CouponsFields_code_Read {
+type DiscountsFields_name_Read {
   permission: Boolean!
 }
 
-type CouponsFields_code_Update {
+type DiscountsFields_name_Update {
   permission: Boolean!
 }
 
-type CouponsFields_code_Delete {
+type DiscountsFields_name_Delete {
   permission: Boolean!
 }
 
-type CouponsFields_discountPercentage {
-  create: CouponsFields_discountPercentage_Create
-  read: CouponsFields_discountPercentage_Read
-  update: CouponsFields_discountPercentage_Update
-  delete: CouponsFields_discountPercentage_Delete
+type DiscountsFields_discountMode {
+  create: DiscountsFields_discountMode_Create
+  read: DiscountsFields_discountMode_Read
+  update: DiscountsFields_discountMode_Update
+  delete: DiscountsFields_discountMode_Delete
 }
 
-type CouponsFields_discountPercentage_Create {
+type DiscountsFields_discountMode_Create {
   permission: Boolean!
 }
 
-type CouponsFields_discountPercentage_Read {
+type DiscountsFields_discountMode_Read {
   permission: Boolean!
 }
 
-type CouponsFields_discountPercentage_Update {
+type DiscountsFields_discountMode_Update {
   permission: Boolean!
 }
 
-type CouponsFields_discountPercentage_Delete {
+type DiscountsFields_discountMode_Delete {
   permission: Boolean!
 }
 
-type CouponsFields_expirationDate {
-  create: CouponsFields_expirationDate_Create
-  read: CouponsFields_expirationDate_Read
-  update: CouponsFields_expirationDate_Update
-  delete: CouponsFields_expirationDate_Delete
+type DiscountsFields_code {
+  create: DiscountsFields_code_Create
+  read: DiscountsFields_code_Read
+  update: DiscountsFields_code_Update
+  delete: DiscountsFields_code_Delete
 }
 
-type CouponsFields_expirationDate_Create {
+type DiscountsFields_code_Create {
   permission: Boolean!
 }
 
-type CouponsFields_expirationDate_Read {
+type DiscountsFields_code_Read {
   permission: Boolean!
 }
 
-type CouponsFields_expirationDate_Update {
+type DiscountsFields_code_Update {
   permission: Boolean!
 }
 
-type CouponsFields_expirationDate_Delete {
+type DiscountsFields_code_Delete {
   permission: Boolean!
 }
 
-type CouponsFields_maxUses {
-  create: CouponsFields_maxUses_Create
-  read: CouponsFields_maxUses_Read
-  update: CouponsFields_maxUses_Update
-  delete: CouponsFields_maxUses_Delete
+type DiscountsFields_discountPercentage {
+  create: DiscountsFields_discountPercentage_Create
+  read: DiscountsFields_discountPercentage_Read
+  update: DiscountsFields_discountPercentage_Update
+  delete: DiscountsFields_discountPercentage_Delete
 }
 
-type CouponsFields_maxUses_Create {
+type DiscountsFields_discountPercentage_Create {
   permission: Boolean!
 }
 
-type CouponsFields_maxUses_Read {
+type DiscountsFields_discountPercentage_Read {
   permission: Boolean!
 }
 
-type CouponsFields_maxUses_Update {
+type DiscountsFields_discountPercentage_Update {
   permission: Boolean!
 }
 
-type CouponsFields_maxUses_Delete {
+type DiscountsFields_discountPercentage_Delete {
   permission: Boolean!
 }
 
-type CouponsFields_currentUses {
-  create: CouponsFields_currentUses_Create
-  read: CouponsFields_currentUses_Read
-  update: CouponsFields_currentUses_Update
-  delete: CouponsFields_currentUses_Delete
+type DiscountsFields_appliesTo {
+  create: DiscountsFields_appliesTo_Create
+  read: DiscountsFields_appliesTo_Read
+  update: DiscountsFields_appliesTo_Update
+  delete: DiscountsFields_appliesTo_Delete
 }
 
-type CouponsFields_currentUses_Create {
+type DiscountsFields_appliesTo_Create {
   permission: Boolean!
 }
 
-type CouponsFields_currentUses_Read {
+type DiscountsFields_appliesTo_Read {
   permission: Boolean!
 }
 
-type CouponsFields_currentUses_Update {
+type DiscountsFields_appliesTo_Update {
   permission: Boolean!
 }
 
-type CouponsFields_currentUses_Delete {
+type DiscountsFields_appliesTo_Delete {
   permission: Boolean!
 }
 
-type CouponsFields_isActive {
-  create: CouponsFields_isActive_Create
-  read: CouponsFields_isActive_Read
-  update: CouponsFields_isActive_Update
-  delete: CouponsFields_isActive_Delete
+type DiscountsFields_category {
+  create: DiscountsFields_category_Create
+  read: DiscountsFields_category_Read
+  update: DiscountsFields_category_Update
+  delete: DiscountsFields_category_Delete
 }
 
-type CouponsFields_isActive_Create {
+type DiscountsFields_category_Create {
   permission: Boolean!
 }
 
-type CouponsFields_isActive_Read {
+type DiscountsFields_category_Read {
   permission: Boolean!
 }
 
-type CouponsFields_isActive_Update {
+type DiscountsFields_category_Update {
   permission: Boolean!
 }
 
-type CouponsFields_isActive_Delete {
+type DiscountsFields_category_Delete {
   permission: Boolean!
 }
 
-type CouponsFields_updatedAt {
-  create: CouponsFields_updatedAt_Create
-  read: CouponsFields_updatedAt_Read
-  update: CouponsFields_updatedAt_Update
-  delete: CouponsFields_updatedAt_Delete
+type DiscountsFields_bulkQuantity {
+  create: DiscountsFields_bulkQuantity_Create
+  read: DiscountsFields_bulkQuantity_Read
+  update: DiscountsFields_bulkQuantity_Update
+  delete: DiscountsFields_bulkQuantity_Delete
 }
 
-type CouponsFields_updatedAt_Create {
+type DiscountsFields_bulkQuantity_Create {
   permission: Boolean!
 }
 
-type CouponsFields_updatedAt_Read {
+type DiscountsFields_bulkQuantity_Read {
   permission: Boolean!
 }
 
-type CouponsFields_updatedAt_Update {
+type DiscountsFields_bulkQuantity_Update {
   permission: Boolean!
 }
 
-type CouponsFields_updatedAt_Delete {
+type DiscountsFields_bulkQuantity_Delete {
   permission: Boolean!
 }
 
-type CouponsFields_createdAt {
-  create: CouponsFields_createdAt_Create
-  read: CouponsFields_createdAt_Read
-  update: CouponsFields_createdAt_Update
-  delete: CouponsFields_createdAt_Delete
+type DiscountsFields_startDate {
+  create: DiscountsFields_startDate_Create
+  read: DiscountsFields_startDate_Read
+  update: DiscountsFields_startDate_Update
+  delete: DiscountsFields_startDate_Delete
 }
 
-type CouponsFields_createdAt_Create {
+type DiscountsFields_startDate_Create {
   permission: Boolean!
 }
 
-type CouponsFields_createdAt_Read {
+type DiscountsFields_startDate_Read {
   permission: Boolean!
 }
 
-type CouponsFields_createdAt_Update {
+type DiscountsFields_startDate_Update {
   permission: Boolean!
 }
 
-type CouponsFields_createdAt_Delete {
+type DiscountsFields_startDate_Delete {
   permission: Boolean!
 }
 
-type CouponsCreateAccess {
+type DiscountsFields_expirationDate {
+  create: DiscountsFields_expirationDate_Create
+  read: DiscountsFields_expirationDate_Read
+  update: DiscountsFields_expirationDate_Update
+  delete: DiscountsFields_expirationDate_Delete
+}
+
+type DiscountsFields_expirationDate_Create {
+  permission: Boolean!
+}
+
+type DiscountsFields_expirationDate_Read {
+  permission: Boolean!
+}
+
+type DiscountsFields_expirationDate_Update {
+  permission: Boolean!
+}
+
+type DiscountsFields_expirationDate_Delete {
+  permission: Boolean!
+}
+
+type DiscountsFields_maxUses {
+  create: DiscountsFields_maxUses_Create
+  read: DiscountsFields_maxUses_Read
+  update: DiscountsFields_maxUses_Update
+  delete: DiscountsFields_maxUses_Delete
+}
+
+type DiscountsFields_maxUses_Create {
+  permission: Boolean!
+}
+
+type DiscountsFields_maxUses_Read {
+  permission: Boolean!
+}
+
+type DiscountsFields_maxUses_Update {
+  permission: Boolean!
+}
+
+type DiscountsFields_maxUses_Delete {
+  permission: Boolean!
+}
+
+type DiscountsFields_currentUses {
+  create: DiscountsFields_currentUses_Create
+  read: DiscountsFields_currentUses_Read
+  update: DiscountsFields_currentUses_Update
+  delete: DiscountsFields_currentUses_Delete
+}
+
+type DiscountsFields_currentUses_Create {
+  permission: Boolean!
+}
+
+type DiscountsFields_currentUses_Read {
+  permission: Boolean!
+}
+
+type DiscountsFields_currentUses_Update {
+  permission: Boolean!
+}
+
+type DiscountsFields_currentUses_Delete {
+  permission: Boolean!
+}
+
+type DiscountsFields_isActive {
+  create: DiscountsFields_isActive_Create
+  read: DiscountsFields_isActive_Read
+  update: DiscountsFields_isActive_Update
+  delete: DiscountsFields_isActive_Delete
+}
+
+type DiscountsFields_isActive_Create {
+  permission: Boolean!
+}
+
+type DiscountsFields_isActive_Read {
+  permission: Boolean!
+}
+
+type DiscountsFields_isActive_Update {
+  permission: Boolean!
+}
+
+type DiscountsFields_isActive_Delete {
+  permission: Boolean!
+}
+
+type DiscountsFields_updatedAt {
+  create: DiscountsFields_updatedAt_Create
+  read: DiscountsFields_updatedAt_Read
+  update: DiscountsFields_updatedAt_Update
+  delete: DiscountsFields_updatedAt_Delete
+}
+
+type DiscountsFields_updatedAt_Create {
+  permission: Boolean!
+}
+
+type DiscountsFields_updatedAt_Read {
+  permission: Boolean!
+}
+
+type DiscountsFields_updatedAt_Update {
+  permission: Boolean!
+}
+
+type DiscountsFields_updatedAt_Delete {
+  permission: Boolean!
+}
+
+type DiscountsFields_createdAt {
+  create: DiscountsFields_createdAt_Create
+  read: DiscountsFields_createdAt_Read
+  update: DiscountsFields_createdAt_Update
+  delete: DiscountsFields_createdAt_Delete
+}
+
+type DiscountsFields_createdAt_Create {
+  permission: Boolean!
+}
+
+type DiscountsFields_createdAt_Read {
+  permission: Boolean!
+}
+
+type DiscountsFields_createdAt_Update {
+  permission: Boolean!
+}
+
+type DiscountsFields_createdAt_Delete {
+  permission: Boolean!
+}
+
+type DiscountsCreateAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type CouponsReadAccess {
+type DiscountsReadAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type CouponsUpdateAccess {
+type DiscountsUpdateAccess {
   permission: Boolean!
   where: JSONObject
 }
 
-type CouponsDeleteAccess {
+type DiscountsDeleteAccess {
   permission: Boolean!
   where: JSONObject
 }
@@ -13644,9 +14035,9 @@ type Mutation {
   forgotPasswordUser(disableEmail: Boolean, email: String!, expiration: Int): Boolean!
   resetPasswordUser(password: String, token: String): usersResetPassword
   verifyEmailUser(token: String): Boolean
-  createCoupon(data: mutationCouponInput!): Coupon
-  updateCoupon(id: Int!, autosave: Boolean, data: mutationCouponUpdateInput!): Coupon
-  deleteCoupon(id: Int!): Coupon
+  createDiscount(data: mutationDiscountInput!): Discount
+  updateDiscount(id: Int!, autosave: Boolean, data: mutationDiscountUpdateInput!): Discount
+  deleteDiscount(id: Int!): Discount
   createRedirect(data: mutationRedirectInput!): Redirect
   updateRedirect(id: Int!, autosave: Boolean, data: mutationRedirectUpdateInput!): Redirect
   deleteRedirect(id: Int!): Redirect
@@ -13857,7 +14248,7 @@ input mutationOrderInput {
   stripePaymentIntentID: String
   total: Float!
   items: [mutationOrder_ItemsInput]
-  couponUsed: Int
+  discountUsed: Int
   discountAmount: Float
   updatedAt: String
   createdAt: String
@@ -13875,7 +14266,7 @@ input mutationOrderUpdateInput {
   stripePaymentIntentID: String
   total: Float
   items: [mutationOrderUpdate_ItemsInput]
-  couponUsed: Int
+  discountUsed: Int
   discountAmount: Float
   updatedAt: String
   createdAt: String
@@ -14065,9 +14456,15 @@ type usersResetPassword {
   user: User
 }
 
-input mutationCouponInput {
-  code: String!
+input mutationDiscountInput {
+  name: String!
+  discountMode: Discount_discountMode_MutationInput!
+  code: String
   discountPercentage: Float!
+  appliesTo: Discount_appliesTo_MutationInput!
+  category: Int
+  bulkQuantity: Float
+  startDate: String
   expirationDate: String!
   maxUses: Float!
   currentUses: Float
@@ -14076,15 +14473,43 @@ input mutationCouponInput {
   createdAt: String
 }
 
-input mutationCouponUpdateInput {
+enum Discount_discountMode_MutationInput {
+  manual
+  automatic
+  bulk
+}
+
+enum Discount_appliesTo_MutationInput {
+  all
+  category
+}
+
+input mutationDiscountUpdateInput {
+  name: String
+  discountMode: DiscountUpdate_discountMode_MutationInput
   code: String
   discountPercentage: Float
+  appliesTo: DiscountUpdate_appliesTo_MutationInput
+  category: Int
+  bulkQuantity: Float
+  startDate: String
   expirationDate: String
   maxUses: Float
   currentUses: Float
   isActive: Boolean
   updatedAt: String
   createdAt: String
+}
+
+enum DiscountUpdate_discountMode_MutationInput {
+  manual
+  automatic
+  bulk
+}
+
+enum DiscountUpdate_appliesTo_MutationInput {
+  all
+  category
 }
 
 input mutationRedirectInput {

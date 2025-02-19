@@ -28,7 +28,7 @@ import seo from '@payloadcms/plugin-seo'
 import { slateEditor } from '@payloadcms/richtext-slate'
 import stripePlugin from '@payloadcms/plugin-stripe'
 import { webpackBundler } from '@payloadcms/bundler-webpack'
-import Coupons from './collections/Coupons'
+import Discounts from './collections/Discounts'
 const generateTitle: GenerateTitle = () => {
   return 'My Store'
 }
@@ -98,7 +98,7 @@ export default buildConfig({
     push: false,
   }),
   serverURL: process.env.PAYLOAD_PUBLIC_BASE_DNS,
-  collections: [Pages, Products, Orders, Media, Categories, Users, Coupons],
+  collections: [Pages, Products, Orders, Media, Categories, Users, Discounts],
   globals: [Settings, Header, Footer],
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),

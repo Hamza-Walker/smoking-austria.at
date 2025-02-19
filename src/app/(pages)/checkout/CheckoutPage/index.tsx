@@ -25,10 +25,10 @@ export const CheckoutPage: React.FC<{
   const [paymentMethod, setPaymentMethod] = React.useState<'stripe' | 'bankTransfer'>(
     'bankTransfer',
   )
-  const { cart, cartIsEmpty, cartTotal, applyCoupon } = useCart()
+  const { cart, cartIsEmpty, cartTotal, applyDiscount } = useCart()
 
-  const handleApplyCoupon = (discount: number) => {
-    applyCoupon(discount)
+  const handleapplyDiscount = (discount: number) => {
+    applyDiscount(discount)
   }
   useEffect(() => {
     if (user !== null && cartIsEmpty) {

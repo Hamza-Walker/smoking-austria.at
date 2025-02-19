@@ -8,7 +8,7 @@ const PromoCodeInput: React.FC<{
 }> = ({ onApplyPromoCode, onRemovePromoCode }) => {
   const [promoCode, setPromoCode] = useState('')
   const [invalidPromo, setInvalidPromo] = useState(false)
-  const { couponDiscount } = useCart()
+  const { discountAmount } = useCart()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPromoCode(e.target.value)
@@ -43,7 +43,7 @@ const PromoCodeInput: React.FC<{
         <button
           className={classes.applyButton}
           onClick={handleApplyPromoCode}
-          disabled={couponDiscount > 0}
+          disabled={discountAmount > 0}
         >
           Apply
         </button>
