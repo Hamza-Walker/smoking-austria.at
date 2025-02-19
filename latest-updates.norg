@@ -117,6 +117,16 @@
    cURL (Terminal)
 
 Run this in your terminal (replace URL_HERE with the actual API URL):
+curl -X GET "http://localhost:3000/api/get-active-discounts" \                                                                                                   ─╯
+  -H "Content-Type: application/json" \
+  -v
 
-curl -X GET "https://yourdomain.com/api/get-active-discounts" -H "Content-Type: application/json"
+feat(discounts/cart): Rename and fix Discounts collection; unify cart logic and psql schema
 
+Removed the old “coupons” collection and replaced it with a single “discounts” collection, merging coupon & discount features into one.
+Cleaned up PostgreSQL tables (dropped leftover coupons references, fixed naming conflicts with discounts and join tables).
+Ensured columns were camelCase in the discounts table (e.g., discountPercentage), removing discount_percentage references.
+Added an endpoint /next/get-active-discounts (and logic) to fetch automatic/bulk discounts, separate from /next/apply-discount for manual coupons.
+Updated cart calculation to handle direct item.price (fallback to priceJSON if absent), ensuring nonzero totals and discount amounts.
+Set hasMany = false on Orders discount field to avoid needing an orders_rels table.
+Fixed prettier formatting issues and reorganized the Cart Context code for readability.
