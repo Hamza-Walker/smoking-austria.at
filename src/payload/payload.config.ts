@@ -95,7 +95,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI,
     },
-    push: false,
+    push: true,
   }),
   serverURL: process.env.PAYLOAD_PUBLIC_BASE_DNS,
   collections: [Pages, Products, Orders, Media, Categories, Users, Discounts],
