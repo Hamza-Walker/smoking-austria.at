@@ -101,6 +101,7 @@ export const CartPage: React.FC<{
                 </div>
 
                 <div className={classes.row}>
+                  {/* prettier-ignore */}
                   <p className={classes.deliveryNote}>Delivery costs will be calculated separately.</p>
                 </div>
 
