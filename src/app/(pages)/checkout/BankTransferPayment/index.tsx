@@ -183,47 +183,60 @@ const BankTransferPayment: React.FC<{
   return (
     <div className={classes.parentContainer}>
       <div className={classes.bankDetails}>
-        <h3 className={classes.payment}>Bank Transfer Details</h3>
+        {/* Hide Bank Transfer Details */}
+
+        {/* <h3 className={classes.payment}>Bank Transfer Details</h3>
         <p>Please transfer the total amount to the following bank account:</p>
         <p>Bank: BAWAG</p>
         <p>IBAN: AT39 60000 0104 1019 7559</p>
         <p>Reference Number: {userId}</p>
-
-        {/*
-          cartTotal.formatted is your final total (cents / 100)
-          after all discounts have been applied
-        */}
         <p>Amount: {cartTotal.formatted}</p>
+        */}
 
         {/*
           3) PromoCodeInput usage remains the same, but we now
              also handle auto discount in the cart context
         */}
+
+        {/* Hide Promo code input. Todo, update discounts shcema to include a boolian field. in the admin pannal to control visibility of the input component */}
+        {/*
         <PromoCodeInput
           onApplyPromoCode={handleapplyDiscount}
           onRemovePromoCode={handleremoveDiscount}
         />
+        */}
 
         {/*
           4) Show manual discount if present
         */}
+        {/*
         {discountAmount > 0 && (
           <p className={classes.discountApplied}>
             Manual discount applied:{' '}
             {(discountAmount / 100).toLocaleString('en-US', { style: 'currency', currency: 'EUR' })}
           </p>
         )}
-
+        */}
         {/*
           5) (Optional) Show automatic discount if present
               If you'd prefer to show a combined discount line, skip this
         */}
+        {/*
         {autoDiscount > 0 && (
           <p className={classes.discountApplied}>
             Automatic discount:{' '}
             {(autoDiscount / 100).toLocaleString('en-US', { style: 'currency', currency: 'EUR' })}
           </p>
         )}
+        */}
+        <p className={classes.checkoutMessage}>
+          Upon confirming the order, you will receive an email with your order details. Our staff
+          will contact you afterward with a receipt, which will also include the shipping costs and
+          bank information. Once the payment is received, the items will be shipped immediately.
+        </p>
+        <p className={classes.checkoutWarning}>
+          Please ensure that you have entered your address correctly.
+        </p>
 
         <TermsAndConditions termsUrl="/terms-and-conditions" onAccept={handleTermsAccept} />
 

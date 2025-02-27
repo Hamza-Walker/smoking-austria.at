@@ -140,3 +140,13 @@ curl -X GET "http://localhost:3000/api/get-active-discounts" \                  
     - ( ) update the bill to include reflect this
     - ( ) improve the styling of the bill to match the varient ottmar sent you.
     - ( ) update the terms and conditions.
+
+** 2025-02-27:
+   - (x) updated the cart page to notify the user that the delivery costs will be
+         calculated seperately.
+   - (x) &feat(checkout)&: Add order process and address confirmation messages:
+   -- Added a message explaining the order confirmation, staff follow-up, and shipping process.
+   -- Added a warning reminding customers to enter their address correctly.
+   -- Styled the messages: orange for order info, red for address warning.
+   -- Updated `checkout.tsx` and `index.module.scss` for these changes.
+
