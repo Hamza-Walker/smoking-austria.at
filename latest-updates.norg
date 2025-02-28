@@ -166,3 +166,10 @@ feat(checkout): Add dynamic discount display in checkout summary
 - Consolidated all totals in single styled container
 - Modified CheckoutPage component for improved discount visibility
 - Updated index.module.scss with new label and container styles
+
+feat(receipt): Refine delivery message and consolidate discount display
+
+- Removed separate manual and automatic discount fields, now using a single combined discount value.
+- Updated receipt template to show only one discount line reflecting total discounts.
+- Added a clear shipping message regarding delivery costs and contact information.
+- Enhanced clarity and comprehensiveness of the receipt for better user understanding.
