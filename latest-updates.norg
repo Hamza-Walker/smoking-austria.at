@@ -150,3 +150,19 @@ curl -X GET "http://localhost:3000/api/get-active-discounts" \                  
    -- Styled the messages: orange for order info, red for address warning.
    -- Updated `checkout.tsx` and `index.module.scss` for these changes.
 
+** 2025-02-28
+feat(cart): Add dynamic discount display with improved styling
+- Added separate display for bulk and manual discounts in cart summary
+- Updated Cart provider to expose autoDiscount through context
+- Implemented conditional rendering for both discount types
+- Added green styling for discount amounts for better visibility
+- Updated CartPage component to handle both discount types
+- Modified index.module.scss to include new discount styles
+
+feat(checkout): Add dynamic discount display in checkout summary
+- Added consistent discount display matching cart page layout
+- Implemented both bulk and manual discount displays in checkout
+- Updated styling for discount and total labels with bold text
+- Consolidated all totals in single styled container
+- Modified CheckoutPage component for improved discount visibility
+- Updated index.module.scss with new label and container styles

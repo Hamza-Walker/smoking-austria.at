@@ -38,6 +38,7 @@ export type CartContext = {
   removeDiscount: () => void
   discountAmount: number
   discountId: string | null
+  autoDiscount: number  
 }
 
 const Context = createContext({} as CartContext)
@@ -407,6 +408,7 @@ export const CartProvider = (props: any) => {
         removeDiscount,
         discountAmount,
         discountId,
+        autoDiscount,
       }}
     >
       {children}

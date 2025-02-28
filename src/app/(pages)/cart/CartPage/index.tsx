@@ -24,7 +24,15 @@ export const CartPage: React.FC<{
 
   const { user } = useAuth()
 
-  const { cart, cartIsEmpty, addItemToCart, cartTotal, hasInitializedCart } = useCart()
+  const { 
+    cart, 
+    cartIsEmpty, 
+    addItemToCart, 
+    cartTotal, 
+    hasInitializedCart, 
+    discountAmount,
+    autoDiscount 
+  } = useCart()
 
   return (
     <Fragment>
@@ -104,6 +112,32 @@ export const CartPage: React.FC<{
                   {/* prettier-ignore */}
                   <p className={classes.deliveryNote}>Delivery costs will be calculated separately.</p>
                 </div>
+
+                {/* Show bulk discount if applicable */}
+                {autoDiscount > 0 && (
+                  <div className={classes.row}>
+                    <p className={classes.discountText}>Bulk Discount</p>
+                    <p className={classes.discount}>
+                      -{(autoDiscount / 100).toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                      })}
+                    </p>
+                  </div>
+                )}
+
+                {/* Show manual coupon discount if applicable */}
+                {discountAmount > 0 && (
+                  <div className={classes.row}>
+                    <p className={classes.discount}>Coupon Discount</p>
+                    <p className={classes.discount}>
+                      -{(discountAmount / 100).toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                      })}
+                    </p>
+                  </div>
+                )}
 
                 <div className={classes.row}>
                   <p className={classes.cartTotal}>Grand Total</p>

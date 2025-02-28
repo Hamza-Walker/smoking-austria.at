@@ -234,10 +234,6 @@ const BankTransferPayment: React.FC<{
           will contact you afterward with a receipt, which will also include the shipping costs and
           bank information. Once the payment is received, the items will be shipped immediately.
         </p>
-        <p className={classes.checkoutWarning}>
-          Please ensure that you have entered your address correctly.
-        </p>
-
         <TermsAndConditions termsUrl="/terms-and-conditions" onAccept={handleTermsAccept} />
 
         <div className={classes.buttonContainer}>

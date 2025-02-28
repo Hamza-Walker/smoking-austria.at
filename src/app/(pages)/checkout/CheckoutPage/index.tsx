@@ -25,7 +25,7 @@ export const CheckoutPage: React.FC<{
   const [paymentMethod, setPaymentMethod] = React.useState<'stripe' | 'bankTransfer'>(
     'bankTransfer',
   )
-  const { cart, cartIsEmpty, cartTotal, applyDiscount } = useCart()
+  const { cart, cartIsEmpty, cartTotal, discountAmount, autoDiscount } = useCart()
 
   const handleapplyDiscount = (discount: number) => {
     applyDiscount(discount)
@@ -91,11 +91,41 @@ export const CheckoutPage: React.FC<{
               }
               return null
             })}
-            <div className={classes.orderTotal}>
-              <p>Order Total</p>
-              <p>{cartTotal.formatted}</p>
-            </div>
           </ul>
+
+          <div className={classes.orderTotal}>
+            {/* Show bulk discount if applicable */}
+            {autoDiscount > 0 && (
+              <div className={classes.totalRow}>
+                <p className={classes.label}>Discount</p>
+                <p className={classes.discount}>
+                  -{(autoDiscount / 100).toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                  })}
+                </p>
+              </div>
+            )}
+
+            {/* Show manual coupon discount if applicable */}
+            {discountAmount > 0 && (
+              <div className={classes.totalRow}>
+                <p className={classes.label}>Discount</p>
+                <p className={classes.discount}>
+                  -{(discountAmount / 100).toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                  })}
+                </p>
+              </div>
+            )}
+
+            {/* Order Total */}
+            <div className={classes.totalRow}>
+              <p className={classes.label}>Order Total</p>
+              <p className={classes.label}>{cartTotal.formatted}</p>
+            </div>
+          </div>
         </div>
       )}
 
