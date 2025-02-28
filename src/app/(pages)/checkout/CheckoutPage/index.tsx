@@ -99,7 +99,8 @@ export const CheckoutPage: React.FC<{
               <div className={classes.totalRow}>
                 <p className={classes.label}>Discount</p>
                 <p className={classes.discount}>
-                  -{(autoDiscount / 100).toLocaleString('en-US', {
+                  -
+                  {(autoDiscount / 100).toLocaleString('en-US', {
                     style: 'currency',
                     currency: 'USD',
                   })}
@@ -112,7 +113,8 @@ export const CheckoutPage: React.FC<{
               <div className={classes.totalRow}>
                 <p className={classes.label}>Discount</p>
                 <p className={classes.discount}>
-                  -{(discountAmount / 100).toLocaleString('en-US', {
+                  -
+                  {(discountAmount / 100).toLocaleString('en-US', {
                     style: 'currency',
                     currency: 'USD',
                   })}

@@ -24,14 +24,14 @@ export const CartPage: React.FC<{
 
   const { user } = useAuth()
 
-  const { 
-    cart, 
-    cartIsEmpty, 
-    addItemToCart, 
-    cartTotal, 
-    hasInitializedCart, 
+  const {
+    cart,
+    cartIsEmpty,
+    addItemToCart,
+    cartTotal,
+    hasInitializedCart,
     discountAmount,
-    autoDiscount 
+    autoDiscount,
   } = useCart()
 
   return (
@@ -118,7 +118,8 @@ export const CartPage: React.FC<{
                   <div className={classes.row}>
                     <p className={classes.discountText}>Bulk Discount</p>
                     <p className={classes.discount}>
-                      -{(autoDiscount / 100).toLocaleString('en-US', {
+                      -
+                      {(autoDiscount / 100).toLocaleString('en-US', {
                         style: 'currency',
                         currency: 'USD',
                       })}
@@ -131,7 +132,8 @@ export const CartPage: React.FC<{
                   <div className={classes.row}>
                     <p className={classes.discount}>Coupon Discount</p>
                     <p className={classes.discount}>
-                      -{(discountAmount / 100).toLocaleString('en-US', {
+                      -
+                      {(discountAmount / 100).toLocaleString('en-US', {
                         style: 'currency',
                         currency: 'USD',
                       })}

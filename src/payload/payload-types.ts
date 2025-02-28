@@ -423,6 +423,7 @@ export interface Product {
  * via the `definition` "orders".
  */
 export interface Order {
+  autoDiscount: number;
   id: number;
   orderedBy: number | User;
   stripePaymentIntentID?: string | null;
