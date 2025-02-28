@@ -43,9 +43,8 @@ export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
         const paymentMethod = doc.stripePaymentIntentID ? 'Card' : 'Check'
         const taxNumber = user.taxNumber || 'ATU-'
 
-        // The discount is already applied in the BankTransferPayment Component
-        // const totalAfterDiscount = doc.discountAmount ? doc.total - doc.discountAmount : doc.total
-        // Calculate discount and total
+        // Combine both discount fields
+        const totalDiscount = (doc.discountAmount ?? 0) + (doc.autoDiscount ?? 0)
 
         const emailData = {
           invoiceNumber,
@@ -76,11 +75,16 @@ export const sendOrderConfirmationWithReceipt: AfterChangeHook<Order> = async ({
             totalBrutto: formatCurrency(item.price * item.quantity),
             mwst: formatCurrency(item.price * item.quantity * 0.2),
           })),
-          discount: doc.discountAmount ? formatCurrency(doc.discountAmount) : null,
+          discount: totalDiscount > 0 ? formatCurrency(totalDiscount) : null,
+          hasDiscount: totalDiscount > 0,
+          manualDiscount: doc.discountAmount ? formatCurrency(doc.discountAmount) : null,
+          autoDiscount: doc.autoDiscount ? formatCurrency(doc.autoDiscount) : null,
           total: formatCurrency(doc.total),
-          hasDiscount: !!doc.discountAmount,
+          shippingMessage:
+            ' Please note that shipping costs will be calculated and added to your order separately. A member of our team will contact you shortly with an updated invoice reflecting the final total, including shipping charges.',
         }
         console.log('discount:', doc.discountAmount)
+        console.log('Auto Discount:', doc.autoDiscount)
         console.log('total:', doc.total)
         // Paths
         const emailTemplatePath = path.join(__dirname, 'utilities', 'emailTemplate.html')

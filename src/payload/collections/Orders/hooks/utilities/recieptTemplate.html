@@ -1,8 +1,10 @@
+<!-- eslint-disable -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <title>Invoice</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt</title>
     <style>
       .invoice-box {
         max-width: 800px;
@@ -99,72 +101,79 @@
   </head>
 
   <body>
-<div class="invoice-box">
-  <table cellpadding="0" cellspacing="0">
-    <tr class="top">
-      <td colspan="2">
-        <table>
-          <tr>
-            <td class="title">
-              <img src="https://www.smokingpaper.com/wp-content/uploads/2021/11/smoking-logo.svg" style="width:100%; max-width:300px;">
-            </td>
-            <td>
-              Invoice #: {{invoiceNumber}}<br>
-              Tax Number: {{ taxNumber }}<br>
-              Created: {{date}}<br>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+    <h1>Receipt</h1>
+    <div class="invoice-box">
+      <table cellpadding="0" cellspacing="0">
+        <tr class="top">
+          <td colspan="2">
+            <table>
+              <tr>
+                <td class="title">
+                  <img src="https://www.smokingpaper.com/wp-content/uploads/2021/11/smoking-logo.svg" style="width:100%; max-width:300px;">
+                </td>
+                <td>
+                  Invoice #: {{invoiceNumber}}<br>
+                  Tax Number: {{ taxNumber }}<br>
+                  Created: {{date}}<br>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
 
-    <tr class="information">
-      <td colspan="2">
-        <table>
-          <tr>
-             <td>
-              {{sender.name}}<br>
-                  {{#if sender.address}}<span>{{{sender.address}}}</span>{{/if}}
-            </td>
-            <td>
-              {{recipient.name}}<br>
-                  {{#if recipient.address}}<span>{{{recipient.address}}}</span>{{/if}}
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+        <tr class="information">
+          <td colspan="2">
+            <table>
+              <tr>
+                 <td>
+                  {{sender.name}}<br>
+                      {{#if sender.address}}<span>{{{sender.address}}}</span>{{/if}}
+                </td>
+                <td>
+                  {{recipient.name}}<br>
+                      {{#if recipient.address}}<span>{{{recipient.address}}}</span>{{/if}}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
 
-    <tr>
-      <td>Payment Method</td>
-      <td>{{paymentMethod}}</td>
-    </tr>
+        <tr>
+          <td>Payment Method</td>
+          <td>{{paymentMethod}}</td>
+        </tr>
 
-    <tr class="heading">
-      <td>Item</td>
-      <td>Price</td>
-    </tr>
+        <tr class="heading">
+          <td>Item</td>
+          <td>Price</td>
+        </tr>
 
-    {{#each items}}
-    <tr class="item">
-      <td>{{description}} (x{{quantity}})</td>
-      <td>{{totalBrutto}}</td>
-    </tr>
-    {{/each}}
+        {{#each items}}
+        <tr class="item">
+          <td>{{description}} (x{{quantity}})</td>
+          <td>{{totalBrutto}}</td>
+        </tr>
+        {{/each}}
 
-    {{#if hasDiscount}}
-    <tr class="item">
-      <td>Discount Applied</td>
-      <td>-{{discount}}</td>
-    </tr>
-    {{/if}}
-
-    <tr class="total">
-      <td></td>
-      <td>Total: {{total}}</td>
-    </tr>
-  </table>
-</div>
+        {{#if hasDiscount}}
+        <tr class="item">
+          <td>Discount Applied</td>
+          <td>-{{discount}}</td>
+        </tr>
+        {{/if}}
+     
+        <tr class="total">
+          <td></td>
+          <td>Total: {{total}}</td>
+        </tr>
+      
+        <tr class="item">
+          <td colspan="2" style="text-align: center;">
+            <p style="font-style: italic; color: #555;">{{shippingMessage}}</p>
+          </td>
+        </tr>
+      </table>
+    </div>
   </body>
 </html>
 

@@ -93,6 +93,12 @@ export const Orders: CollectionConfig = {
       type: 'number',
       min: 0,
     },
+    {
+      name: 'autoDiscount',
+      type: 'number',
+      label: 'Auto Discount',
+      defaultValue: 0,
+    },
   ],
 }
 
