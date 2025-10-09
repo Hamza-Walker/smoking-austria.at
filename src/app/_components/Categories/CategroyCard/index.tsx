@@ -12,7 +12,7 @@ type CategoryCardProps = {
 
 const CategoryCard = ({ category }: CategoryCardProps) => {
   const { setCategoryFilters } = useFilter()
-  
+
   // Skip rendering if category has a parent
   if (category.parentCategory) {
     return null

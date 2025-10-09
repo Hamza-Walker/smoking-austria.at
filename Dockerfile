@@ -26,7 +26,7 @@ WORKDIR /home/node/app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY . .
@@ -47,7 +47,7 @@ WORKDIR /home/node/app
 COPY package*.json ./
 
 # Install production dependencies
-RUN npm install --production
+RUN npm install --production --legacy-peer-deps
 
 # Copy the built application
 COPY --from=builder /home/node/app/dist ./dist
