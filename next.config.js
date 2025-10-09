@@ -3,6 +3,7 @@ const ContentSecurityPolicy = require('./csp')
 const redirects = require('./redirects')
 
 const nextConfig = {
+  output: 'standalone', // Explicitly disable static export
   typescript: {
     ignoreBuildErrors: true,
   },
