@@ -12,6 +12,10 @@ import { CheckoutPage } from './CheckoutPage'
 
 import classes from './index.module.scss'
 
+// Force dynamic rendering since page requires authentication
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function Checkout() {
   await getMeUser({
     nullUserRedirect: `/login?error=${encodeURIComponent(

@@ -9,6 +9,10 @@ import { RecoverPasswordForm } from './RecoverPasswordForm'
 
 import classes from './index.module.scss'
 
+// Force dynamic rendering since page uses RenderParams
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function RecoverPassword() {
   return (
     <section className={classes.recoverPassword}>

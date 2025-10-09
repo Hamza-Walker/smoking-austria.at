@@ -2,6 +2,10 @@ import React from 'react'
 
 import classes from './index.module.scss'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function TermsAndConditions() {
   return (
     <div className={classes.termsContainer}>

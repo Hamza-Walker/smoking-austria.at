@@ -14,6 +14,10 @@ import { mergeOpenGraph } from '../../_utilities/mergeOpenGraph'
 
 import classes from './index.module.scss'
 
+// Force dynamic rendering since page requires authentication and RenderParams
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function Orders() {
   const { token } = await getMeUser({
     nullUserRedirect: `/login?error=${encodeURIComponent(

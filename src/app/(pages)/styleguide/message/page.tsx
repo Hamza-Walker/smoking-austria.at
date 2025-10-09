@@ -7,6 +7,10 @@ import { Message } from '../../../_components/Message'
 import { VerticalPadding } from '../../../_components/VerticalPadding'
 import { mergeOpenGraph } from '../../../_utilities/mergeOpenGraph'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function MessageComponentPage() {
   return (
     <Fragment>

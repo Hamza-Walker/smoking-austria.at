@@ -11,6 +11,10 @@ import Filters from './Filters'
 
 import classes from './index.module.scss'
 
+// Force dynamic rendering since page uses filters and dynamic content
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 const Products = async () => {
   const { isEnabled: isDraftMode } = draftMode()
   let page: Page | null = null

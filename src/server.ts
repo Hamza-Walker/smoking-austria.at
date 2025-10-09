@@ -13,11 +13,21 @@ import payload from 'payload'
 const app = express()
 const PORT = process.env.PORT || 3000
 
-const transport = nodemailer.createTransport({
+// Debug: Log email configuration (without password)
+console.log('Email config:', {
   host: process.env.EMAIL_HOST,
   port: process.env.EMAIL_PORT,
+  user: process.env.EMAIL_USER,
+  hasPassword: !!process.env.EMAIL_PASSWORD,
+  passwordLength: process.env.EMAIL_PASSWORD?.length || 0,
+})
+
+const transport = nodemailer.createTransport({
+  host: process.env.EMAIL_HOST,
+  port: parseInt(process.env.EMAIL_PORT || '465'),
+  secure: true, // true for 465, false for other ports
   auth: {
-    user: process.env.EMAIL_SALES,
+    user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASSWORD,
   },
 })

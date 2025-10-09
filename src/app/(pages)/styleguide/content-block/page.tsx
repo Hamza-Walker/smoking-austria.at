@@ -7,6 +7,10 @@ import { Gutter } from '../../../_components/Gutter'
 import { VerticalPadding } from '../../../_components/VerticalPadding'
 import { mergeOpenGraph } from '../../../_utilities/mergeOpenGraph'
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function ContentBlockPage() {
   return (
     <Fragment>
