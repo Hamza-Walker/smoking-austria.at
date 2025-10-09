@@ -11,6 +11,12 @@ import { Providers } from './_providers'
 import React from 'react'
 import { mergeOpenGraph } from './_utilities/mergeOpenGraph'
 
+// Force dynamic rendering for entire app
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+export const dynamicParams = true
+export const fetchCache = 'force-no-store'
+
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',

@@ -4,6 +4,12 @@ const redirects = require('./redirects')
 
 const nextConfig = {
   output: 'standalone', // Explicitly disable static export
+  experimental: {
+    // Force all pages to be server-side rendered
+    isrMemoryCacheSize: 0,
+    // Disable static optimization completely
+    forceSwcTransforms: true,
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
