@@ -3,12 +3,13 @@ const ContentSecurityPolicy = require('./csp')
 const redirects = require('./redirects')
 
 const nextConfig = {
-  output: 'standalone', // Explicitly disable static export
+  // Force server-only rendering - no static generation at all
+  output: 'standalone',
   experimental: {
-    // Force all pages to be server-side rendered
+    // Completely disable any form of static generation
+    esmExternals: false,
     isrMemoryCacheSize: 0,
-    // Disable static optimization completely
-    forceSwcTransforms: true,
+    serverComponentsExternalPackages: [],
   },
   typescript: {
     ignoreBuildErrors: true,
