@@ -50,6 +50,9 @@ const FooterComponent = ({ footer }: { footer: Footer }) => {
             <div className={classes.socialLinks}>
               {navItems.map(item => {
                 const icon = item?.link?.icon as Media
+
+                // Skip rendering if no icon or icon URL
+                if (!icon?.url) return null
                 return (
                   <Button
                     key={item.link.label}
@@ -59,7 +62,7 @@ const FooterComponent = ({ footer }: { footer: Footer }) => {
                     className={classes.socialLinkItem}
                   >
                     <Image
-                      src={icon?.url}
+                      src={icon.url}
                       alt={item.link.label}
                       width={24}
                       height={24}

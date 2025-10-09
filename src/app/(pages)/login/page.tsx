@@ -11,6 +11,10 @@ import LoginForm from './LoginForm'
 
 import classes from './index.module.scss'
 
+// Force dynamic rendering since LoginForm and RenderParams use useSearchParams
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function Login() {
   await getMeUser({
     validUserRedirect: `/account?warning=${encodeURIComponent('You are already logged in.')}`,

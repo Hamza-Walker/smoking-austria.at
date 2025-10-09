@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:18.8-alpine as base
+FROM node:20-alpine as base
 
 # Install necessary dependencies for Puppeteer and Chromium
 RUN apk update && apk upgrade && apk add --no-cache \

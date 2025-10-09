@@ -7,6 +7,10 @@ import { ResetPasswordForm } from './ResetPasswordForm'
 
 import classes from './index.module.scss'
 
+// Force dynamic rendering since ResetPasswordForm uses useSearchParams
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function ResetPassword() {
   return (
     <Gutter className={classes.resetPassword}>

@@ -7,6 +7,10 @@ import { OrderConfirmationPage } from './OrderConfirmationPage'
 
 import classes from './index.module.scss'
 
+// Force dynamic rendering since OrderConfirmationPage uses useSearchParams
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function OrderConfirmation() {
   return (
     <Gutter className={classes.confirmationPage}>
